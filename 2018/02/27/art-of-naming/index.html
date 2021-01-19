@@ -1,40 +1,420 @@
-extends ./_layout.pug
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
 
-block content
-  // Just used to judge whether it is an article page
-  div#is-post
-  div.post
-    include ./_mixins/post-header.pug
-    include ./_mixins/gallery.pug
 
-    +postHeader(page)
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    div.post-body
-      if page.photos && page.photos.length
-        +gallery(page)
-      != page.content
+<link rel="stylesheet" href="/css/main.css">
 
-    footer.post-footer
-      if theme.post_widget.end_text.enable
-        div.post-ending.ending
-          div.ending__text= __('post.end')
 
-      if page.copyright === true || (isShowCC && theme.creative_commons.post)
-        include ./_partials/widgets/copyright.pug
 
-      if theme.post_widget.tags
-        if page.tags && page.tags.length > 0
-          div.post-tags
-            each tag in page.tags.data
-              span.post-tags-item
-                span.post-tags-item__icon
-                  i(class=theme.icon.post_tags)
-                a.post-tags-item__link(href=tag.permalink)= tag.name
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
-      if theme.post_widget.share.enable
-        include ./_partials/widgets/share.pug
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="来源于Jenkins、Sonar等，一些名称的命名建议 业务相关 culprit Jenkins构建成功后，会发送邮件到最后一次构建成功的提交者 set 集合 actions 操作  ID、名称等 userId userName displayName fullDisplayName shortDescription  密码 obfuscatedPassword 模糊的密码（用星号替代）  文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些（非正式的）编码英语单词规范">
+<meta property="og:url" content="http://blog.heroine-x.com/2018/02/27/art-of-naming/index.html">
+<meta property="og:site_name" content="Blog of Heroine Ekkusu">
+<meta property="og:description" content="来源于Jenkins、Sonar等，一些名称的命名建议 业务相关 culprit Jenkins构建成功后，会发送邮件到最后一次构建成功的提交者 set 集合 actions 操作  ID、名称等 userId userName displayName fullDisplayName shortDescription  密码 obfuscatedPassword 模糊的密码（用星号替代）  文件">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-02-27T03:39:04.000Z">
+<meta property="article:modified_time" content="2018-11-19T06:16:49.803Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
 
-      if isShowReward
-        include ./_partials/widgets/reward.pug
 
-      include ./_partials/widgets/paginator.pug
+<link rel="canonical" href="http://blog.heroine-x.com/2018/02/27/art-of-naming/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>一些（非正式的）编码英语单词规范 | Blog of Heroine Ekkusu</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Heroine Ekkusu</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of heroine-x 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">业务相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID%E3%80%81%E5%90%8D%E7%A7%B0%E7%AD%89"><span class="nav-number">2.</span> <span class="nav-text">ID、名称等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%86%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E7%AD%89"><span class="nav-number">5.</span> <span class="nav-text">时间等</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">6.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%88%E6%9C%AC"><span class="nav-number">7.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E4%BD%9C"><span class="nav-number">8.</span> <span class="nav-text">动作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8A%B6%E6%80%81"><span class="nav-number">9.</span> <span class="nav-text">状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-number">10.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#verify-%E5%92%8C-validate"><span class="nav-number">11.</span> <span class="nav-text">verify 和 validate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#authentication-%E5%92%8C-authorization"><span class="nav-number">12.</span> <span class="nav-text">authentication 和 authorization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%85%E8%A3%85"><span class="nav-number">13.</span> <span class="nav-text">包装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E5%85%83"><span class="nav-number">14.</span> <span class="nav-text">单元</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0-%E8%A1%A5%E5%85%85"><span class="nav-number">15.</span> <span class="nav-text">增加&#x2F;补充</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E5%8F%96-%E6%9E%90%E5%8F%96"><span class="nav-number">16.</span> <span class="nav-text">提取&#x2F;析取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0"><span class="nav-number">17.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">18.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/27/art-of-naming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一些（非正式的）编码英语单词规范
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-02-27 11:39:04" itemprop="dateCreated datePublished" datetime="2018-02-27T11:39:04+08:00">2018-02-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>来源于Jenkins、Sonar等，一些名称的命名建议</p>
+<h4 id="业务相关"><a href="#业务相关" class="headerlink" title="业务相关"></a>业务相关</h4><ul>
+<li><code>culprit</code> Jenkins构建成功后，会发送邮件到最后一次构建成功的提交者</li>
+<li><code>set</code> 集合</li>
+<li><code>actions</code> 操作</li>
+</ul>
+<h4 id="ID、名称等"><a href="#ID、名称等" class="headerlink" title="ID、名称等"></a>ID、名称等</h4><ul>
+<li><code>userId</code></li>
+<li><code>userName</code></li>
+<li><code>displayName</code></li>
+<li><code>fullDisplayName</code></li>
+<li><code>shortDescription</code></li>
+</ul>
+<h4 id="密码"><a href="#密码" class="headerlink" title="密码"></a>密码</h4><ul>
+<li><code>obfuscatedPassword</code> 模糊的密码（用星号替代）</li>
+</ul>
+<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><ul>
+<li><code>fileName</code></li>
+<li><code>displayPath</code></li>
+<li><code>relativePath</code></li>
+</ul>
+<h4 id="时间等"><a href="#时间等" class="headerlink" title="时间等"></a>时间等</h4><ul>
+<li><code>duration</code> 持续时间</li>
+<li><code>estimatedDuration</code> 预估时间</li>
+<li><code>timestamp</code> 时间戳</li>
+<li><code>submittedAt</code> 提交时间</li>
+<li><code>startedAt</code> 开始时间</li>
+<li><code>executedAt</code> 执行时间</li>
+<li><code>timeMs</code> 毫秒时间</li>
+<li><code>uptime</code> 工作总时长</li>
+<li><code>interval</code> 时间间隔</li>
+<li><code>duration</code> 时长</li>
+</ul>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
+<li><code>keepLog</code> 是否记录日志 </li>
+</ul>
+<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><ul>
+<li><code>artifact</code> 产品</li>
+<li><code>component</code> 组件</li>
+</ul>
+<h4 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h4><ul>
+<li><code>analysis</code> 分析</li>
+<li><code>obtain</code> 获取</li>
+<li><code>suggestion</code> 建议</li>
+</ul>
+<h4 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h4><ul>
+<li><code>status</code> <code>SUCCESS</code></li>
+<li><code>hasXxx</code> boolean，是否有XXX</li>
+</ul>
+<h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><ul>
+<li><code>arch</code> 架构</li>
+<li><code>family</code> 操作系统家族</li>
+</ul>
+<p>以下是重点——————————</p>
+<h4 id="verify-和-validate"><a href="#verify-和-validate" class="headerlink" title="verify 和 validate"></a>verify 和 validate</h4><p>这俩都有校验、验证的意思，怎么区分呢</p>
+<h4 id="authentication-和-authorization"><a href="#authentication-和-authorization" class="headerlink" title="authentication 和 authorization"></a>authentication 和 authorization</h4><h4 id="包装"><a href="#包装" class="headerlink" title="包装"></a>包装</h4><ul>
+<li>wrap/wrapper</li>
+<li>pack</li>
+<li>package</li>
+</ul>
+<h4 id="单元"><a href="#单元" class="headerlink" title="单元"></a>单元</h4><ul>
+<li>unit</li>
+<li>cell</li>
+</ul>
+<h4 id="增加-补充"><a href="#增加-补充" class="headerlink" title="增加/补充"></a>增加/补充</h4><ul>
+<li>add</li>
+<li>supply</li>
+<li>fill</li>
+</ul>
+<h4 id="提取-析取"><a href="#提取-析取" class="headerlink" title="提取/析取"></a>提取/析取</h4><ul>
+<li>extract</li>
+</ul>
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><ul>
+<li>cause</li>
+<li>reason</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>superfluous 多余的，不必要的</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/02/26/versions-in-innosetup/" rel="prev" title="InnoSetup中的版本对应关系">
+                  <i class="fa fa-chevron-left"></i> InnoSetup中的版本对应关系
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/06/ideas-about-the-inherit-platform/" rel="next" title="项目继承与数据库关系的一点想法">
+                  项目继承与数据库关系的一点想法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

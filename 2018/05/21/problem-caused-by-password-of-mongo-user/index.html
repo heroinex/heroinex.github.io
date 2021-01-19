@@ -1,40 +1,353 @@
-extends ./_layout.pug
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
 
-block content
-  // Just used to judge whether it is an article page
-  div#is-post
-  div.post
-    include ./_mixins/post-header.pug
-    include ./_mixins/gallery.pug
 
-    +postHeader(page)
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    div.post-body
-      if page.photos && page.photos.length
-        +gallery(page)
-      != page.content
+<link rel="stylesheet" href="/css/main.css">
 
-    footer.post-footer
-      if theme.post_widget.end_text.enable
-        div.post-ending.ending
-          div.ending__text= __('post.end')
 
-      if page.copyright === true || (isShowCC && theme.creative_commons.post)
-        include ./_partials/widgets/copyright.pug
 
-      if theme.post_widget.tags
-        if page.tags && page.tags.length > 0
-          div.post-tags
-            each tag in page.tags.data
-              span.post-tags-item
-                span.post-tags-item__icon
-                  i(class=theme.icon.post_tags)
-                a.post-tags-item__link(href=tag.permalink)= tag.name
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
 
-      if theme.post_widget.share.enable
-        include ./_partials/widgets/share.pug
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="Spring MVC程序，Mongo密码放在spring.properties配置文件 12345spring.data.mongodb.host&#x3D;127.0.0.1spring.data.mongodb.port&#x3D;27017spring.data.mongodb.database&#x3D;hxlogspring.data.mongodb.username&#x3D;hxsp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mongo密码导致Spring起不来的奇怪问题">
+<meta property="og:url" content="http://blog.heroine-x.com/2018/05/21/problem-caused-by-password-of-mongo-user/index.html">
+<meta property="og:site_name" content="Blog of Heroine Ekkusu">
+<meta property="og:description" content="Spring MVC程序，Mongo密码放在spring.properties配置文件 12345spring.data.mongodb.host&#x3D;127.0.0.1spring.data.mongodb.port&#x3D;27017spring.data.mongodb.database&#x3D;hxlogspring.data.mongodb.username&#x3D;hxsp">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-05-21T03:01:12.000Z">
+<meta property="article:modified_time" content="2018-11-19T06:16:49.818Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
 
-      if isShowReward
-        include ./_partials/widgets/reward.pug
 
-      include ./_partials/widgets/paginator.pug
+<link rel="canonical" href="http://blog.heroine-x.com/2018/05/21/problem-caused-by-password-of-mongo-user/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Mongo密码导致Spring起不来的奇怪问题 | Blog of Heroine Ekkusu</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Heroine Ekkusu</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of heroine-x 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/21/problem-caused-by-password-of-mongo-user/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mongo密码导致Spring起不来的奇怪问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-21 11:01:12" itemprop="dateCreated datePublished" datetime="2018-05-21T11:01:12+08:00">2018-05-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Spring MVC程序，Mongo密码放在<code>spring.properties</code>配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spring.data.mongodb.host&#x3D;127.0.0.1</span><br><span class="line">spring.data.mongodb.port&#x3D;27017</span><br><span class="line">spring.data.mongodb.database&#x3D;hxlog</span><br><span class="line">spring.data.mongodb.username&#x3D;hx</span><br><span class="line">spring.data.mongodb.password&#x3D;123456?</span><br></pre></td></tr></table></figure>
+<p>Mondo配置文件位于<code>mongo-config.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mongo:mongo-client</span> <span class="attr">host</span>=<span class="string">&quot;$&#123;spring.data.mongodb.host&#125;&quot;</span> <span class="attr">port</span>=<span class="string">&quot;$&#123;spring.data.mongodb.port&#125;&quot;</span> <span class="attr">credentials</span>=<span class="string">&quot;$&#123;spring.data.mongodb.username&#125;:$&#123;spring.data.mongodb.password&#125;@$&#123;spring.data.mongodb.database&#125;&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mongo&quot;</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">mongo:client-options</span> <span class="attr">write-concern</span>=<span class="string">&quot;SAFE&quot;</span>/&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">mongo:mongo-client</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>然后启动就报异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error creating bean with name <span class="string">&#x27;mongo&#x27;</span>:Initialization of bean failed;nested exception is java.lang.ArrayIndexOutOfBoundsException:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>错误原因：<br>mongo密码中有问号，修改Mongo用户的密码，去掉了问号（替换为了叹号）就好了</p>
+<p>参加class<code>MongoCredentialPropertyEditor</code>，其中定义了<code>private static final String OPTIONS_DELEMINATOR=&quot;?&quot;</code></p>
+<p>未解决问题：</p>
+<ol>
+<li>该问题只在Linux的Mongo上遇到了，Windows的Mongo没遇到</li>
+<li>如果在不能修改Mongo密码的情况下，如何正确的配置连接字</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/05/16/how-to-use-intellij-better/" rel="prev" title="IntelliJ配置指南">
+                  <i class="fa fa-chevron-left"></i> IntelliJ配置指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/05/22/java-code-collection/" rel="next" title="Java代码搜集">
+                  Java代码搜集 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
