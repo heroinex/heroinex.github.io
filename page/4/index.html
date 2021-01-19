@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,73 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/02/something-about-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/02/02/something-about-docker/" class="post-title-link" itemprop="url">关于Docker的一些想法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2018-02-02 18:20:12 / Modified: 18:21:48" itemprop="dateCreated datePublished" datetime="2018-02-02T18:20:12+08:00">2018-02-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>2018年2月2日18:20:48<br>暂时没觉得docker对我有多少吸引力，可能是应用场景不合适吧，其实比起docker本身的作用，我更期待的是一个不常用但重要的备份和迁移功能，可能导出导入虚拟机更适合吧 </p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1024,84 +1091,6 @@
 <ul>
 <li>不知道怎么解决，如果有解决方法后再更新本文内容</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/01/03/about-automatic-tools/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/01/03/about-automatic-tools/" class="post-title-link" itemprop="url">自动化工具的坑</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-01-03 16:31:19" itemprop="dateCreated datePublished" datetime="2018-01-03T16:31:19+08:00">2018-01-03</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-01-05 11:14:07" itemprop="dateModified" datetime="2018-01-05T11:14:07+08:00">2018-01-05</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>由于工作需要，开发一个类似于自动部署的工具，上个星期用了一个星期的时间用Java实现了一下，发现用Java实现的时候总是不由自主的有一种先造框架再写业务的习惯，不知不觉一个简单的部署工作写成了个增删改查的庞大系统，实际执行业务的代码的份额越来越小。因此经过简单的反思，得到了如下结论</p>
-<ul>
-<li>明确工具定位，是产品or工具</li>
-<li>如果是工具，那么需要不需要复杂的后续维护，例如某个目标IP可能会变化，那么这个IP应当写死在代码中、或者存储到配置文件，或者存储到数据库。很不幸之前我选择了后者，我存储到了SQLite中，SQLite的实现又抽象了数据层，渐渐的就写成了一个增删改查系统，然而这可能是不需要的，其实是可以硬编码到代码中的，如果有需求的话，只要修改代码就好了</li>
-<li>于是就引出另外一个问题，用什么语言？其实如果用Java的话，是免不了写增删改查的，因为Java的部署需要编译，新版本我选择了Python，我尽量让这个系统变得越精简越好</li>
-</ul>
-<hr>
-<p>更新于 2018年1月5日11:09:29<br>让我可怕的事情发生了，竟然真的需要做增删改查，但是我已经使用Python重构了70%了</p>
 
       
     </div>
