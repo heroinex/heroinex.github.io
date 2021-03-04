@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,77 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/04/to-study-list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/04/to-study-list/" class="post-title-link" itemprop="url">待研究的技术</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-03-04 17:04:15 / Modified: 17:11:31" itemprop="dateCreated datePublished" datetime="2021-03-04T17:04:15+08:00">2021-03-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近发现有些技术需要研究一下，但是随处记录之后，又忘记记录到哪儿了，统一放在这里。</p>
+<ul>
+<li><strong><em>busybox</em></strong> Linux命令和工具软件</li>
+<li><strong><em>BTrace</em></strong> BTrace- Java动态跟踪分析工具</li>
+<li><strong><em>-Djava.endorsed.dirs</em></strong> 技术，用来覆盖jre自带的类</li>
+<li><strong>布隆过滤器</strong> </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -800,79 +871,6 @@
 <ol>
 <li>64位的MySQL为什么限制2038年？</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/22/use-jdk-tools-on-windows-java-service/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/05/22/use-jdk-tools-on-windows-java-service/" class="post-title-link" itemprop="url">对Windows的Java服务使用JDK工具</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-05-22 14:32:56" itemprop="dateCreated datePublished" datetime="2018-05-22T14:32:56+08:00">2018-05-22</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>如果把Java程序封装为服务，那么直接用JDK工具运行会报错误：<br><code>308:  insufficient memory or insufficient privileges to attach</code></p>
-<p>原因应该是Java服务是用System起的，登陆用户是Administrator</p>
-<p>需要下载PsExec，然后执行命令<br><code>psexec -s &quot;C:\Path\to\jdk\jmap.exe&quot; -histo 3456 &gt;&quot;C:\3456.txt&quot;</code>才能输出正确的结果。</p>
 
       
     </div>

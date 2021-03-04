@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,79 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/22/use-jdk-tools-on-windows-java-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/22/use-jdk-tools-on-windows-java-service/" class="post-title-link" itemprop="url">对Windows的Java服务使用JDK工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-22 14:32:56" itemprop="dateCreated datePublished" datetime="2018-05-22T14:32:56+08:00">2018-05-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>如果把Java程序封装为服务，那么直接用JDK工具运行会报错误：<br><code>308:  insufficient memory or insufficient privileges to attach</code></p>
+<p>原因应该是Java服务是用System起的，登陆用户是Administrator</p>
+<p>需要下载PsExec，然后执行命令<br><code>psexec -s &quot;C:\Path\to\jdk\jmap.exe&quot; -histo 3456 &gt;&quot;C:\3456.txt&quot;</code>才能输出正确的结果。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -856,78 +929,6 @@
 <li><a target="_blank" rel="noopener" href="https://segmentfault.com/q/1010000010210760">https://segmentfault.com/q/1010000010210760</a> 问 MySQL5.7查询时服务挂掉</li>
 <li><a target="_blank" rel="noopener" href="http://www.talkwithtrend.com/Question/405405">http://www.talkwithtrend.com/Question/405405</a> 今天将MySQL版本升级到5.7.19 执行查询，mysql服务直接挂了？</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/21/invalid-constant-type-18/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/21/invalid-constant-type-18/" class="post-title-link" itemprop="url">Java工程报错：invalid constant type 18</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-03-21 11:10:03 / Modified: 13:03:14" itemprop="dateCreated datePublished" datetime="2018-03-21T11:10:03+08:00">2018-03-21</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>项目用Tomcat8跑，代码中有一句lambda表达式，导致项目启动报错：<br><code>invalid constant type 18</code></p>
-<p>解决方法：</p>
-<ol>
-<li>经过定位发现有个dependency定义为：<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-entitymanager<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.3.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>修改为最新的<code>5.2.15Final</code>后重新编译即可正常运行</li>
-</ol>
-<hr>
-<p>Javassist是一个动态类库，可以用来检查、修改以及创建类。</p>
 
       
     </div>

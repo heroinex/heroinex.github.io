@@ -23,20 +23,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="配置方法  生成Keystore1keytool -genkey -alias heroine-x.com 将生成的.keystore（会生成在%userprofile%下，迷）放在static&#x2F;keystore下，然后修改application.properties为1234server.ssl.key-store&#x3D;classpath:static&#x2F;keystoreserve">
+<meta name="description" content="最近发现有些技术需要研究一下，但是随处记录之后，又忘记记录到哪儿了，统一放在这里。  busybox Linux命令和工具软件 BTrace BTrace- Java动态跟踪分析工具 -Djava.endorsed.dirs 技术，用来覆盖jre自带的类 布隆过滤器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Spring Boot中启用Https">
-<meta property="og:url" content="http://blog.heroine-x.com/2018/02/08/use-https-in-spring-boot/index.html">
+<meta property="og:title" content="待研究的技术">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/03/04/to-study-list/index.html">
 <meta property="og:site_name" content="Blog of Heroine Ekkusu">
-<meta property="og:description" content="配置方法  生成Keystore1keytool -genkey -alias heroine-x.com 将生成的.keystore（会生成在%userprofile%下，迷）放在static&#x2F;keystore下，然后修改application.properties为1234server.ssl.key-store&#x3D;classpath:static&#x2F;keystoreserve">
+<meta property="og:description" content="最近发现有些技术需要研究一下，但是随处记录之后，又忘记记录到哪儿了，统一放在这里。  busybox Linux命令和工具软件 BTrace BTrace- Java动态跟踪分析工具 -Djava.endorsed.dirs 技术，用来覆盖jre自带的类 布隆过滤器">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2018-02-08T08:02:20.000Z">
-<meta property="article:modified_time" content="2018-02-08T08:42:31.399Z">
+<meta property="article:published_time" content="2021-03-04T09:04:15.000Z">
+<meta property="article:modified_time" content="2021-03-04T09:11:31.785Z">
 <meta property="article:author" content="heroine-x">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://blog.heroine-x.com/2018/02/08/use-https-in-spring-boot/">
+<link rel="canonical" href="http://blog.heroine-x.com/2021/03/04/to-study-list/">
 
 
 <script class="page-configurations">
@@ -48,7 +48,7 @@
     lang   : 'en'
   };
 </script>
-<title>在Spring Boot中启用Https | Blog of Heroine Ekkusu</title>
+<title>待研究的技术 | Blog of Heroine Ekkusu</title>
   
 
 
@@ -200,7 +200,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/08/use-https-in-spring-boot/">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/04/to-study-list/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在Spring Boot中启用Https
+          待研究的技术
         </h1>
 
         <div class="post-meta-container">
@@ -225,7 +225,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2018-02-08 16:02:20 / Modified: 16:42:31" itemprop="dateCreated datePublished" datetime="2018-02-08T16:02:20+08:00">2018-02-08</time>
+      <time title="Created: 2021-03-04 17:04:15 / Modified: 17:11:31" itemprop="dateCreated datePublished" datetime="2021-03-04T17:04:15+08:00">2021-03-04</time>
     </span>
 
   
@@ -238,43 +238,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><strong>配置方法</strong></p>
-<ol>
-<li>生成Keystore<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -alias heroine-x.com</span><br></pre></td></tr></table></figure></li>
-<li>将生成的.keystore（会生成在<code>%userprofile%</code>下，迷）放在<code>static/keystore</code>下，然后修改<code>application.properties</code>为<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.ssl.key-store&#x3D;classpath:static&#x2F;keystore</span><br><span class="line">server.ssl.key-store-password&#x3D;123456</span><br><span class="line">server.ssl.keyStoreType&#x3D;JKS</span><br><span class="line">server.ssl.keyAlias&#x3D;heroine-x.com</span><br></pre></td></tr></table></figure></li>
-<li>启动</li>
-</ol>
-<p><strong>当然这样配置，一般会得到如下的错误</strong></p>
+        <p>最近发现有些技术需要研究一下，但是随处记录之后，又忘记记录到哪儿了，统一放在这里。</p>
 <ul>
-<li><p>IE</p>
-<blockquote>
-<p>无法安全地连接到此页面<br>这可能是因为该站点使用过期的或不安全的 TLS 安全设置。如果这种情况持续发生，请与网站的所有者联系。<br>TLS 安全设置未设置为默认设置，这也可能导致此错误。<br>尝试此操作：<br>•返回到前一页</p>
-</blockquote>
-</li>
-<li><p>Chrome</p>
-<blockquote>
-<p>此网站无法提供安全连接<br>127.0.0.1 使用了不受支持的协议。<br>ERR_SSL_VERSION_OR_CIPHER_MISMATCH<br>隐藏详细信息<br>协议不受支持<br>客户端和服务器不支持一般 SSL 协议版本或加密套件。</p>
-</blockquote>
-</li>
-<li><p>CURL</p>
-<blockquote>
-<p>curl: (60) SSL certificate problem: self signed certificate<br>More details here: <a target="_blank" rel="noopener" href="https://curl.haxx.se/docs/sslcerts.html/">https://curl.haxx.se/docs/sslcerts.html\</a><br>curl failed to verify the legitimacy of the server and therefore could not establish a secure connection to it. To learn more about this situation and how to fix it, please visit the web page mentioned above.</p>
-</blockquote>
-</li>
+<li><strong><em>busybox</em></strong> Linux命令和工具软件</li>
+<li><strong><em>BTrace</em></strong> BTrace- Java动态跟踪分析工具</li>
+<li><strong><em>-Djava.endorsed.dirs</em></strong> 技术，用来覆盖jre自带的类</li>
+<li><strong>布隆过滤器</strong> </li>
 </ul>
-<hr>
-<p><strong>解决方法</strong><br>把生成证书的命令替换为：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -alias heroine-x.com  -storetype PKCS12 -keyalg RSA -keysize 2048  -keystore keystore.p12 -validity 3650</span><br></pre></td></tr></table></figure>
-<ol>
-<li>-storetype 指定密钥仓库类型 </li>
-<li>-keyalg 生证书的算法名称，RSA是一种非对称加密算法 </li>
-<li>-keysize 证书大小 </li>
-<li>-keystore 生成的证书文件的存储路径 </li>
-<li>-validity 证书的有效期</li>
-</ol>
-<p>SpringBoot配置文件</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server.ssl.keyStoreType=PKCS12</span><br></pre></td></tr></table></figure>
-<p>修改完成。</p>
 
     </div>
 
@@ -288,14 +258,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2018/02/07/some-pitfall-about-maven/" rel="prev" title="关于maven的POM中dependencyManagement和dependencies的坑">
-                  <i class="fa fa-chevron-left"></i> 关于maven的POM中dependencyManagement和dependencies的坑
+                <a href="/2021/03/01/attck-framework/" rel="prev" title="ATT&CK框架">
+                  <i class="fa fa-chevron-left"></i> ATT&CK框架
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2018/02/13/code-collection-batch/" rel="next" title="批处理代码大全">
-                  批处理代码大全 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
