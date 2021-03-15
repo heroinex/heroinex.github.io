@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,239 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/06/07/about-restful-api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/06/07/about-restful-api/" class="post-title-link" itemprop="url">关于RESTful API的一些想法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-06-07 16:00:38" itemprop="dateCreated datePublished" datetime="2018-06-07T16:00:38+08:00">2018-06-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>对于一个小组或者团队，应当定义统一的URL规范，确实是值得努力的事情，但是这个规范是否应该符合REST风格呢？</p>
+<p>先看一下Jenkins的REST API：</p>
+<ol>
+<li>执行构建 POST <a target="_blank" rel="noopener" href="http://127.0.0.1/job/testJob/build">http://127.0.0.1/job/testJob/build</a> &lt;–URL里带动词了</li>
+<li>带参数构建 POST <a target="_blank" rel="noopener" href="http://127.0.0.1/job/testJob/buildWithParameters">http://127.0.0.1/job/testJob/buildWithParameters</a> &lt;–URL里使用了驼峰</li>
+<li>删除任务 POST <a target="_blank" rel="noopener" href="http://127.0.0.1/job/testJob/doDelete">http://127.0.0.1/job/testJob/doDelete</a> &lt;–并没有使用delete方法，而是post方法，delete字样放url里</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/31/sigar-crash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/31/sigar-crash/" class="post-title-link" itemprop="url">Sigar崩溃错误[sigar-amd64-winnt.dll+0x14ed4]</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-31 14:24:16" itemprop="dateCreated datePublished" datetime="2018-05-31T14:24:16+08:00">2018-05-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在Windows Server 2008上有Sigar崩溃，错误信息如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># A fatal error has been detected by the Java Runtime Environment:</span><br><span class="line">#</span><br><span class="line">#  EXCEPTION_ACCESS_VIOLATION (<span class="number">0xc0000005</span>) at pc=<span class="number">0x0000000016ba4ed4</span>, pid=<span class="number">2912</span>, tid=<span class="number">0x000000000000133c</span></span><br><span class="line">#</span><br><span class="line"># JRE version: Java(TM) SE Runtime Environment (<span class="number">8.0</span>_144-b01) (build <span class="number">1.8</span><span class="number">.0</span>_144-b01)</span><br><span class="line"># Java VM: Java HotSpot(TM) <span class="number">64</span>-Bit Server VM (<span class="number">25.144</span>-b01 mixed mode windows-amd64 compressed oops)</span><br><span class="line"># Problematic frame:</span><br><span class="line"># C  [sigar-amd64-winnt.dll+<span class="number">0x14ed4</span>]</span><br><span class="line">#</span><br><span class="line"># Core dump written. Default location: C:\Program Files\*******\server\hs_err_pid2912.mdmp</span><br><span class="line">#</span><br><span class="line"># An error report file with more information is saved as:</span><br><span class="line"># C:\Program Files\*******\server\hs_err_pid2912.<span class="built_in">log</span></span><br><span class="line">#</span><br><span class="line"># If you would like to submit a bug report, please visit:</span><br><span class="line"><span class="meta">#   http:<span class="comment">//bugreport.java.com/bugreport/crash.jsp</span></span></span><br><span class="line"># The crash happened outside the Java Virtual Machine in native code.</span><br><span class="line"># See problematic frame <span class="keyword">for</span> where to report the bug.</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/hyperic/sigar/issues/77">https://github.com/hyperic/sigar/issues/77</a></p>
+</blockquote>
+<p>检查<code>[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\PerfProc\Performance] &quot;Disable Performance Counters&quot;</code>项目，并没有发现被禁用，PerfProc开头的几个服务都没有设置禁用。</p>
+<p>本问题原因暂未定位出来。也暂时没有解决方案。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/28/2038-in-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/28/2038-in-mysql/" class="post-title-link" itemprop="url">MySQL的2038问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-28 14:53:45" itemprop="dateCreated datePublished" datetime="2018-05-28T14:53:45+08:00">2018-05-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>将CentOS6.5的MySQL5.7时间调到2048年，发现起不来，错误信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2047-07-08T16:00:00.098689Z 5 [Warning] Current time has got past year 2038. Validating current time with 5 iterations before initiating the normal server shutdown process.</span><br><span class="line">2047-07-08T16:00:00.098707Z 5 [Warning] Iteration 1: Current time obtained from system is greater than 2038</span><br><span class="line">2047-07-08T16:00:00.098712Z 5 [Warning] Iteration 2: Current time obtained from system is greater than 2038</span><br><span class="line">2047-07-08T16:00:00.098715Z 5 [Warning] Iteration 3: Current time obtained from system is greater than 2038</span><br><span class="line">2047-07-08T16:00:00.098719Z 5 [Warning] Iteration 4: Current time obtained from system is greater than 2038</span><br><span class="line">2047-07-08T16:00:00.098728Z 5 [Warning] Iteration 5: Current time obtained from system is greater than 2038</span><br><span class="line">2047-07-08T16:00:00.098732Z 5 [ERROR] This MySQL server doesn&#39;t support dates later then 2038</span><br></pre></td></tr></table></figure>
+<p>然后MySQL的信息如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./mysql -V</span><br><span class="line">./mysql Ver 14.14 Distrib 5.7.18 ,for linux-glibc2.5 (x86_64) using EditLine wrapper</span><br></pre></td></tr></table></figure>
+<p>问题</p>
+<ol>
+<li>64位的MySQL为什么限制2038年？</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -701,234 +934,6 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>在IntelliJ中Build项目的时候报错cannot move mixed-revision subtree，解决方法不知道。不过据我经验，Intellij在重构的时候容易完犊子，最佳的方法是一个包一个包的重构，例如A包含B，要把A移动到C，最好先把A的类移动到C，然后把B移动到C.B中。如果直接把A移动到C，容易出现依赖问题。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/03/dev-ops/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/05/03/dev-ops/" class="post-title-link" itemprop="url">dev ops</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-05-03 10:33:54" itemprop="dateCreated datePublished" datetime="2018-05-03T10:33:54+08:00">2018-05-03</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>关于持续集成和DEVOPS</p>
-<p>透明化<br>持续化<br>自动化</p>
-<blockquote>
-<p>DevOps 是来自 Development 和 Operations 这 2 个英文字的缩写组合，跟 Agile 一样，他并非是使用特定的工具或技术来做为解决方案，而是一种具备文化、哲学、实务与工具于一身的概念结合，主要目的是提升组织快速交付应用程式和服务的能力</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/04/28/is-scheduled-for-addition-but-is-missing/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/04/28/is-scheduled-for-addition-but-is-missing/" class="post-title-link" itemprop="url">SVN: xxx is scheduled for addition, but is missing</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-04-28 10:56:38" itemprop="dateCreated datePublished" datetime="2018-04-28T10:56:38+08:00">2018-04-28</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>SVN遇到这个错误，非常纠结蛋疼，解决方法：</p>
-<p>Windows：在上级目录上点击右键，调出SVN菜单，选择REVERT，勾选全部，确认。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/04/27/mysql-crash-in-08r2-without-sp1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/04/27/mysql-crash-in-08r2-without-sp1/" class="post-title-link" itemprop="url">MySQL5.7在Windows 2008R2 (without SP1）上崩溃</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-04-27 16:46:56" itemprop="dateCreated datePublished" datetime="2018-04-27T16:46:56+08:00">2018-04-27</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Spring Repository执行一个查询的时候崩溃，崩溃信息如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">mysqld got exception <span class="number">0xc000001d</span></span><br><span class="line">This could be because you hit a bug.It is also possible that <span class="keyword">this</span> binary <span class="keyword">or</span> one of the libraries it was linked ageinst is corrupt ,improperly built ,<span class="keyword">or</span> misconfigured .This error can also be caused by malfunctioning hardware.</span><br><span class="line">Attempting to collect some information that could help diagnose the problem.</span><br><span class="line">As <span class="keyword">this</span> is a crash <span class="keyword">and</span> something is definetely wrong ,the information collection process might fail.</span><br><span class="line"></span><br><span class="line">key_buffer_size=<span class="number">8388608</span></span><br><span class="line">read_buffer_size=<span class="number">65536</span></span><br><span class="line">max_used_connections=<span class="number">10</span></span><br><span class="line">max_threads=<span class="number">200</span></span><br><span class="line">thread_count=<span class="number">6</span></span><br><span class="line">connection_count=<span class="number">6</span></span><br><span class="line"></span><br><span class="line">It is possible that mysqld could use up to key_buffer_size + (read_buffer_size + sort_buffer_size )* max_threads = <span class="number">51223</span> K bytes of memory</span><br><span class="line">Hope that<span class="number">&#x27;</span>s ok ; <span class="keyword">if</span> <span class="keyword">not</span> ,decrease some variables in the equation.</span><br><span class="line"></span><br><span class="line">Thread pointer:<span class="number">0x115e8100</span></span><br><span class="line"></span><br><span class="line">Hope that<span class="number">&#x27;</span>s ok ;<span class="keyword">if</span> <span class="keyword">not</span> ,decrease some variables in the equation.</span><br><span class="line"></span><br><span class="line">Thread pointer : <span class="number">0x115e8100</span></span><br><span class="line"></span><br><span class="line">Attempting backtrace.You can use the following information to find out where mysqld died.If you see no message after <span class="keyword">this</span> ,something went terribly wrong...</span><br><span class="line"></span><br><span class="line"><span class="number">7f</span>ef6cb5c01 MSVCR120.dll!<span class="built_in">pow</span>()</span><br><span class="line">....太多省略...</span><br><span class="line"><span class="number">77433281</span>  ntdll.dll!TrlUserThreadStart()</span><br><span class="line"></span><br><span class="line">Trying to get some variables.</span><br><span class="line">Some pointers may be invalid <span class="keyword">and</span> cause the dump to <span class="built_in">abort</span>.</span><br><span class="line">Query (<span class="number">11588e0</span>): UPDATE T_RULE A SET A.MODE=<span class="number">1</span> WHERE A.ID=<span class="number">1</span> </span><br><span class="line">Connection ID (thread ID):<span class="number">37</span></span><br><span class="line">Status:NOT_KILLED</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>原因未知，但是分析后发现，这个表里本来有一个主键ID，但是还有另外一个索引RULE_ID，也是ID，也就是说索引重复了，解决方法使用命令删掉了一个多余的索引：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> index RULE_ID <span class="keyword">on</span> T_RULE;</span><br></pre></td></tr></table></figure>
-<p>参考文献：</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://bugs.mysql.com/bug.php?id=81197">https://bugs.mysql.com/bug.php?id=81197</a> Bug #81197    crash with STATUS_ILLEGAL_INSTRUCTION if CPU/OS cant do AVX instructions</li>
-<li><a target="_blank" rel="noopener" href="https://bugs.mysql.com/bug.php?id=81538">https://bugs.mysql.com/bug.php?id=81538</a> Bug #81538    UTC - mysqld got exception 0xc000001d</li>
-<li><a target="_blank" rel="noopener" href="https://segmentfault.com/q/1010000010210760">https://segmentfault.com/q/1010000010210760</a> 问 MySQL5.7查询时服务挂掉</li>
-<li><a target="_blank" rel="noopener" href="http://www.talkwithtrend.com/Question/405405">http://www.talkwithtrend.com/Question/405405</a> 今天将MySQL版本升级到5.7.19 执行查询，mysql服务直接挂了？</li>
-</ol>
 
       
     </div>
