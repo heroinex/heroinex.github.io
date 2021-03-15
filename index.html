@@ -284,7 +284,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-03-15 12:18:18 / Modified: 16:37:49" itemprop="dateCreated datePublished" datetime="2021-03-15T12:18:18+08:00">2021-03-15</time>
+      <time title="Created: 2021-03-15 12:18:18 / Modified: 16:44:19" itemprop="dateCreated datePublished" datetime="2021-03-15T12:18:18+08:00">2021-03-15</time>
     </span>
 
   
@@ -320,7 +320,8 @@
 <blockquote>
 <p>未使用的意思是队列上没有任何的消费者，队列也没有被重新声明，并 且在过期时间段 内也未调用过 Basic.Get 命令</p>
 </blockquote>
-<h3 id="4-结果验证"><a href="#4-结果验证" class="headerlink" title="4.结果验证"></a>4.结果验证</h3><p>采用方案3，最终解决了该问题。</p>
+<p>该策略对已经产生的队列和即将创建的队列均有效，因此该方案能长久解决该问题。</p>
+<h3 id="4-结果验证"><a href="#4-结果验证" class="headerlink" title="4.结果验证"></a>4.结果验证</h3><p>采用方案3，最终解决了该问题。短期内没有发现问题。</p>
 
       
     </div>
