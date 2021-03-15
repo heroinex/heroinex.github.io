@@ -272,7 +272,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/15/performance-optimizition-for-rabbitmq/" class="post-title-link" itemprop="url">RabbitMQ性能优化专题</a>
+          <a href="/2021/03/15/performance-optimizition-for-rabbitmq/" class="post-title-link" itemprop="url">一则由业务设计不合理导致的RabbitMQ异常分析</a>
         </h2>
 
         <div class="post-meta-container">
@@ -284,7 +284,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-03-15 12:18:18 / Modified: 12:19:02" itemprop="dateCreated datePublished" datetime="2021-03-15T12:18:18+08:00">2021-03-15</time>
+      <time title="Created: 2021-03-15 12:18:18 / Modified: 16:37:49" itemprop="dateCreated datePublished" datetime="2021-03-15T12:18:18+08:00">2021-03-15</time>
     </span>
 
   
@@ -297,7 +297,30 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>施工中，占坑</p>
+          <p>近期遇到了RabbitMQ产生的问题，特此记录。</p>
+<p>问题现象：生产者无法投递消息，消费者无法消费消息，RabbitMQ整个异常</p>
+<h3 id="1-定位思路"><a href="#1-定位思路" class="headerlink" title="1.定位思路"></a>1.定位思路</h3><ol>
+<li>使用<code>rabbitmqctl status</code>命令查看MQ运行状态，报内存告警，使用management界面，process区域标红</li>
+<li>使用<code>rabbitmqctl list_queues</code>命令查询队列，输出响应极为缓慢，增加<code> | wc -l</code>参数查询数量，最终输出十几万余队列</li>
+</ol>
+<h3 id="2-问题原因分析"><a href="#2-问题原因分析" class="headerlink" title="2.问题原因分析"></a>2.问题原因分析</h3><p>经过分析，我们的业务程序会在特定触发下建立一个以UUID命名的队列，该队列没有设置策略，不会自动删除，导致MQ中一直存在该队列。每触发一次条件就会建立一个，频发触发导致建立几十万队列，占用大量内存，导致MQ异常。</p>
+<h3 id="3-解决思路"><a href="#3-解决思路" class="headerlink" title="3.解决思路"></a>3.解决思路</h3><p>解决思路有几种，利弊分析如下：</p>
+<ol>
+<li><p>优化业务程序，当建立队列并且不再使用后，手动删除，但是该方案无法解决现有的问题</p>
+</li>
+<li><p>删除现有的无用队列，由于rabbitmqctl中没有删除队列的命令，因此需要使用rabbitmqadmin来删除，方法如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rabbitmqctl list_queues | grep -E <span class="string">&quot;heroine:q:[0-9a-f]&#123;16&#125;&quot;</span> | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | xargs -n1 -I % <span class="built_in">echo</span> <span class="string">&quot;%&quot;</span> &amp;&amp; ./rabbitmqadmin delete queue name=%</span><br></pre></td></tr></table></figure>
+<p>该方案的缺点在于，其一需要开启RabbitMQ管理界面，其二业务依然在运行，仍然会周期性产生该队列，需要有定期清理机制，增加系统复杂性</p>
+</li>
+<li><p>最终使用的方案是增加策略的方式，具体如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rabbitmqctl set_policy QEXPIREPOLICY <span class="string">&quot;heroine:q:[0-9a-f]&#123;16&#125;&quot;</span> <span class="string">&#x27;&#123;&quot;expires&quot;: 100000&#125;&#x27;</span> --apply-to queues  --priority 1</span><br></pre></td></tr></table></figure>
+<p>在如上策略中，100000毫秒后队列会自动删除，其优先级为1，优先级数字越高优先级越高，但是注意，每个队列只有一个policy生效。</p>
+</li>
+</ol>
+<blockquote>
+<p>未使用的意思是队列上没有任何的消费者，队列也没有被重新声明，并 且在过期时间段 内也未调用过 Basic.Get 命令</p>
+</blockquote>
+<h3 id="4-结果验证"><a href="#4-结果验证" class="headerlink" title="4.结果验证"></a>4.结果验证</h3><p>采用方案3，最终解决了该问题。</p>
 
       
     </div>
