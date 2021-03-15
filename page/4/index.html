@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,79 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/23/windows-git-no-matching-key-exchange-method-found/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/02/23/windows-git-no-matching-key-exchange-method-found/" class="post-title-link" itemprop="url">Windows Git错误： no matching key exchange method found</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2018-02-23 15:34:56 / Modified: 16:32:10" itemprop="dateCreated datePublished" datetime="2018-02-23T15:34:56+08:00">2018-02-23</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>执行<code>git clone ssh://XX@X.X.X.X:X/XXX</code>时有如下错误，错误信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cloning into &#39;XXX&#39;...</span><br><span class="line">Unable to negotiate with X.X.X.X: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1</span><br><span class="line">fatal: Could not read from remote repository.</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<p>在.ssh目录（当前用户目录下）新增config文件，在其中加入如下语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host *</span><br><span class="line">    KexAlgorithms +diffie-hellman-group1-sha1</span><br></pre></td></tr></table></figure>
+<hr>
+<p>问题还没有结束，这个操作是作为Jenkins的Slave执行的，在Jenkins上触发的时候，得到了同样的错误，解决方法：在执行git命令之前，设置环境变量</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> USERPROFILE=C:\Users\Administrator</span><br><span class="line">git clone SOME_URL</span><br></pre></td></tr></table></figure>
+<p>副作用未知</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1074,75 +1147,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String command=<span class="string">&quot;sh /build.sh&quot;</span></span><br><span class="line">Process process = <span class="keyword">new</span> ProcessBuilder(<span class="string">&quot;bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,command).start();</span><br></pre></td></tr></table></figure>
 <p>并且需要在<code>build.sh</code>中<code>source /etc/profile</code>，因为svn和mvn的环境变量都在这里</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/01/27/ftp-error-425-failed-to-establish-connection/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/01/27/ftp-error-425-failed-to-establish-connection/" class="post-title-link" itemprop="url">FTP下载错误：425 Failed to establish connection</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-01-27 19:37:15 / Modified: 19:44:38" itemprop="dateCreated datePublished" datetime="2018-01-27T19:37:15+08:00">2018-01-27</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>FTP服务器：CentOS6.5<br>FTP客户端：Windows Server 12R2 ,FTP<br>解决方法：</p>
-<blockquote>
-<p> Windows防火墙-&gt;允许应用或功能通过Windows防火墙-&gt;允许其他应用-&gt;浏览-&gt;选择ftp.exe，添加，完成</p>
-</blockquote>
-<p>解决方法（命令行）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall add allowedprogram C:\Windows\System32\ftp.exe ALLOW_FTP ENABLE</span><br></pre></td></tr></table></figure>
       
     </div>
 

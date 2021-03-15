@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,70 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/15/prevention-of-ddos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/15/prevention-of-ddos/" class="post-title-link" itemprop="url">DDOS攻击防御的思考</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-03-15 14:09:13 / Modified: 14:09:45" itemprop="dateCreated datePublished" datetime="2021-03-15T14:09:13+08:00">2021-03-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -777,75 +841,6 @@
           <ol>
 <li>进行编译或者安装之前，先把当前环境信息打印一下（内存、硬盘空间等）</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/11/19/mysqld-cant-change-dir-to-errcode-13-permission-denied/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/11/19/mysqld-cant-change-dir-to-errcode-13-permission-denied/" class="post-title-link" itemprop="url">MySQL报错：mysqld cant change dir to errcode 13 permission denied</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-11-19 14:18:27 / Modified: 14:23:17" itemprop="dateCreated datePublished" datetime="2018-11-19T14:18:27+08:00">2018-11-19</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>MySQL报错：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqld:Can&#39;t change dir to &#39;&#x2F;usr&#x2F;local&#x2F;dbmysql&#x2F;data&#x2F;db&#39; Errcode:13 -Permission denied</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>原因：mysql不仅要对/usr/local/dbmysql/data/db有读写权限，还要对/usr/local/dbmysql/data及之上的目录有读权限</p>
-<p>有的Linux系统的umask是027(大部分是022)，直接创建出来的目录对其他是无权限的</p>
-<p>因此，在Linux系统中，如果手动创建了目录，保险起见还是chmod一下</p>
 
       
     </div>

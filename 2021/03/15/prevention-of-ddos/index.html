@@ -23,20 +23,18 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="The right method to run a shell script build remotely through Spring boot on CentOS环境：CentOS6.5，Spring Boot 为了能远程触发一个CentOS6.5上的构建脚本，例如&#x2F;build.sh，内容为 123#!&#x2F;bin&#x2F;shsvn checkout path@Head --username xxx -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Linux中通过Java运行脚本文件的正确姿势">
-<meta property="og:url" content="http://blog.heroine-x.com/2018/01/29/run-command-through-java-in-linux/index.html">
+<meta property="og:title" content="DDOS攻击防御的思考">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/03/15/prevention-of-ddos/index.html">
 <meta property="og:site_name" content="Blog of Heroine Ekkusu">
-<meta property="og:description" content="The right method to run a shell script build remotely through Spring boot on CentOS环境：CentOS6.5，Spring Boot 为了能远程触发一个CentOS6.5上的构建脚本，例如&#x2F;build.sh，内容为 123#!&#x2F;bin&#x2F;shsvn checkout path@Head --username xxx -">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2018-01-29T07:06:33.000Z">
-<meta property="article:modified_time" content="2018-01-29T07:15:01.220Z">
+<meta property="article:published_time" content="2021-03-15T06:09:13.000Z">
+<meta property="article:modified_time" content="2021-03-15T06:09:45.649Z">
 <meta property="article:author" content="heroine-x">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://blog.heroine-x.com/2018/01/29/run-command-through-java-in-linux/">
+<link rel="canonical" href="http://blog.heroine-x.com/2021/03/15/prevention-of-ddos/">
 
 
 <script class="page-configurations">
@@ -48,7 +46,7 @@
     lang   : 'en'
   };
 </script>
-<title>在Linux中通过Java运行脚本文件的正确姿势 | Blog of Heroine Ekkusu</title>
+<title>DDOS攻击防御的思考 | Blog of Heroine Ekkusu</title>
   
 
 
@@ -135,7 +133,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -148,7 +146,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#The-right-method-to-run-a-shell-script-build-remotely-through-Spring-boot-on-CentOS"><span class="nav-number">1.</span> <span class="nav-text">The right method to run a shell script build remotely through Spring boot on CentOS</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -201,7 +198,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/01/29/run-command-through-java-in-linux/">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/15/prevention-of-ddos/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,7 +211,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在Linux中通过Java运行脚本文件的正确姿势
+          DDOS攻击防御的思考
         </h1>
 
         <div class="post-meta-container">
@@ -226,7 +223,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2018-01-29 15:06:33 / Modified: 15:15:01" itemprop="dateCreated datePublished" datetime="2018-01-29T15:06:33+08:00">2018-01-29</time>
+      <time title="Created: 2021-03-15 14:09:13 / Modified: 14:09:45" itemprop="dateCreated datePublished" datetime="2021-03-15T14:09:13+08:00">2021-03-15</time>
     </span>
 
   
@@ -239,13 +236,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h5 id="The-right-method-to-run-a-shell-script-build-remotely-through-Spring-boot-on-CentOS"><a href="#The-right-method-to-run-a-shell-script-build-remotely-through-Spring-boot-on-CentOS" class="headerlink" title="The right method to run a shell script build remotely through Spring boot on CentOS"></a>The right method to run a shell script build remotely through Spring boot on CentOS</h5><p>环境：CentOS6.5，Spring Boot</p>
-<p>为了能远程触发一个CentOS6.5上的构建脚本，例如<code>/build.sh</code>，内容为</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">svn checkout path@Head --username xxx --password yyy --no-auth-cache</span><br><span class="line">mvn clean package</span><br></pre></td></tr></table></figure>
-<p>有一个Spring Boot应用程序，通过调用<code>http://build-server.com:8080/api/build</code>接口来调用这个脚本，进行构建。但是如果直接使用<code>Runtime.getRuntime.exec(&quot;sh /build.sh&quot;)</code>的话，十有八九是构建失败的，正确的姿势是</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String command=<span class="string">&quot;sh /build.sh&quot;</span></span><br><span class="line">Process process = <span class="keyword">new</span> ProcessBuilder(<span class="string">&quot;bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,command).start();</span><br></pre></td></tr></table></figure>
-<p>并且需要在<code>build.sh</code>中<code>source /etc/profile</code>，因为svn和mvn的环境变量都在这里</p>
-
+        
     </div>
 
     
@@ -258,14 +249,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2018/01/27/ftp-error-425-failed-to-establish-connection/" rel="prev" title="FTP下载错误：425 Failed to establish connection">
-                  <i class="fa fa-chevron-left"></i> FTP下载错误：425 Failed to establish connection
+                <a href="/2021/03/15/performance-optimizition-for-rabbitmq/" rel="prev" title="RabbitMQ性能优化专题">
+                  <i class="fa fa-chevron-left"></i> RabbitMQ性能优化专题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2018/02/01/some-pitfall-about-rabbitmq/" rel="next" title="关于RabbitMQ的一些坑">
-                  关于RabbitMQ的一些坑 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

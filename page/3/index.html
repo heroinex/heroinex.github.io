@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,77 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/03/cannot-move-mixed-revision-subtree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/03/cannot-move-mixed-revision-subtree/" class="post-title-link" itemprop="url">Intellij报错：cannot move mixed-revision subtree</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-03 15:55:54" itemprop="dateCreated datePublished" datetime="2018-05-03T15:55:54+08:00">2018-05-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在IntelliJ中Build项目的时候报错cannot move mixed-revision subtree，解决方法不知道。不过据我经验，Intellij在重构的时候容易完犊子，最佳的方法是一个包一个包的重构，例如A包含B，要把A移动到C，最好先把A的类移动到C，然后把B移动到C.B中。如果直接把A移动到C，容易出现依赖问题。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -926,79 +997,6 @@
 <li>产品名称 Sample.App</li>
 <li>产品版本 App.Version</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/23/windows-git-no-matching-key-exchange-method-found/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/23/windows-git-no-matching-key-exchange-method-found/" class="post-title-link" itemprop="url">Windows Git错误： no matching key exchange method found</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-02-23 15:34:56 / Modified: 16:32:10" itemprop="dateCreated datePublished" datetime="2018-02-23T15:34:56+08:00">2018-02-23</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>执行<code>git clone ssh://XX@X.X.X.X:X/XXX</code>时有如下错误，错误信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cloning into &#39;XXX&#39;...</span><br><span class="line">Unable to negotiate with X.X.X.X: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1</span><br><span class="line">fatal: Could not read from remote repository.</span><br></pre></td></tr></table></figure>
-<p>解决方法：</p>
-<p>在.ssh目录（当前用户目录下）新增config文件，在其中加入如下语句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host *</span><br><span class="line">    KexAlgorithms +diffie-hellman-group1-sha1</span><br></pre></td></tr></table></figure>
-<hr>
-<p>问题还没有结束，这个操作是作为Jenkins的Slave执行的，在Jenkins上触发的时候，得到了同样的错误，解决方法：在执行git命令之前，设置环境变量</p>
-<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> USERPROFILE=C:\Users\Administrator</span><br><span class="line">git clone SOME_URL</span><br></pre></td></tr></table></figure>
-<p>副作用未知</p>
 
       
     </div>
