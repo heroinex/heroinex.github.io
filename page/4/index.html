@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,463 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/09/problems-when-exception-in-transaction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/03/09/problems-when-exception-in-transaction/" class="post-title-link" itemprop="url">事务发生异常的时候如何进行处理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-03-09 11:38:24" itemprop="dateCreated datePublished" datetime="2018-03-09T11:38:24+08:00">2018-03-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-03-16 12:19:48" itemprop="dateModified" datetime="2018-03-16T12:19:48+08:00">2018-03-16</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>当时写这篇文章的时候来源于一个“印象”，假设有如下代码块</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">save</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Client client = <span class="keyword">new</span> Client();</span><br><span class="line">    clientDao.save(client); <span class="comment">// save</span></span><br><span class="line">    clientCacheMap.add(client.getId(),client); <span class="comment">// add to cache</span></span><br><span class="line">    <span class="comment">// end of function</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>我印象中<code>@Transaction</code> 是发生在<code>end of function</code>这部分，所以如果调用<code>save</code>方法报异常的时候，<code>add to cache</code>方法也是会执行的，但是此时，数据库中并没有插入，而Map已经插入了。造成了Map作为一个缓存，与数据库不统一。</p>
+<p>但是我现在复现不了了，<code>save</code>行直接抛出异常了，什么鬼，复现的方法是什么呢？</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/07/condition-to-specification-jpa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/03/07/condition-to-specification-jpa/" class="post-title-link" itemprop="url">condition to specification jpa</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-03-07 17:30:32" itemprop="dateCreated datePublished" datetime="2018-03-07T17:30:32+08:00">2018-03-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/06/ideas-about-the-inherit-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/03/06/ideas-about-the-inherit-platform/" class="post-title-link" itemprop="url">项目继承与数据库关系的一点想法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-03-06 11:15:45" itemprop="dateCreated datePublished" datetime="2018-03-06T11:15:45+08:00">2018-03-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>项目分为1个父项目和1个子项目，父项目作为一个基础平台，子项目依赖父项目并且扩展。将来子项目可能有多个，但是父项目只有1个。</p>
+<p>子项目与父项目代码的物理位置不同，但是连接同一个数据库，数据库连接方法在子项目中定义。</p>
+<h1 id="问题1：实体类的CRUD"><a href="#问题1：实体类的CRUD" class="headerlink" title="问题1：实体类的CRUD"></a>问题1：实体类的<code>CRUD</code></h1><p>问题来源：有客户端<code>Client</code>，其在父项目中定义，并且在父项目中<strong>新增、修改、删除</strong>，另有一些额外的信息在子项目中定义，并且在子项目中<strong>修改</strong>，子项目不会新增或删除Client，父项目和子项目都有可能使用Specification来定制搜索规则。</p>
+<h2 id="方案1：-使用Entity继承"><a href="#方案1：-使用Entity继承" class="headerlink" title="方案1： 使用Entity继承"></a>方案1： 使用Entity继承</h2><p>JPA提供了三种实体继承映射策略</p>
+<ol>
+<li><code>InheritanceType.SINGLE_TABLE</code> 例如B继承A，C继承A，那么只会映射为一个表，包含了A、B、C的所有字段，并且使用一个字段来区分某一个记录是哪个实体</li>
+<li><code>InheritanceType.JOINED</code> 超类映射为一个表，每个子类映射到各自的表</li>
+<li><code>InheritanceType.TABLE_PER_CLASS</code> 每个具体的类一个表，每个表都是单独的，各个表的主键没有任何关系</li>
+</ol>
+<h3 id="方案1-0-使用SINGLE-TABLE"><a href="#方案1-0-使用SINGLE-TABLE" class="headerlink" title="方案1.0 使用SINGLE_TABLE"></a>方案1.0 使用SINGLE_TABLE</h3><p>这种方法明显不适合，略过。</p>
+<p>实在想不出来这种玩法有什么应用场景。</p>
+<h3 id="方案1-1-使用JOINED"><a href="#方案1-1-使用JOINED" class="headerlink" title="方案1.1 使用JOINED"></a>方案1.1 使用JOINED</h3><p>在这种方式中父类存放公共字段，父类和子类存在一一对应的关系，子类的ID参考父类的ID。</p>
+<p>客户端实体类<code>ClientDO.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name=&quot;client&quot;)</span></span><br><span class="line"><span class="meta">@Inheritance(strategy=InheritanceType.JOINED)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClientDO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name=&quot;name&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端附加信息实体类（位于子项目）<code>ExtraDO.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name=&quot;extra&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtraDO</span> <span class="keyword">extends</span> <span class="title">ClientDO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Column(name=&quot;os&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String os;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name=&quot;ip&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数据库表<code>client</code>包含id,name和<code>extra</code>包含id,os,ip，不建物理外键。在<code>ClientService</code>中，进行如下测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 片段1</span></span><br><span class="line">ClientDO client=<span class="keyword">new</span> ClientDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"><span class="comment">// client表中新增一条记录，extra表中无记录</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ClientDO client=<span class="keyword">new</span> ExtraDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>,<span class="string">&quot;windows&quot;</span>,<span class="string">&quot;192.168.0.2&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"><span class="comment">// client表中新增一条记录，extra表中新增一条记录</span></span><br></pre></td></tr></table></figure>
+<p>因为我们有在父项目中<strong>新增</strong>的需求，但是父项目中是无法看到<code>ExtraDO</code>的（其实也有办法：提供一个Service实现，返回ClientDO的子类对象，如果没有实现，就new ClientDO），所以我们只能用片段1的方式，但是这样不会在client_e中插入记录，所以还需要手动插入一个ExtraDO的实体，所以这样写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在父类中</span></span><br><span class="line">ClientDO client=<span class="keyword">new</span> ClientDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后调用子类的接口，可以通过写一个Service，子类来实现的方式</span></span><br><span class="line">ExtraDO extra=<span class="keyword">new</span> ExtraDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;windows&quot;</span>,<span class="string">&quot;192.168.0.2&quot;</span>);</span><br><span class="line">extraDao.save(extra);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会报错：A different object with the same identifier value was alread associated with the session</span></span><br></pre></td></tr></table></figure>
+<p>因此直接使用<code>JOINED</code>是不可以的。</p>
+<h3 id="方案1-2-使用TABLE-PER-CLASS"><a href="#方案1-2-使用TABLE-PER-CLASS" class="headerlink" title="方案1.2 使用TABLE_PER_CLASS"></a>方案1.2 使用TABLE_PER_CLASS</h3><p>参考文章：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/mhmyqn/article/details/37994707">http://blog.csdn.net/mhmyqn/article/details/37994707</a><br><a target="_blank" rel="noopener" href="http://blog.csdn.net/mhmyqn/article/details/37996673">http://blog.csdn.net/mhmyqn/article/details/37996673</a></p>
+</blockquote>
+<p>方案2: 维护2张表，并且联合查询</p>
+<p>思路1：condition的特殊处理</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/27/art-of-naming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/02/27/art-of-naming/" class="post-title-link" itemprop="url">一些（非正式的）编码英语单词规范</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-02-27 11:39:04" itemprop="dateCreated datePublished" datetime="2018-02-27T11:39:04+08:00">2018-02-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>来源于Jenkins、Sonar等，一些名称的命名建议</p>
+<h4 id="业务相关"><a href="#业务相关" class="headerlink" title="业务相关"></a>业务相关</h4><ul>
+<li><code>culprit</code> Jenkins构建成功后，会发送邮件到最后一次构建成功的提交者</li>
+<li><code>set</code> 集合</li>
+<li><code>actions</code> 操作</li>
+</ul>
+<h4 id="ID、名称等"><a href="#ID、名称等" class="headerlink" title="ID、名称等"></a>ID、名称等</h4><ul>
+<li><code>userId</code></li>
+<li><code>userName</code></li>
+<li><code>displayName</code></li>
+<li><code>fullDisplayName</code></li>
+<li><code>shortDescription</code></li>
+</ul>
+<h4 id="密码"><a href="#密码" class="headerlink" title="密码"></a>密码</h4><ul>
+<li><code>obfuscatedPassword</code> 模糊的密码（用星号替代）</li>
+</ul>
+<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><ul>
+<li><code>fileName</code></li>
+<li><code>displayPath</code></li>
+<li><code>relativePath</code></li>
+</ul>
+<h4 id="时间等"><a href="#时间等" class="headerlink" title="时间等"></a>时间等</h4><ul>
+<li><code>duration</code> 持续时间</li>
+<li><code>estimatedDuration</code> 预估时间</li>
+<li><code>timestamp</code> 时间戳</li>
+<li><code>submittedAt</code> 提交时间</li>
+<li><code>startedAt</code> 开始时间</li>
+<li><code>executedAt</code> 执行时间</li>
+<li><code>timeMs</code> 毫秒时间</li>
+<li><code>uptime</code> 工作总时长</li>
+<li><code>interval</code> 时间间隔</li>
+<li><code>duration</code> 时长</li>
+</ul>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
+<li><code>keepLog</code> 是否记录日志 </li>
+</ul>
+<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><ul>
+<li><code>artifact</code> 产品</li>
+<li><code>component</code> 组件</li>
+</ul>
+<h4 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h4><ul>
+<li><code>analysis</code> 分析</li>
+<li><code>obtain</code> 获取</li>
+<li><code>suggestion</code> 建议</li>
+</ul>
+<h4 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h4><ul>
+<li><code>status</code> <code>SUCCESS</code></li>
+<li><code>hasXxx</code> boolean，是否有XXX</li>
+</ul>
+<h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><ul>
+<li><code>arch</code> 架构</li>
+<li><code>family</code> 操作系统家族</li>
+</ul>
+<p>以下是重点——————————</p>
+<h4 id="verify-和-validate"><a href="#verify-和-validate" class="headerlink" title="verify 和 validate"></a>verify 和 validate</h4><p>这俩都有校验、验证的意思，怎么区分呢</p>
+<h4 id="authentication-和-authorization"><a href="#authentication-和-authorization" class="headerlink" title="authentication 和 authorization"></a>authentication 和 authorization</h4><h4 id="包装"><a href="#包装" class="headerlink" title="包装"></a>包装</h4><ul>
+<li>wrap/wrapper</li>
+<li>pack</li>
+<li>package</li>
+</ul>
+<h4 id="单元"><a href="#单元" class="headerlink" title="单元"></a>单元</h4><ul>
+<li>unit</li>
+<li>cell</li>
+</ul>
+<h4 id="增加-补充"><a href="#增加-补充" class="headerlink" title="增加/补充"></a>增加/补充</h4><ul>
+<li>add</li>
+<li>supply</li>
+<li>fill</li>
+</ul>
+<h4 id="提取-析取"><a href="#提取-析取" class="headerlink" title="提取/析取"></a>提取/析取</h4><ul>
+<li>extract</li>
+</ul>
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><ul>
+<li>cause</li>
+<li>reason</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>superfluous 多余的，不必要的</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/26/versions-in-innosetup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/02/26/versions-in-innosetup/" class="post-title-link" itemprop="url">InnoSetup中的版本对应关系</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2018-02-26 09:54:13 / Modified: 10:07:20" itemprop="dateCreated datePublished" datetime="2018-02-26T09:54:13+08:00">2018-02-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>InnoSetup的描述文件</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Setup]</span></span><br><span class="line"><span class="attr">AppName</span>=Sample.App</span><br><span class="line"><span class="attr">Appversion</span>=App.Version</span><br><span class="line"><span class="attr">VersionInfoTextVersion</span>=<span class="number">1.1</span>.A.B</span><br><span class="line"><span class="attr">VersionInfoVersion</span>=<span class="number">2.2</span> <span class="comment">#只能输入数字和点，不够的自动补0</span></span><br></pre></td></tr></table></figure>
+<p>编译出来的应用属性：</p>
+<ul>
+<li>文件说明 Sample.App Setup</li>
+<li>文件版本 2.2.0.0</li>
+<li>产品名称 Sample.App</li>
+<li>产品版本 App.Version</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -618,554 +1075,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/05/network-archaeology/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/05/network-archaeology/" class="post-title-link" itemprop="url">互联网考古</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-02-05 16:56:35 / Modified: 17:04:17" itemprop="dateCreated datePublished" datetime="2018-02-05T16:56:35+08:00">2018-02-05</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>放一些很“古老”的互联网概念。</p>
-<h1 id="BBCode"><a href="#BBCode" class="headerlink" title="BBCode"></a>BBCode</h1><p>要说没用过discuz，那是肯定不可能的，10年前我在小区内网搭建了个discuz，但那时候还不知道所谓的BBCode的概念，今天才偶然得知，原来还有BBCode这个说法。<br>举例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">普通文字</span><br><span class="line">[b]粗体[&#x2F;b]</span><br><span class="line">[i]斜体[&#x2F;i]</span><br><span class="line">[u]下划线[&#x2F;u]</span><br><span class="line">[s]删除线[&#x2F;s]</span><br><span class="line">[mask]马赛克[&#x2F;mask]</span><br><span class="line">[color&#x3D;green]绿色[&#x2F;color]</span><br><span class="line">[size&#x3D;10]字号[&#x2F;size]</span><br><span class="line">[url]URL[&#x2F;url]</span><br><span class="line">[img]http:&#x2F;&#x2F;not-exist.com&#x2F;null.gif[&#x2F;img]</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/02/something-about-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/02/something-about-docker/" class="post-title-link" itemprop="url">关于Docker的一些想法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-02-02 18:20:12 / Modified: 18:21:48" itemprop="dateCreated datePublished" datetime="2018-02-02T18:20:12+08:00">2018-02-02</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>2018年2月2日18:20:48<br>暂时没觉得docker对我有多少吸引力，可能是应用场景不合适吧，其实比起docker本身的作用，我更期待的是一个不常用但重要的备份和迁移功能，可能导出导入虚拟机更适合吧 </p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/02/tech-stacks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/02/tech-stacks/" class="post-title-link" itemprop="url">技术栈</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-02-02 16:00:35" itemprop="dateCreated datePublished" datetime="2018-02-02T16:00:35+08:00">2018-02-02</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>放一些现在我不会的东西，以后学习</p>
-<h2 id="数据结构和算法"><a href="#数据结构和算法" class="headerlink" title="数据结构和算法"></a>数据结构和算法</h2><ul>
-<li>数据结构 +</li>
-<li>算法 +</li>
-<li>分类问题</li>
-<li>回归问题</li>
-</ul>
-<h2 id="框架-语言"><a href="#框架-语言" class="headerlink" title="框架/语言"></a>框架/语言</h2><ul>
-<li>Python +++++++++++</li>
-<li>Flask</li>
-<li>Django</li>
-<li>Ruby ++</li>
-<li>Ruby on Rails +</li>
-<li>Golang +</li>
-<li>Scala</li>
-<li>PHP ++++</li>
-<li>Android +</li>
-<li>IOS +</li>
-<li>Object-C</li>
-<li>GO +</li>
-<li>C++ +++</li>
-<li>STL</li>
-<li>C</li>
-<li>Spring MVC</li>
-<li>ibatis</li>
-<li>dubbo </li>
-<li>Node +</li>
-<li>Struts</li>
-</ul>
-<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><ul>
-<li>Jvm</li>
-<li>类装载</li>
-<li>线程</li>
-<li>并发</li>
-<li>IO</li>
-<li>网络</li>
-</ul>
-<h2 id="安卓"><a href="#安卓" class="headerlink" title="安卓"></a>安卓</h2><ul>
-<li>Android SDK UI</li>
-<li>数据存储</li>
-<li>GPS</li>
-<li>网络通讯</li>
-<li>多媒体</li>
-<li>大型安卓应用经历</li>
-</ul>
-<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><ul>
-<li>爬虫 *</li>
-<li>Scrapy</li>
-<li>XPath</li>
-<li>Selenium</li>
-<li>PhantomJS</li>
-<li>反爬虫</li>
-<li>反反爬虫</li>
-</ul>
-<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><ul>
-<li>Hibernate</li>
-<li>PostgreSQL</li>
-<li>Cassandra</li>
-<li>Redis +++</li>
-<li>Elasticsearch ++</li>
-<li>Kibana</li>
-<li>Oracle</li>
-</ul>
-<h2 id="运维"><a href="#运维" class="headerlink" title="运维"></a>运维</h2><ul>
-<li>Docker</li>
-<li>Ansible</li>
-</ul>
-<h2 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h2><ul>
-<li>ETL +</li>
-<li>ETL实施</li>
-<li>ETL性能优化</li>
-<li>OLAP</li>
-<li>数据监控</li>
-<li>数据仓储</li>
-<li>BI</li>
-<li>数据立方</li>
-<li>数据挖掘 ++</li>
-<li>机器学习 +</li>
-<li>用户画像</li>
-<li>Hadoop ++</li>
-<li>Spark ++</li>
-<li>HDFS, MapReduce，Hbase，Pig</li>
-<li>Hive ++</li>
-<li>Storm</li>
-<li>推荐系统</li>
-<li>rank</li>
-<li>数据模型</li>
-</ul>
-<h2 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h2><ul>
-<li>分布式</li>
-<li>分布式服务治理</li>
-<li>分布式数据库</li>
-<li>负载均衡</li>
-<li>多线程 +</li>
-<li>高性能</li>
-<li>高可用</li>
-<li>扩展性</li>
-</ul>
-<h2 id="移动开发"><a href="#移动开发" class="headerlink" title="移动开发"></a>移动开发</h2><ul>
-<li>iOS</li>
-<li>Andriod</li>
-</ul>
-<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><ul>
-<li>CSS +++++</li>
-<li>ES5/6</li>
-<li>JS +++++</li>
-<li>Html ++</li>
-<li>DOM</li>
-<li>JQuery</li>
-<li>Bootstrap</li>
-<li>JSP</li>
-<li>Ajax</li>
-<li>跨浏览器/跨平台/浏览器兼容 +</li>
-<li>AngularJS +</li>
-<li>Konkout/Backbone/Ember</li>
-<li>React ++</li>
-<li>React Native +</li>
-<li>Redux</li>
-<li>Vue </li>
-<li>W3C</li>
-<li>ECMAScript</li>
-<li>CommonJS</li>
-<li>ES6</li>
-<li>MVC</li>
-<li>MVVM</li>
-<li>flux</li>
-<li>redux</li>
-<li>hybrid</li>
-<li>前端构建 +</li>
-<li>前端性能优化</li>
-<li>大型网站重构</li>
-<li>SVG +</li>
-<li>Canvas +</li>
-<li>WebGL</li>
-<li>Electron</li>
-</ul>
-<h2 id="持续集成"><a href="#持续集成" class="headerlink" title="持续集成"></a>持续集成</h2><ul>
-<li>Grunt</li>
-<li>Gulp </li>
-<li>Gitlab</li>
-<li>GitHub Flow</li>
-</ul>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ul>
-<li>API 测试</li>
-<li>自动化测试</li>
-<li>Web自动化测试 </li>
-<li>数据分析测试</li>
-<li>性能测试</li>
-<li>安全测试</li>
-<li>TDD(测试驱动开发) +</li>
-<li>BDD</li>
-</ul>
-<h2 id="不会归类"><a href="#不会归类" class="headerlink" title="不会归类"></a>不会归类</h2><ul>
-<li>设计模式</li>
-</ul>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><ul>
-<li>网络</li>
-<li>IO</li>
-<li>TCP/IP</li>
-<li>HTTP ++</li>
-<li>Socket</li>
-<li>Web Service</li>
-</ul>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><ul>
-<li>xgboost、tensorflow、keras、theano、caffe</li>
-</ul>
-<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><ul>
-<li>SQL注入</li>
-<li>XSS</li>
-</ul>
-<h2 id="能力"><a href="#能力" class="headerlink" title="能力"></a>能力</h2><ul>
-<li>后台服务架构</li>
-<li>开源代码阅读</li>
-<li>Web性能优化手段</li>
-<li>设计模式</li>
-<li>代码重构</li>
-<li>企业应用架构模式</li>
-<li>微服务实践</li>
-<li>高并发</li>
-</ul>
-<h2 id="配置管理软件"><a href="#配置管理软件" class="headerlink" title="配置管理软件"></a>配置管理软件</h2><ul>
-<li>Ansible</li>
-<li>Salt</li>
-<li>Puppet</li>
-<li>Chef</li>
-</ul>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
-<li>个人技术博客地址</li>
-<li>GitHub上的开源代码</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/01/some-pitfall-about-rabbitmq/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/01/some-pitfall-about-rabbitmq/" class="post-title-link" itemprop="url">关于RabbitMQ的一些坑</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-02-01 16:05:48" itemprop="dateCreated datePublished" datetime="2018-02-01T16:05:48+08:00">2018-02-01</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-02-02 15:56:01" itemprop="dateModified" datetime="2018-02-02T15:56:01+08:00">2018-02-02</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>Some pitfalls about RabbitMQ</p>
-</blockquote>
-<p>首先是发现了一个奇怪的现象，RabbitMQ某个时间不接受新的连接，重启也不能解决。用<code>rabbitmqctl status</code>执行了一下发现，很奇怪的<code>listeners</code>字段为空的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;listeners,[]&#125;</span><br></pre></td></tr></table></figure>
-<p>Google上相关现象很少，但是偶然发现其中的<code>file_descriptors</code>字段中，<code>total_used</code>已经达到了<code>total_limit</code>的数值，才发现RabbitMQ重启的时候，ulimit -n 并没有生效</p>
-<p>修改之后就好了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ulimit -n 40000</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;rabbitmq&#x2F;sbin&#x2F;rabbitmq-server</span><br></pre></td></tr></table></figure>
-<p>待确认的问题：</p>
-<ol>
-<li>已知MQ用了如此多的<code>file_descriptors</code>是因为客户端不断连接导致的，但是为何重启之后也不行呢，与持久化有关吗</li>
-<li>为什么/etc/profile里的<code>ulimit -n 65535</code>没有生效呢</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/01/29/run-command-through-java-in-linux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/01/29/run-command-through-java-in-linux/" class="post-title-link" itemprop="url">在Linux中通过Java运行脚本文件的正确姿势</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-01-29 15:06:33 / Modified: 15:15:01" itemprop="dateCreated datePublished" datetime="2018-01-29T15:06:33+08:00">2018-01-29</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h5 id="The-right-method-to-run-a-shell-script-build-remotely-through-Spring-boot-on-CentOS"><a href="#The-right-method-to-run-a-shell-script-build-remotely-through-Spring-boot-on-CentOS" class="headerlink" title="The right method to run a shell script build remotely through Spring boot on CentOS"></a>The right method to run a shell script build remotely through Spring boot on CentOS</h5><p>环境：CentOS6.5，Spring Boot</p>
-<p>为了能远程触发一个CentOS6.5上的构建脚本，例如<code>/build.sh</code>，内容为</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">svn checkout path@Head --username xxx --password yyy --no-auth-cache</span><br><span class="line">mvn clean package</span><br></pre></td></tr></table></figure>
-<p>有一个Spring Boot应用程序，通过调用<code>http://build-server.com:8080/api/build</code>接口来调用这个脚本，进行构建。但是如果直接使用<code>Runtime.getRuntime.exec(&quot;sh /build.sh&quot;)</code>的话，十有八九是构建失败的，正确的姿势是</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String command=<span class="string">&quot;sh /build.sh&quot;</span></span><br><span class="line">Process process = <span class="keyword">new</span> ProcessBuilder(<span class="string">&quot;bash&quot;</span>,<span class="string">&quot;-c&quot;</span>,command).start();</span><br></pre></td></tr></table></figure>
-<p>并且需要在<code>build.sh</code>中<code>source /etc/profile</code>，因为svn和mvn的环境变量都在这里</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 

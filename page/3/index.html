@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,394 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/22/java-code-collection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/22/java-code-collection/" class="post-title-link" itemprop="url">Java代码搜集</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-22 09:22:59" itemprop="dateCreated datePublished" datetime="2018-05-22T09:22:59+08:00">2018-05-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="递归处理父类"><a href="#递归处理父类" class="headerlink" title="递归处理父类"></a>递归处理父类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Class cur=obj.getClass();</span><br><span class="line"><span class="keyword">while</span> (!Object.class.equals(cur))</span><br><span class="line">&#123;</span><br><span class="line">    Field[] fields=cur.getDeclaredFields();</span><br><span class="line">    <span class="keyword">for</span> (field:fields)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">    cur=cur.getSuperclass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/21/problem-caused-by-password-of-mongo-user/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/21/problem-caused-by-password-of-mongo-user/" class="post-title-link" itemprop="url">Mongo密码导致Spring起不来的奇怪问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-21 11:01:12" itemprop="dateCreated datePublished" datetime="2018-05-21T11:01:12+08:00">2018-05-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Spring MVC程序，Mongo密码放在<code>spring.properties</code>配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spring.data.mongodb.host&#x3D;127.0.0.1</span><br><span class="line">spring.data.mongodb.port&#x3D;27017</span><br><span class="line">spring.data.mongodb.database&#x3D;hxlog</span><br><span class="line">spring.data.mongodb.username&#x3D;hx</span><br><span class="line">spring.data.mongodb.password&#x3D;123456?</span><br></pre></td></tr></table></figure>
+<p>Mondo配置文件位于<code>mongo-config.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mongo:mongo-client</span> <span class="attr">host</span>=<span class="string">&quot;$&#123;spring.data.mongodb.host&#125;&quot;</span> <span class="attr">port</span>=<span class="string">&quot;$&#123;spring.data.mongodb.port&#125;&quot;</span> <span class="attr">credentials</span>=<span class="string">&quot;$&#123;spring.data.mongodb.username&#125;:$&#123;spring.data.mongodb.password&#125;@$&#123;spring.data.mongodb.database&#125;&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mongo&quot;</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">mongo:client-options</span> <span class="attr">write-concern</span>=<span class="string">&quot;SAFE&quot;</span>/&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">mongo:mongo-client</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>然后启动就报异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error creating bean with name <span class="string">&#x27;mongo&#x27;</span>:Initialization of bean failed;nested exception is java.lang.ArrayIndexOutOfBoundsException:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>错误原因：<br>mongo密码中有问号，修改Mongo用户的密码，去掉了问号（替换为了叹号）就好了</p>
+<p>参加class<code>MongoCredentialPropertyEditor</code>，其中定义了<code>private static final String OPTIONS_DELEMINATOR=&quot;?&quot;</code></p>
+<p>未解决问题：</p>
+<ol>
+<li>该问题只在Linux的Mongo上遇到了，Windows的Mongo没遇到</li>
+<li>如果在不能修改Mongo密码的情况下，如何正确的配置连接字</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/16/how-to-use-intellij-better/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/16/how-to-use-intellij-better/" class="post-title-link" itemprop="url">IntelliJ配置指南</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-16 14:26:28" itemprop="dateCreated datePublished" datetime="2018-05-16T14:26:28+08:00">2018-05-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h4 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h4><ol>
+<li>Key Promoter X</li>
+<li>CheckStyle</li>
+</ol>
+<h4 id="代码格式化文件"><a href="#代码格式化文件" class="headerlink" title="代码格式化文件"></a>代码格式化文件</h4><p>从以前的项目中导入</p>
+<h4 id="CheckStyle风格文件"><a href="#CheckStyle风格文件" class="headerlink" title="CheckStyle风格文件"></a>CheckStyle风格文件</h4><p>从以前的项目中导入</p>
+<h4 id="配置Json风格的toString方法"><a href="#配置Json风格的toString方法" class="headerlink" title="配置Json风格的toString方法"></a>配置Json风格的toString方法</h4><p>配置toString模板（按alt+ins），新建模板如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> java.lang.<span class="function">String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">final</span> java.lang.StringBuilder sb = <span class="keyword">new</span> java.lang.StringBuilder(<span class="string">&quot;&#123;&quot;</span>);</span><br><span class="line">#set ($i = 0)</span><br><span class="line">#foreach ($member in $members)#if ($i == 0)</span><br><span class="line">sb.append(<span class="string">&quot;#####</span></span><br><span class="line"><span class="string">#else</span></span><br><span class="line">sb.append(&quot;,####</span><br><span class="line">#end#if ($member.string || $member.date)</span><br><span class="line">\<span class="string">&quot;$member.name\&quot;:\&quot;&quot;</span>)</span><br><span class="line">#else</span><br><span class="line">\<span class="string">&quot;$member.name\&quot;:&quot;</span>)</span><br><span class="line">#end#if ($member.primitiveArray || $member.objectArray)</span><br><span class="line">.append(java.util.Arrays.toString($member.name));</span><br><span class="line">#elseif ($member.string || $member.date)</span><br><span class="line">.append($member.accessor).append(<span class="string">&#x27;\&quot;&#x27;</span>);</span><br><span class="line">#else</span><br><span class="line">.append($member.accessor);</span><br><span class="line">#end#set ($i = $i + 1)</span><br><span class="line">#end</span><br><span class="line">sb.append(<span class="string">&quot;,\&quot;super\&quot;:&quot;</span>);</span><br><span class="line">sb.append(<span class="keyword">super</span>.toString());</span><br><span class="line">sb.append(<span class="string">&#x27;&#125;&#x27;</span>);</span><br><span class="line"><span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/16/tsukkomi-about-run-bat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/16/tsukkomi-about-run-bat/" class="post-title-link" itemprop="url">关于bat调用的吐槽</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-16 14:07:49" itemprop="dateCreated datePublished" datetime="2018-05-16T14:07:49+08:00">2018-05-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>现在才知道如果a.bat调用b.bat，需要写<code>call b.bat</code>，否则执行完b.bat后是不会继续执行a.bat剩下的语句的。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/10/set-CATALINA-OPTS-for-tomcat-as-a-service-in-windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Heroine Ekkusu">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/10/set-CATALINA-OPTS-for-tomcat-as-a-service-in-windows/" class="post-title-link" itemprop="url">Windows系统中以服务方式运行的Tomcat，如何设置CATALINA_OPTS</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-10 16:09:02" itemprop="dateCreated datePublished" datetime="2018-05-10T16:09:02+08:00">2018-05-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>当Tomcat安装为服务时，想设置CATALINA_OPTS，如果使用<code>setenv.bat</code>的话，那么这个bat是不会执行的。具体说明如下：</p>
+<h4 id="使用setenv-bat"><a href="#使用setenv-bat" class="headerlink" title="使用setenv.bat"></a>使用setenv.bat</h4><ol>
+<li>新建setenv.bat，内容如下<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> CATALINA_OPTS=<span class="variable">%CATALINA_OPTS%</span> -Djava.library.<span class="built_in">path</span>=&quot;C:\My <span class="number">3</span><span class="built_in">rd</span> Lib\bin&quot; -Djava.awt.headless=true</span><br></pre></td></tr></table></figure></li>
+<li>使用<code>service.bat install mytomcat</code>命令安装服务并启动</li>
+</ol>
+<p>这种方式只有使用<code>startup.bat</code>启动（或者Linux下<code>startup.sh</code>启动）的时候，才会执行，如果安装为服务，是无法达到想要的目的的。<del>真是坑爹</del></p>
+<p>正确的方法是</p>
+<h4 id="使用US更新服务"><a href="#使用US更新服务" class="headerlink" title="使用US更新服务"></a>使用US更新服务</h4><ol>
+<li>使用<code>service.bat install mytomcat</code>命令安装服务，不启动</li>
+<li>使用tomcat程序更新参数<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tomcat8 //US//mytomcat ++JvmOptions=-Djava.library.<span class="built_in">path</span>=&quot;C:\My <span class="number">3</span><span class="built_in">rd</span> Lib\bin&quot;</span><br><span class="line">tomcat8 //US//mytomcat ++JvmOptions=-Djava.awt.headless=true</span><br></pre></td></tr></table></figure></li>
+<li>启动服务</li>
+</ol>
+<p>注：该配置存放在注册表，位置为<code>HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Apache Software Foundation\Procrun 2.0\Tomcat7\Parameters\Java\Options</code>，但是这样有问题，这个配置应该配置的是JVM的参数，而不是catalina的参数。</p>
+<p>Catalina的参数怎么配置，有待继续研究。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -558,465 +946,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/09/problems-when-exception-in-transaction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/09/problems-when-exception-in-transaction/" class="post-title-link" itemprop="url">事务发生异常的时候如何进行处理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-03-09 11:38:24" itemprop="dateCreated datePublished" datetime="2018-03-09T11:38:24+08:00">2018-03-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-03-16 12:19:48" itemprop="dateModified" datetime="2018-03-16T12:19:48+08:00">2018-03-16</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>当时写这篇文章的时候来源于一个“印象”，假设有如下代码块</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">save</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Client client = <span class="keyword">new</span> Client();</span><br><span class="line">    clientDao.save(client); <span class="comment">// save</span></span><br><span class="line">    clientCacheMap.add(client.getId(),client); <span class="comment">// add to cache</span></span><br><span class="line">    <span class="comment">// end of function</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>我印象中<code>@Transaction</code> 是发生在<code>end of function</code>这部分，所以如果调用<code>save</code>方法报异常的时候，<code>add to cache</code>方法也是会执行的，但是此时，数据库中并没有插入，而Map已经插入了。造成了Map作为一个缓存，与数据库不统一。</p>
-<p>但是我现在复现不了了，<code>save</code>行直接抛出异常了，什么鬼，复现的方法是什么呢？</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/07/condition-to-specification-jpa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/07/condition-to-specification-jpa/" class="post-title-link" itemprop="url">condition to specification jpa</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-03-07 17:30:32" itemprop="dateCreated datePublished" datetime="2018-03-07T17:30:32+08:00">2018-03-07</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/06/ideas-about-the-inherit-platform/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/06/ideas-about-the-inherit-platform/" class="post-title-link" itemprop="url">项目继承与数据库关系的一点想法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-03-06 11:15:45" itemprop="dateCreated datePublished" datetime="2018-03-06T11:15:45+08:00">2018-03-06</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>项目分为1个父项目和1个子项目，父项目作为一个基础平台，子项目依赖父项目并且扩展。将来子项目可能有多个，但是父项目只有1个。</p>
-<p>子项目与父项目代码的物理位置不同，但是连接同一个数据库，数据库连接方法在子项目中定义。</p>
-<h1 id="问题1：实体类的CRUD"><a href="#问题1：实体类的CRUD" class="headerlink" title="问题1：实体类的CRUD"></a>问题1：实体类的<code>CRUD</code></h1><p>问题来源：有客户端<code>Client</code>，其在父项目中定义，并且在父项目中<strong>新增、修改、删除</strong>，另有一些额外的信息在子项目中定义，并且在子项目中<strong>修改</strong>，子项目不会新增或删除Client，父项目和子项目都有可能使用Specification来定制搜索规则。</p>
-<h2 id="方案1：-使用Entity继承"><a href="#方案1：-使用Entity继承" class="headerlink" title="方案1： 使用Entity继承"></a>方案1： 使用Entity继承</h2><p>JPA提供了三种实体继承映射策略</p>
-<ol>
-<li><code>InheritanceType.SINGLE_TABLE</code> 例如B继承A，C继承A，那么只会映射为一个表，包含了A、B、C的所有字段，并且使用一个字段来区分某一个记录是哪个实体</li>
-<li><code>InheritanceType.JOINED</code> 超类映射为一个表，每个子类映射到各自的表</li>
-<li><code>InheritanceType.TABLE_PER_CLASS</code> 每个具体的类一个表，每个表都是单独的，各个表的主键没有任何关系</li>
-</ol>
-<h3 id="方案1-0-使用SINGLE-TABLE"><a href="#方案1-0-使用SINGLE-TABLE" class="headerlink" title="方案1.0 使用SINGLE_TABLE"></a>方案1.0 使用SINGLE_TABLE</h3><p>这种方法明显不适合，略过。</p>
-<p>实在想不出来这种玩法有什么应用场景。</p>
-<h3 id="方案1-1-使用JOINED"><a href="#方案1-1-使用JOINED" class="headerlink" title="方案1.1 使用JOINED"></a>方案1.1 使用JOINED</h3><p>在这种方式中父类存放公共字段，父类和子类存在一一对应的关系，子类的ID参考父类的ID。</p>
-<p>客户端实体类<code>ClientDO.java</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name=&quot;client&quot;)</span></span><br><span class="line"><span class="meta">@Inheritance(strategy=InheritanceType.JOINED)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClientDO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name=&quot;name&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>客户端附加信息实体类（位于子项目）<code>ExtraDO.java</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name=&quot;extra&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtraDO</span> <span class="keyword">extends</span> <span class="title">ClientDO</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Column(name=&quot;os&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String os;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name=&quot;ip&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String ip;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>数据库表<code>client</code>包含id,name和<code>extra</code>包含id,os,ip，不建物理外键。在<code>ClientService</code>中，进行如下测试</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 片段1</span></span><br><span class="line">ClientDO client=<span class="keyword">new</span> ClientDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"><span class="comment">// client表中新增一条记录，extra表中无记录</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ClientDO client=<span class="keyword">new</span> ExtraDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>,<span class="string">&quot;windows&quot;</span>,<span class="string">&quot;192.168.0.2&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"><span class="comment">// client表中新增一条记录，extra表中新增一条记录</span></span><br></pre></td></tr></table></figure>
-<p>因为我们有在父项目中<strong>新增</strong>的需求，但是父项目中是无法看到<code>ExtraDO</code>的（其实也有办法：提供一个Service实现，返回ClientDO的子类对象，如果没有实现，就new ClientDO），所以我们只能用片段1的方式，但是这样不会在client_e中插入记录，所以还需要手动插入一个ExtraDO的实体，所以这样写</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在父类中</span></span><br><span class="line">ClientDO client=<span class="keyword">new</span> ClientDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;alpha&quot;</span>);</span><br><span class="line">clientDao.save(client);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后调用子类的接口，可以通过写一个Service，子类来实现的方式</span></span><br><span class="line">ExtraDO extra=<span class="keyword">new</span> ExtraDO(<span class="string">&quot;1&quot;</span>,<span class="string">&quot;windows&quot;</span>,<span class="string">&quot;192.168.0.2&quot;</span>);</span><br><span class="line">extraDao.save(extra);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会报错：A different object with the same identifier value was alread associated with the session</span></span><br></pre></td></tr></table></figure>
-<p>因此直接使用<code>JOINED</code>是不可以的。</p>
-<h3 id="方案1-2-使用TABLE-PER-CLASS"><a href="#方案1-2-使用TABLE-PER-CLASS" class="headerlink" title="方案1.2 使用TABLE_PER_CLASS"></a>方案1.2 使用TABLE_PER_CLASS</h3><p>参考文章：</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/mhmyqn/article/details/37994707">http://blog.csdn.net/mhmyqn/article/details/37994707</a><br><a target="_blank" rel="noopener" href="http://blog.csdn.net/mhmyqn/article/details/37996673">http://blog.csdn.net/mhmyqn/article/details/37996673</a></p>
-</blockquote>
-<p>方案2: 维护2张表，并且联合查询</p>
-<p>思路1：condition的特殊处理</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/27/art-of-naming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/27/art-of-naming/" class="post-title-link" itemprop="url">一些（非正式的）编码英语单词规范</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-02-27 11:39:04" itemprop="dateCreated datePublished" datetime="2018-02-27T11:39:04+08:00">2018-02-27</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>来源于Jenkins、Sonar等，一些名称的命名建议</p>
-<h4 id="业务相关"><a href="#业务相关" class="headerlink" title="业务相关"></a>业务相关</h4><ul>
-<li><code>culprit</code> Jenkins构建成功后，会发送邮件到最后一次构建成功的提交者</li>
-<li><code>set</code> 集合</li>
-<li><code>actions</code> 操作</li>
-</ul>
-<h4 id="ID、名称等"><a href="#ID、名称等" class="headerlink" title="ID、名称等"></a>ID、名称等</h4><ul>
-<li><code>userId</code></li>
-<li><code>userName</code></li>
-<li><code>displayName</code></li>
-<li><code>fullDisplayName</code></li>
-<li><code>shortDescription</code></li>
-</ul>
-<h4 id="密码"><a href="#密码" class="headerlink" title="密码"></a>密码</h4><ul>
-<li><code>obfuscatedPassword</code> 模糊的密码（用星号替代）</li>
-</ul>
-<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><ul>
-<li><code>fileName</code></li>
-<li><code>displayPath</code></li>
-<li><code>relativePath</code></li>
-</ul>
-<h4 id="时间等"><a href="#时间等" class="headerlink" title="时间等"></a>时间等</h4><ul>
-<li><code>duration</code> 持续时间</li>
-<li><code>estimatedDuration</code> 预估时间</li>
-<li><code>timestamp</code> 时间戳</li>
-<li><code>submittedAt</code> 提交时间</li>
-<li><code>startedAt</code> 开始时间</li>
-<li><code>executedAt</code> 执行时间</li>
-<li><code>timeMs</code> 毫秒时间</li>
-<li><code>uptime</code> 工作总时长</li>
-<li><code>interval</code> 时间间隔</li>
-<li><code>duration</code> 时长</li>
-</ul>
-<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
-<li><code>keepLog</code> 是否记录日志 </li>
-</ul>
-<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><ul>
-<li><code>artifact</code> 产品</li>
-<li><code>component</code> 组件</li>
-</ul>
-<h4 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h4><ul>
-<li><code>analysis</code> 分析</li>
-<li><code>obtain</code> 获取</li>
-<li><code>suggestion</code> 建议</li>
-</ul>
-<h4 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h4><ul>
-<li><code>status</code> <code>SUCCESS</code></li>
-<li><code>hasXxx</code> boolean，是否有XXX</li>
-</ul>
-<h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><ul>
-<li><code>arch</code> 架构</li>
-<li><code>family</code> 操作系统家族</li>
-</ul>
-<p>以下是重点——————————</p>
-<h4 id="verify-和-validate"><a href="#verify-和-validate" class="headerlink" title="verify 和 validate"></a>verify 和 validate</h4><p>这俩都有校验、验证的意思，怎么区分呢</p>
-<h4 id="authentication-和-authorization"><a href="#authentication-和-authorization" class="headerlink" title="authentication 和 authorization"></a>authentication 和 authorization</h4><h4 id="包装"><a href="#包装" class="headerlink" title="包装"></a>包装</h4><ul>
-<li>wrap/wrapper</li>
-<li>pack</li>
-<li>package</li>
-</ul>
-<h4 id="单元"><a href="#单元" class="headerlink" title="单元"></a>单元</h4><ul>
-<li>unit</li>
-<li>cell</li>
-</ul>
-<h4 id="增加-补充"><a href="#增加-补充" class="headerlink" title="增加/补充"></a>增加/补充</h4><ul>
-<li>add</li>
-<li>supply</li>
-<li>fill</li>
-</ul>
-<h4 id="提取-析取"><a href="#提取-析取" class="headerlink" title="提取/析取"></a>提取/析取</h4><ul>
-<li>extract</li>
-</ul>
-<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><ul>
-<li>cause</li>
-<li>reason</li>
-</ul>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li>superfluous 多余的，不必要的</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/02/26/versions-in-innosetup/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Heroine Ekkusu">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/02/26/versions-in-innosetup/" class="post-title-link" itemprop="url">InnoSetup中的版本对应关系</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-02-26 09:54:13 / Modified: 10:07:20" itemprop="dateCreated datePublished" datetime="2018-02-26T09:54:13+08:00">2018-02-26</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>InnoSetup的描述文件</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Setup]</span></span><br><span class="line"><span class="attr">AppName</span>=Sample.App</span><br><span class="line"><span class="attr">Appversion</span>=App.Version</span><br><span class="line"><span class="attr">VersionInfoTextVersion</span>=<span class="number">1.1</span>.A.B</span><br><span class="line"><span class="attr">VersionInfoVersion</span>=<span class="number">2.2</span> <span class="comment">#只能输入数字和点，不够的自动补0</span></span><br></pre></td></tr></table></figure>
-<p>编译出来的应用属性：</p>
-<ul>
-<li>文件说明 Sample.App Setup</li>
-<li>文件版本 2.2.0.0</li>
-<li>产品名称 Sample.App</li>
-<li>产品版本 App.Version</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
