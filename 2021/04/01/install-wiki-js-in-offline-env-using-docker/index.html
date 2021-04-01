@@ -31,7 +31,7 @@
 <meta property="og:description" content="安装方法Docker镜像导入离线环境首先在联网机上安装Docker， 123yum install dockersystemctl enable dockersystemctl start docker 然后拉取Wiki.js和MySQL的镜像，并保存 1234docker pull requarks&#x2F;wiki:2.5docker save -o wiki:2.5.tar requark">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-04-01T11:45:29.000Z">
-<meta property="article:modified_time" content="2021-04-01T12:20:07.450Z">
+<meta property="article:modified_time" content="2021-04-01T12:28:03.669Z">
 <meta property="article:author" content="heroine-x">
 <meta name="twitter:card" content="summary">
 
@@ -226,7 +226,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-04-01 19:45:29 / Modified: 20:20:07" itemprop="dateCreated datePublished" datetime="2021-04-01T19:45:29+08:00">2021-04-01</time>
+      <time title="Created: 2021-04-01 19:45:29 / Modified: 20:28:03" itemprop="dateCreated datePublished" datetime="2021-04-01T19:45:29+08:00">2021-04-01</time>
     </span>
 
   
@@ -261,6 +261,7 @@
 <li>在主机上执行<code>ifconfig</code>命令，docker0网卡对应的IP地址就是主机对于Docker的IP地址</li>
 <li>由于MySQL和Wiki是运行在不同的容器中，因此需要主机开3306端口，否则无法访问，此处存疑，不知道有无优化余地，添加防火墙规则命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;public --add-port&#x3D;3306&#x2F;tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure></li>
 <li>关闭SELinux一劳永逸，临时关闭<code>setenforce 0</code>，永久关闭：编辑<code>/etc/selinux/config</code>文件，将<code>SELINUX=enforcing</code>更改为<code>SELINUX=disabled</code></li>
+<li>不支持中文搜索，后续尝试PostgreSQL</li>
 </ul>
 
     </div>
