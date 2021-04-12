@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,156 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/12/using-elasticsearch-in-wiki-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/12/using-elasticsearch-in-wiki-js/" class="post-title-link" itemprop="url">在Wiki.js中使用ElasticSearch搜索</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-04-12 15:32:47 / Modified: 15:40:16" itemprop="dateCreated datePublished" datetime="2021-04-12T15:32:47+08:00">2021-04-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>首先还是搭建完成Wiki.js，然后搭建ElasticSearch，方法如下：</p>
+<h2 id="搭建ES"><a href="#搭建ES" class="headerlink" title="搭建ES"></a>搭建ES</h2><ul>
+<li>使用<code>docker pull elasticsearch:7.12.0</code>命令拉取ES，注意要加上版本号，否则可能报错</li>
+<li>使用<br><code>docker save -o elasticsearch:7.12.0.tar elasticsearch:7.12.0</code>导出为tar镜像，并导出到离线的机器上，如果没有此需求可以不进行这个操作</li>
+<li>在离线机器上使用<code>docker load -i elasticsearch:7.12.0.tar</code>命令导入镜像</li>
+<li>启动ES<code>docker run -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot;  --name es --restart unless-stopped elasticsearch:7.12.0 </code></li>
+<li>添加防火墙规则<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=9200/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=9300/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h2 id="连接ES"><a href="#连接ES" class="headerlink" title="连接ES"></a>连接ES</h2></li>
+<li>登录Wiki.js，进入设置-&gt;搜索引擎，选择ElasticSearch</li>
+<li>Version选择7.x，Host输入<code>http://172.17.0.1:9200</code>，其他的不需要进行修改</li>
+<li>点击右上角的应用，再点击右上角的重建索引</li>
+</ul>
+<p>这样支持了中文分词搜索，但是亲测搜索效果不佳，很多词汇搜不出来，不知道有无优化余地。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/08/search-binary-sequence-in-binary-files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/08/search-binary-sequence-in-binary-files/" class="post-title-link" itemprop="url">文件夹中的二进制序列搜索</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-04-08 14:44:29 / Modified: 14:51:19" itemprop="dateCreated datePublished" datetime="2021-04-08T14:44:29+08:00">2021-04-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>需求：需要在一个文件夹中查找特定的二进制串，例如0x11,0x12,0x13,0x14，经测试可使用grepWin工具</p>
+<ul>
+<li>Search in 文件夹路径</li>
+<li>Search for 填写查找文件的正则，例如\x11\x12\x13\x14</li>
+<li>勾选Treat files as binary</li>
+<li>点击Search即可</li>
+</ul>
+<p>缺点是仅查找出来了文件，未写明第几行，还需要UltraEdit之类的工具二次查找。</p>
+<p>grepWin工具网站：<a target="_blank" rel="noopener" href="https://tools.stefankueng.com/">https://tools.stefankueng.com/</a> </p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -768,140 +918,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/22/some-pitfall-about-class-inheritance-in-spring-data-jpa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/22/some-pitfall-about-class-inheritance-in-spring-data-jpa/" class="post-title-link" itemprop="url">Spring Data JPA中关于实体类继承的一些坑</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-22 09:56:26 / Modified: 09:58:12" itemprop="dateCreated datePublished" datetime="2021-03-22T09:56:26+08:00">2021-03-22</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/16/what-is-the-meaning-of-in-url/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/16/what-is-the-meaning-of-in-url/" class="post-title-link" itemprop="url">URL里的特殊字符</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-16 15:18:17 / Modified: 15:18:47" itemprop="dateCreated datePublished" datetime="2021-03-16T15:18:17+08:00">2021-03-16</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>URL里的#!</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19946782">https://www.zhihu.com/question/19946782</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
