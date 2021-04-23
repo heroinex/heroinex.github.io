@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,6 +186,232 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/22/use-jdk-tools-on-windows-java-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/22/use-jdk-tools-on-windows-java-service/" class="post-title-link" itemprop="url">对Windows的Java服务使用JDK工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-22 14:32:56" itemprop="dateCreated datePublished" datetime="2018-05-22T14:32:56+08:00">2018-05-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>如果把Java程序封装为服务，那么直接用JDK工具运行会报错误：<br><code>308:  insufficient memory or insufficient privileges to attach</code></p>
+<p>原因应该是Java服务是用System起的，登陆用户是Administrator</p>
+<p>需要下载PsExec，然后执行命令<br><code>psexec -s &quot;C:\Path\to\jdk\jmap.exe&quot; -histo 3456 &gt;&quot;C:\3456.txt&quot;</code>才能输出正确的结果。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/22/java-code-collection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/22/java-code-collection/" class="post-title-link" itemprop="url">Java代码搜集</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-22 09:22:59" itemprop="dateCreated datePublished" datetime="2018-05-22T09:22:59+08:00">2018-05-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="递归处理父类"><a href="#递归处理父类" class="headerlink" title="递归处理父类"></a>递归处理父类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Class cur=obj.getClass();</span><br><span class="line"><span class="keyword">while</span> (!Object.class.equals(cur))</span><br><span class="line">&#123;</span><br><span class="line">    Field[] fields=cur.getDeclaredFields();</span><br><span class="line">    <span class="keyword">for</span> (field:fields)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">    cur=cur.getSuperclass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/05/21/problem-caused-by-password-of-mongo-user/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/05/21/problem-caused-by-password-of-mongo-user/" class="post-title-link" itemprop="url">Mongo密码导致Spring起不来的奇怪问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-21 11:01:12" itemprop="dateCreated datePublished" datetime="2018-05-21T11:01:12+08:00">2018-05-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2018-11-19 14:16:49" itemprop="dateModified" datetime="2018-11-19T14:16:49+08:00">2018-11-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Spring MVC程序，Mongo密码放在<code>spring.properties</code>配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spring.data.mongodb.host&#x3D;127.0.0.1</span><br><span class="line">spring.data.mongodb.port&#x3D;27017</span><br><span class="line">spring.data.mongodb.database&#x3D;hxlog</span><br><span class="line">spring.data.mongodb.username&#x3D;hx</span><br><span class="line">spring.data.mongodb.password&#x3D;123456?</span><br></pre></td></tr></table></figure>
+<p>Mondo配置文件位于<code>mongo-config.xml</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mongo:mongo-client</span> <span class="attr">host</span>=<span class="string">&quot;$&#123;spring.data.mongodb.host&#125;&quot;</span> <span class="attr">port</span>=<span class="string">&quot;$&#123;spring.data.mongodb.port&#125;&quot;</span> <span class="attr">credentials</span>=<span class="string">&quot;$&#123;spring.data.mongodb.username&#125;:$&#123;spring.data.mongodb.password&#125;@$&#123;spring.data.mongodb.database&#125;&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mongo&quot;</span>&gt;</span>    </span><br><span class="line">    <span class="tag">&lt;<span class="name">mongo:client-options</span> <span class="attr">write-concern</span>=<span class="string">&quot;SAFE&quot;</span>/&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">mongo:mongo-client</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>然后启动就报异常：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error creating bean with name <span class="string">&#x27;mongo&#x27;</span>:Initialization of bean failed;nested exception is java.lang.ArrayIndexOutOfBoundsException:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>错误原因：<br>mongo密码中有问号，修改Mongo用户的密码，去掉了问号（替换为了叹号）就好了</p>
+<p>参加class<code>MongoCredentialPropertyEditor</code>，其中定义了<code>private static final String OPTIONS_DELEMINATOR=&quot;?&quot;</code></p>
+<p>未解决问题：</p>
+<ol>
+<li>该问题只在Linux的Mongo上遇到了，Windows的Mongo没遇到</li>
+<li>如果在不能修改Mongo密码的情况下，如何正确的配置连接字</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -704,215 +930,6 @@
 <li><a target="_blank" rel="noopener" href="http://www.talkwithtrend.com/Question/405405">http://www.talkwithtrend.com/Question/405405</a> 今天将MySQL版本升级到5.7.19 执行查询，mysql服务直接挂了？</li>
 </ol>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/21/invalid-constant-type-18/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/21/invalid-constant-type-18/" class="post-title-link" itemprop="url">Java工程报错：invalid constant type 18</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2018-03-21 11:10:03 / Modified: 13:03:14" itemprop="dateCreated datePublished" datetime="2018-03-21T11:10:03+08:00">2018-03-21</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>项目用Tomcat8跑，代码中有一句lambda表达式，导致项目启动报错：<br><code>invalid constant type 18</code></p>
-<p>解决方法：</p>
-<ol>
-<li>经过定位发现有个dependency定义为：<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.hibernate<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hibernate-entitymanager<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.6.3.Final<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li>修改为最新的<code>5.2.15Final</code>后重新编译即可正常运行</li>
-</ol>
-<hr>
-<p>Javassist是一个动态类库，可以用来检查、修改以及创建类。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/09/problems-when-exception-in-transaction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/09/problems-when-exception-in-transaction/" class="post-title-link" itemprop="url">事务发生异常的时候如何进行处理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-03-09 11:38:24" itemprop="dateCreated datePublished" datetime="2018-03-09T11:38:24+08:00">2018-03-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2018-03-16 12:19:48" itemprop="dateModified" datetime="2018-03-16T12:19:48+08:00">2018-03-16</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>当时写这篇文章的时候来源于一个“印象”，假设有如下代码块</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">save</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Client client = <span class="keyword">new</span> Client();</span><br><span class="line">    clientDao.save(client); <span class="comment">// save</span></span><br><span class="line">    clientCacheMap.add(client.getId(),client); <span class="comment">// add to cache</span></span><br><span class="line">    <span class="comment">// end of function</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>我印象中<code>@Transaction</code> 是发生在<code>end of function</code>这部分，所以如果调用<code>save</code>方法报异常的时候，<code>add to cache</code>方法也是会执行的，但是此时，数据库中并没有插入，而Map已经插入了。造成了Map作为一个缓存，与数据库不统一。</p>
-<p>但是我现在复现不了了，<code>save</code>行直接抛出异常了，什么鬼，复现的方法是什么呢？</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2018/03/07/condition-to-specification-jpa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/03/07/condition-to-specification-jpa/" class="post-title-link" itemprop="url">condition to specification jpa</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-03-07 17:30:32" itemprop="dateCreated datePublished" datetime="2018-03-07T17:30:32+08:00">2018-03-07</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
       
     </div>
 

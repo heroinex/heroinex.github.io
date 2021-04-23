@@ -23,20 +23,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="首先还是搭建完成Wiki.js，然后搭建ElasticSearch，方法如下： 搭建ES 使用docker pull elasticsearch:7.12.0命令拉取ES，注意要加上版本号，否则可能报错 使用docker save -o elasticsearch:7.12.0.tar elasticsearch:7.12.0导出为tar镜像，并导出到离线的机器上，如果没有此需求可以不进行这个操作">
+<meta name="description" content="服务器平安，Linux平安，SSH平安 SSH安全 更强的密码，或使用密钥登录 更改SSH端口 限制源IP地址 fail2ban denyhost endlessh ssh蜜罐  参考材料：  如何防止被暴力破解 ssh https:&#x2F;&#x2F;www.v2ex.com&#x2F;t&#x2F;772486#reply29">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Wiki.js中使用ElasticSearch搜索">
-<meta property="og:url" content="http://blog.heroine-x.com/2021/04/12/using-elasticsearch-in-wiki-js/index.html">
+<meta property="og:title" content="Linux服务器安全">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/04/23/linux-server-safety/index.html">
 <meta property="og:site_name" content="Blog of Mysterious">
-<meta property="og:description" content="首先还是搭建完成Wiki.js，然后搭建ElasticSearch，方法如下： 搭建ES 使用docker pull elasticsearch:7.12.0命令拉取ES，注意要加上版本号，否则可能报错 使用docker save -o elasticsearch:7.12.0.tar elasticsearch:7.12.0导出为tar镜像，并导出到离线的机器上，如果没有此需求可以不进行这个操作">
+<meta property="og:description" content="服务器平安，Linux平安，SSH平安 SSH安全 更强的密码，或使用密钥登录 更改SSH端口 限制源IP地址 fail2ban denyhost endlessh ssh蜜罐  参考材料：  如何防止被暴力破解 ssh https:&#x2F;&#x2F;www.v2ex.com&#x2F;t&#x2F;772486#reply29">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-04-12T07:32:47.000Z">
-<meta property="article:modified_time" content="2021-04-12T07:40:16.768Z">
+<meta property="article:published_time" content="2021-04-23T01:18:27.000Z">
+<meta property="article:modified_time" content="2021-04-23T01:52:48.411Z">
 <meta property="article:author" content="heroine-x">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://blog.heroine-x.com/2021/04/12/using-elasticsearch-in-wiki-js/">
+<link rel="canonical" href="http://blog.heroine-x.com/2021/04/23/linux-server-safety/">
 
 
 <script class="page-configurations">
@@ -48,7 +48,7 @@
     lang   : 'en'
   };
 </script>
-<title>在Wiki.js中使用ElasticSearch搜索 | Blog of Mysterious</title>
+<title>Linux服务器安全 | Blog of Mysterious</title>
   
 
 
@@ -148,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BAES"><span class="nav-number">1.</span> <span class="nav-text">搭建ES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5ES"><span class="nav-number">2.</span> <span class="nav-text">连接ES</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">SSH安全</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -201,7 +201,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/12/using-elasticsearch-in-wiki-js/">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/23/linux-server-safety/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在Wiki.js中使用ElasticSearch搜索
+          Linux服务器安全
         </h1>
 
         <div class="post-meta-container">
@@ -226,7 +226,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-04-12 15:32:47 / Modified: 15:40:16" itemprop="dateCreated datePublished" datetime="2021-04-12T15:32:47+08:00">2021-04-12</time>
+      <time title="Created: 2021-04-23 09:18:27 / Modified: 09:52:48" itemprop="dateCreated datePublished" datetime="2021-04-23T09:18:27+08:00">2021-04-23</time>
     </span>
 
   
@@ -239,19 +239,19 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>首先还是搭建完成Wiki.js，然后搭建ElasticSearch，方法如下：</p>
-<h2 id="搭建ES"><a href="#搭建ES" class="headerlink" title="搭建ES"></a>搭建ES</h2><ul>
-<li>使用<code>docker pull elasticsearch:7.12.0</code>命令拉取ES，注意要加上版本号，否则可能报错</li>
-<li>使用<br><code>docker save -o elasticsearch:7.12.0.tar elasticsearch:7.12.0</code>导出为tar镜像，并导出到离线的机器上，如果没有此需求可以不进行这个操作</li>
-<li>在离线机器上使用<code>docker load -i elasticsearch:7.12.0.tar</code>命令导入镜像</li>
-<li>启动ES<code>docker run -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot;  --name es --restart unless-stopped elasticsearch:7.12.0 </code></li>
-<li>添加防火墙规则<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=9200/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=9300/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-<h2 id="连接ES"><a href="#连接ES" class="headerlink" title="连接ES"></a>连接ES</h2></li>
-<li>登录Wiki.js，进入设置-&gt;搜索引擎，选择ElasticSearch</li>
-<li>Version选择7.x，Host输入<code>http://172.17.0.1:9200</code>，其他的不需要进行修改</li>
-<li>点击右上角的应用，再点击右上角的重建索引</li>
+        <p>服务器平安，Linux平安，SSH平安</p>
+<h1 id="SSH安全"><a href="#SSH安全" class="headerlink" title="SSH安全"></a>SSH安全</h1><ul>
+<li>更强的密码，或使用密钥登录</li>
+<li>更改SSH端口</li>
+<li>限制源IP地址</li>
+<li>fail2ban</li>
+<li>denyhost</li>
+<li>endlessh ssh蜜罐</li>
 </ul>
-<p>这样支持了中文分词搜索，但是亲测搜索效果不佳，很多词汇搜不出来，不知道有无优化余地。</p>
+<p>参考材料：</p>
+<blockquote>
+<p>如何防止被暴力破解 ssh <a target="_blank" rel="noopener" href="https://www.v2ex.com/t/772486#reply29">https://www.v2ex.com/t/772486#reply29</a></p>
+</blockquote>
 
     </div>
 
@@ -265,14 +265,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/04/08/search-binary-sequence-in-binary-files/" rel="prev" title="文件夹中的二进制序列搜索">
-                  <i class="fa fa-chevron-left"></i> 文件夹中的二进制序列搜索
+                <a href="/2021/04/22/jenkins-install-faq/" rel="prev" title="Jenkins安装问题">
+                  <i class="fa fa-chevron-left"></i> Jenkins安装问题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/04/20/how-to-acquire-the-ip-of-a-host/" rel="next" title="如何通过网线得到服务器的IP地址">
-                  如何通过网线得到服务器的IP地址 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
