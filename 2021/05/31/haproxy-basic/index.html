@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="基本测试以1Front+2Back为例： 准备Backend2台虚拟机各自安装httpd，开放80端口，分别写网页index.html，内容分别为This is node1和This is node2。 Front安装HaProxy在Front端执行命令yum install haproxy安装HaProxy 进行配置，修改配置文件&#x2F;etc&#x2F;haproxy&#x2F;haproxy.cfg  修改defau">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HaProxy入门">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/05/31/haproxy-basic/index.html">
+<meta property="og:site_name" content="Blog of Mysterious">
+<meta property="og:description" content="基本测试以1Front+2Back为例： 准备Backend2台虚拟机各自安装httpd，开放80端口，分别写网页index.html，内容分别为This is node1和This is node2。 Front安装HaProxy在Front端执行命令yum install haproxy安装HaProxy 进行配置，修改配置文件&#x2F;etc&#x2F;haproxy&#x2F;haproxy.cfg  修改defau">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-31T10:04:42.000Z">
+<meta property="article:modified_time" content="2021-05-31T11:39:18.877Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.heroine-x.com/2021/05/31/haproxy-basic/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>HaProxy入门 | Blog of Mysterious</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Mysterious</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of mysterious(x) 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">基本测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87Backend"><span class="nav-number">1.1.</span> <span class="nav-text">准备Backend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Front%E5%AE%89%E8%A3%85HaProxy"><span class="nav-number">1.2.</span> <span class="nav-text">Front安装HaProxy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E7%8A%B6%E6%80%81%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">带状态的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%BC%80%E7%9B%91%E6%8E%A7UI"><span class="nav-number">3.</span> <span class="nav-text">打开监控UI</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/05/31/haproxy-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HaProxy入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-31 18:04:42 / Modified: 19:39:18" itemprop="dateCreated datePublished" datetime="2021-05-31T18:04:42+08:00">2021-05-31</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="基本测试"><a href="#基本测试" class="headerlink" title="基本测试"></a>基本测试</h2><p>以1Front+2Back为例：</p>
+<h3 id="准备Backend"><a href="#准备Backend" class="headerlink" title="准备Backend"></a>准备Backend</h3><p>2台虚拟机各自安装httpd，开放80端口，分别写网页index.html，内容分别为This is node1和This is node2。</p>
+<h3 id="Front安装HaProxy"><a href="#Front安装HaProxy" class="headerlink" title="Front安装HaProxy"></a>Front安装HaProxy</h3><p>在Front端执行命令<code>yum install haproxy</code>安装HaProxy</p>
+<p>进行配置，修改配置文件<code>/etc/haproxy/haproxy.cfg</code></p>
+<ol>
+<li>修改default_backend为cloud</li>
+<li>添加名为cloud的backend：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">backend incloud</span><br><span class="line">    balance roundrobin</span><br><span class="line">    server  cloud1 192.168.59.138:80 weight 9 check</span><br><span class="line">    server  cloud2 192.168.59.136:80 weight 1 check</span><br></pre></td></tr></table></figure>
+注意：端口号80必须要配置，要不然HaProxy起不来。</li>
+</ol>
+<p><code>systemctl start haproxy</code>启动服务，然后访问192.168.59.135:5000，刷10次有9次会均衡到node1，1次均衡到node2</p>
+<h2 id="带状态的"><a href="#带状态的" class="headerlink" title="带状态的"></a>带状态的</h2><p>TODO</p>
+<h2 id="打开监控UI"><a href="#打开监控UI" class="headerlink" title="打开监控UI"></a>打开监控UI</h2><p>配置文件中增加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">frontend  adminui</span><br><span class="line">        bind *:8282</span><br><span class="line">        stats enable</span><br><span class="line">        stats  uri  &#x2F;admin?admin</span><br><span class="line">        stats auth admin:admin</span><br><span class="line">        stats hide-version</span><br><span class="line">        stats admin if TRUE</span><br><span class="line">        stats  refresh  30s</span><br></pre></td></tr></table></figure>
+<p>如果报错<code>Starting frontend adminui: cannot bind socket [0.0.0.0:8282]</code> ，则需要执行<code>setsebool -P haproxy_connect_any=1</code>。</p>
+<p>如果报503，检查一下URL输入的对不对。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/28/some-pitfall-about-upgrading-spring-family/" rel="prev" title="升级Spring遇到的一些坑">
+                  <i class="fa fa-chevron-left"></i> 升级Spring遇到的一些坑
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/09/get-all-resources-of-a-web-dir/" rel="next" title="列出网站目录下的资源">
+                  列出网站目录下的资源 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

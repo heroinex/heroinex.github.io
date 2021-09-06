@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="Demo搭建KeyCloak环境配置 新增realm 名称cloud 新增用户cloud000，密码123456，角色user 新增client 名称cloud-app-000pom.xml配置   pom.xml增加依赖123456789101112131415161718192021222324252627282930&lt;dependencies&gt;    &lt;dependency">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KeyCloak学习（二）Spring Boot Demo">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/08/09/spring-boot-keycloak/index.html">
+<meta property="og:site_name" content="Blog of Mysterious">
+<meta property="og:description" content="Demo搭建KeyCloak环境配置 新增realm 名称cloud 新增用户cloud000，密码123456，角色user 新增client 名称cloud-app-000pom.xml配置   pom.xml增加依赖123456789101112131415161718192021222324252627282930&lt;dependencies&gt;    &lt;dependency">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-09T11:33:42.000Z">
+<meta property="article:modified_time" content="2021-08-09T12:10:06.498Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.heroine-x.com/2021/08/09/spring-boot-keycloak/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>KeyCloak学习（二）Spring Boot Demo | Blog of Mysterious</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Mysterious</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of mysterious(x) 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">Demo搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KeyCloak%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">KeyCloak环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pom-xml%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">pom.xml配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.3.</span> <span class="nav-text">测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E5%BD%95-%E7%99%BB%E5%87%BA%E5%90%8E%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%89%8B%E5%8A%A8%E5%9B%9E%E5%88%B0-cloud-app%EF%BC%8C%E5%88%99%E9%9C%80%E8%A6%81ctrl-F5%E5%88%B7%E6%96%B0%E7%94%9F%E6%95%88"><span class="nav-number">2.1.</span> <span class="nav-text">登录&#x2F;登出后，如果手动回到&#x2F;cloud&#x2F;app，则需要ctrl+F5刷新生效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8Controller%E4%B8%AD%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D"><span class="nav-number">2.2.</span> <span class="nav-text">如何在Controller中获取当前登录的用户名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%B3%E8%BD%AC%E5%88%B0KeyCloak%E5%90%8E%EF%BC%8C%E4%B8%8D%E7%AD%89%E8%BE%93%E5%85%A5%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81%E7%9B%B4%E6%8E%A5%E6%98%BE%E7%A4%BA%EF%BC%9AInvalid-parameter-redirect-uri"><span class="nav-number">2.3.</span> <span class="nav-text">跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid parameter: redirect_uri</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/09/spring-boot-keycloak/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KeyCloak学习（二）Spring Boot Demo
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-09 19:33:42 / Modified: 20:10:06" itemprop="dateCreated datePublished" datetime="2021-08-09T19:33:42+08:00">2021-08-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Demo搭建"><a href="#Demo搭建" class="headerlink" title="Demo搭建"></a>Demo搭建</h2><h3 id="KeyCloak环境配置"><a href="#KeyCloak环境配置" class="headerlink" title="KeyCloak环境配置"></a>KeyCloak环境配置</h3><ul>
+<li>新增realm 名称cloud</li>
+<li>新增用户cloud000，密码123456，角色user</li>
+<li>新增client 名称cloud-app-000<h3 id="pom-xml配置"><a href="#pom-xml配置" class="headerlink" title="pom.xml配置"></a>pom.xml配置</h3></li>
+</ul>
+<ol>
+<li><code>pom.xml</code>增加依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-freemarker<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak.bom<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-adapter-bom<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>/resources/static/index.html</code>作为首页<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Index Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/cloud/app&quot;</span>&gt;</span>cloud app<span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>/resources/templates/cloud.ftl</code>作为登录后才能查看的网页<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#import &quot;/spring.ftl&quot; as spring&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Protect page $&#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/logout&quot;</span>&gt;</span>Logout<span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>application.properties进行配置<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">keycloak.auth-server-url</span>=<span class="string">http://192.168.60.171:8080/auth</span></span><br><span class="line"><span class="meta">keycloak.realm</span>=<span class="string">cloud</span></span><br><span class="line"><span class="meta">keycloak.public-client</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">keycloak.resource</span>=<span class="string">cloud-app-000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">spring.freemarker.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">spring.freemarker.suffix</span>=<span class="string">.ftl</span></span><br><span class="line"></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].authRoles[0]</span>=<span class="string">user</span></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].securityCollections[0].name</span>= <span class="string">common user</span></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].securityCollections[0].patterns[0]</span>=<span class="string">/cloud/*</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>CloudController.java</code>，主要内容如下<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(path = &quot;/cloud/app&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getCloud</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">    model.addAttribute(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;username000&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;cloud&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(path = &quot;/logout&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">logout</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    request.logout();</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;/&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li><p>场景1：访问<code>http://127.0.0.1:8086</code>，得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Index Page</span><br><span class="line">cloud app</span><br></pre></td></tr></table></figure></li>
+<li><p>点击cloud app上的链接，跳转到KeyCloak登录界面，URL为<code>http://192.168.60.171:8080/auth/realms/cloud/protocol/openid-connect/auth?response_type=code&amp;client_id=cloud-app-000&amp;redirect_uri=http%3A%2F%2F127.0.0.1%3A8086%2Fcloud%2Fapp&amp;state=4d91e21f-3716-47d2-bf2f-c6e6b85acf3d&amp;login=true&amp;scope=openid</code>，输入正确的用户名密码user000/123456，跳转到<code>http://127.0.0.1:8086/cloud/app</code></p>
+</li>
+<li><p>点击Logout，跳转到首页</p>
+</li>
+<li><p>直接在控制台中curl，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl 127.0.0.1:8086/cloud/app -I</span><br></pre></td></tr></table></figure>
+<p>返回如下</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="string">302</span></span><br><span class="line"><span class="meta">Cache-Control</span>: <span class="string">private</span></span><br><span class="line"><span class="attr">Expires</span>: <span class="string">Thu, 01 Jan 1970 00:00:00 GMT</span></span><br><span class="line"><span class="meta">Set-Cookie</span>: <span class="string">JSESSIONID=98C14318DDFF46051F757D620CA624FA; Path=/; HttpOnly</span></span><br><span class="line"><span class="meta">Set-Cookie</span>: <span class="string">OAuth_Token_Request_State=a10a0741-1674-4010-8230-b2a41f1e6e98; Version=1; Path=/; HttpOnly</span></span><br><span class="line"><span class="attr">Location</span>: <span class="string">http://192.168.60.171:8080/auth/realms/cloud/protocol/openid-connect/auth?response_type=code&amp;client_id=cloud-app-000&amp;redirect_uri=http%3A%2F%2F127.0.0.1%3A8086%2Fcloud%2Fapp&amp;state=a10a0741-1674-4010-8230-b2a41f1e6e98&amp;login=true&amp;scope=openid</span></span><br><span class="line"><span class="meta">Transfer-Encoding</span>: <span class="string">chunked</span></span><br><span class="line"><span class="attr">Date</span>: <span class="string">Mon, 09 Aug 2021 11:58:40 GMT</span></span><br></pre></td></tr></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2></li>
+</ol>
+<h3 id="登录-登出后，如果手动回到-cloud-app，则需要ctrl-F5刷新生效"><a href="#登录-登出后，如果手动回到-cloud-app，则需要ctrl-F5刷新生效" class="headerlink" title="登录/登出后，如果手动回到/cloud/app，则需要ctrl+F5刷新生效"></a>登录/登出后，如果手动回到/cloud/app，则需要ctrl+F5刷新生效</h3><p>暂时没有找到原因</p>
+<h3 id="如何在Controller中获取当前登录的用户名"><a href="#如何在Controller中获取当前登录的用户名" class="headerlink" title="如何在Controller中获取当前登录的用户名"></a>如何在Controller中获取当前登录的用户名</h3><p>暂时没有找到方案</p>
+<h3 id="跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid-parameter-redirect-uri"><a href="#跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid-parameter-redirect-uri" class="headerlink" title="跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid parameter: redirect_uri"></a>跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid parameter: redirect_uri</h3><p>解决方案：在KeyCloak管理界面配置相应Client的Valid Redriect URIs为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8086</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1:8086&#x2F;*</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ifme/p/12591457.html#gallery-5">https://www.cnblogs.com/ifme/p/12591457.html#gallery-5</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/09/install-esxi-on-notebook/" rel="prev" title="在备胎笔记本电脑上安装ESXi">
+                  <i class="fa fa-chevron-left"></i> 在备胎笔记本电脑上安装ESXi
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/11/openladp-server-in-linux/" rel="next" title="CentOS7搭建和使用LDAP">
+                  CentOS7搭建和使用LDAP <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

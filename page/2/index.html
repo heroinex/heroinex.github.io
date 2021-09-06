@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/23/hibernate-vs-eclipselink/">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/09/install-esxi-on-notebook/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -208,643 +208,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/hibernate-vs-eclipselink/" class="post-title-link" itemprop="url">Hibernate、EclipseLink和OpenJPA等ORM框架的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-23 13:53:01 / Modified: 14:25:58" itemprop="dateCreated datePublished" datetime="2021-03-23T13:53:01+08:00">2021-03-23</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>把了解到的整理如下：<br>JDBC是Java连接数据库的方法</p>
-<p>iBatis/Mybatis是一种半自动化的ORM框架</p>
-<ol>
-<li>Hibernate出现了，Hibernate是冬眠的意思，可能取义“懒人框架”</li>
-<li>J2EE团队要求Hibernate在Hibernate的基础上制定了JPA规范，JPA在功能上是Hibernate的子集</li>
-<li>Spring团队对JPA进行了封装，产生了Spring Data JPA</li>
-</ol>
-<p>也即，JPA是ORM规范，Hibernate实现了JPA规范，同样，EclipseLink、TopLink和OpenJPA也实现了这些规范。</p>
-<p>Spring开发中使用的<code>findById(String id)</code> 应该是Spring Data 的特性。</p>
-<p>Hibernate的两层缓存：<br>JDBC/Hibernate如果进行高并发的重复查询，对数据库压力比较大</p>
-<p>jOOQ: The easiest way to write SQL in Java</p>
-<p>参考：</p>
-<blockquote>
-<p>Hibernate和Spring Data JPA有什么区别？ <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/335584253">https://www.zhihu.com/question/335584253</a><br>小菜 jdbc、mybatis 和 hibernate 的疑问。 <a target="_blank" rel="noopener" href="https://www.v2ex.com/t/391707">https://www.v2ex.com/t/391707</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/23/a-security-risk-caused-by-a-301-error-from-missing-trailing-slash-in-nginx/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/a-security-risk-caused-by-a-301-error-from-missing-trailing-slash-in-nginx/" class="post-title-link" itemprop="url">a security risk caused by a 301 error from missing trailing slash in nginx</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-23 10:16:18 / Modified: 10:26:43" itemprop="dateCreated datePublished" datetime="2021-03-23T10:16:18+08:00">2021-03-23</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Our security qa report a risk that ,if you visit a url without a trailing slash ,such as “<a target="_blank" rel="noopener" href="http://192.168.0.100:7000/home&quot;">http://192.168.0.100:7000/home&quot;</a> will cause a 301 error from nginx ,and if you edit the <code>host</code> field in request and resend using firefox debugger tool you may get a reponse with <code>Location</code> field generated from your input <code>host</code> field ,meanwhile a 301 reponse. </p>
-<p>So ,what will happen :</p>
-<ul>
-<li>a hacker edit the request putting a malicious url in the <code>Host</code> field.</li>
-<li>nginx will redirect it ,sending a 301 reponse with <code>Location</code> generated from <code>Host</code></li>
-<li>the browser get the 301 reponse and redirect to the malicious url</li>
-<li>attack done</li>
-</ul>
-<p>To prevent this , optimize the <code>nginx.conf</code> file like this</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 7000;</span><br><span class="line">    absolute_redirect off;</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/23/idea-about-a-solution-website/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/idea-about-a-solution-website/" class="post-title-link" itemprop="url">程序员版知乎的想法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-23 10:04:54 / Modified: 10:30:21" itemprop="dateCreated datePublished" datetime="2021-03-23T10:04:54+08:00">2021-03-23</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>实际上在码农工作的过程中会遇到一些问题，有些问题的答案是比较固定的，这样是否可以有一个网站把这些解法总结出来，类似于Stackoverflow和某乎的结合版？</p>
-<p>&#x1F914;</p>
-<p>这个网站暂且就记录了我工作中遇到的一些问题，以及我能找到的最好的解决方案。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/22/some-pitfall-about-class-inheritance-in-spring-data-jpa/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/22/some-pitfall-about-class-inheritance-in-spring-data-jpa/" class="post-title-link" itemprop="url">Spring Data JPA中关于实体类继承的一些坑</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-22 09:56:26 / Modified: 09:58:12" itemprop="dateCreated datePublished" datetime="2021-03-22T09:56:26+08:00">2021-03-22</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/16/what-is-the-meaning-of-in-url/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/16/what-is-the-meaning-of-in-url/" class="post-title-link" itemprop="url">URL里的特殊字符</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-16 15:18:17 / Modified: 15:18:47" itemprop="dateCreated datePublished" datetime="2021-03-16T15:18:17+08:00">2021-03-16</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>URL里的#!</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19946782">https://www.zhihu.com/question/19946782</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/16/deep-in-mysql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/16/deep-in-mysql/" class="post-title-link" itemprop="url">深入学习MySQL</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-16 11:28:07 / Modified: 11:28:49" itemprop="dateCreated datePublished" datetime="2021-03-16T11:28:07+08:00">2021-03-16</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在线DDL<br>MDL锁</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/15/prevention-of-ddos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/15/prevention-of-ddos/" class="post-title-link" itemprop="url">DDOS攻击防御的思考</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-15 14:09:13 / Modified: 14:09:45" itemprop="dateCreated datePublished" datetime="2021-03-15T14:09:13+08:00">2021-03-15</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/15/performance-optimizition-for-rabbitmq/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/15/performance-optimizition-for-rabbitmq/" class="post-title-link" itemprop="url">一则由业务设计不合理导致的RabbitMQ异常分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-15 12:18:18 / Modified: 16:44:19" itemprop="dateCreated datePublished" datetime="2021-03-15T12:18:18+08:00">2021-03-15</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>近期遇到了RabbitMQ产生的问题，特此记录。</p>
-<p>问题现象：生产者无法投递消息，消费者无法消费消息，RabbitMQ整个异常</p>
-<h3 id="1-定位思路"><a href="#1-定位思路" class="headerlink" title="1.定位思路"></a>1.定位思路</h3><ol>
-<li>使用<code>rabbitmqctl status</code>命令查看MQ运行状态，报内存告警，使用management界面，process区域标红</li>
-<li>使用<code>rabbitmqctl list_queues</code>命令查询队列，输出响应极为缓慢，增加<code> | wc -l</code>参数查询数量，最终输出十几万余队列</li>
-</ol>
-<h3 id="2-问题原因分析"><a href="#2-问题原因分析" class="headerlink" title="2.问题原因分析"></a>2.问题原因分析</h3><p>经过分析，我们的业务程序会在特定触发下建立一个以UUID命名的队列，该队列没有设置策略，不会自动删除，导致MQ中一直存在该队列。每触发一次条件就会建立一个，频发触发导致建立几十万队列，占用大量内存，导致MQ异常。</p>
-<h3 id="3-解决思路"><a href="#3-解决思路" class="headerlink" title="3.解决思路"></a>3.解决思路</h3><p>解决思路有几种，利弊分析如下：</p>
-<ol>
-<li><p>优化业务程序，当建立队列并且不再使用后，手动删除，但是该方案无法解决现有的问题</p>
-</li>
-<li><p>删除现有的无用队列，由于rabbitmqctl中没有删除队列的命令，因此需要使用rabbitmqadmin来删除，方法如下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rabbitmqctl list_queues | grep -E <span class="string">&quot;heroine:q:[0-9a-f]&#123;16&#125;&quot;</span> | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> | xargs -n1 -I % <span class="built_in">echo</span> <span class="string">&quot;%&quot;</span> &amp;&amp; ./rabbitmqadmin delete queue name=%</span><br></pre></td></tr></table></figure>
-<p>该方案的缺点在于，其一需要开启RabbitMQ管理界面，其二业务依然在运行，仍然会周期性产生该队列，需要有定期清理机制，增加系统复杂性</p>
-</li>
-<li><p>最终使用的方案是增加策略的方式，具体如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./rabbitmqctl set_policy QEXPIREPOLICY <span class="string">&quot;heroine:q:[0-9a-f]&#123;16&#125;&quot;</span> <span class="string">&#x27;&#123;&quot;expires&quot;: 100000&#125;&#x27;</span> --apply-to queues  --priority 1</span><br></pre></td></tr></table></figure>
-<p>在如上策略中，100000毫秒后队列会自动删除，其优先级为1，优先级数字越高优先级越高，但是注意，每个队列只有一个policy生效。</p>
-</li>
-</ol>
-<blockquote>
-<p>未使用的意思是队列上没有任何的消费者，队列也没有被重新声明，并 且在过期时间段 内也未调用过 Basic.Get 命令</p>
-</blockquote>
-<p>该策略对已经产生的队列和即将创建的队列均有效，因此该方案能长久解决该问题。</p>
-<h3 id="4-结果验证"><a href="#4-结果验证" class="headerlink" title="4.结果验证"></a>4.结果验证</h3><p>采用方案3，最终解决了该问题。短期内没有发现问题。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/15/some-thinking-about-recent-projects/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/15/some-thinking-about-recent-projects/" class="post-title-link" itemprop="url">近期项目中的几点思考</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-15 11:04:41 / Modified: 12:18:52" itemprop="dateCreated datePublished" datetime="2021-03-15T11:04:41+08:00">2021-03-15</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>近期项目的一些思考。</p>
-<p>1，一定要做HA，考虑单节点故障</p>
-<p>2，脑裂是什么</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/05/mongodb-starts-up-failed-after-power-lost/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/05/mongodb-starts-up-failed-after-power-lost/" class="post-title-link" itemprop="url">掉电后MongoDB启动失败问题</a>
+          <a href="/2021/08/09/install-esxi-on-notebook/" class="post-title-link" itemprop="url">在备胎笔记本电脑上安装ESXi</a>
         </h2>
 
         <div class="post-meta-container">
@@ -855,14 +219,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-03-05 16:35:31" itemprop="dateCreated datePublished" datetime="2021-03-05T16:35:31+08:00">2021-03-05</time>
+      <time title="Created: 2021-08-09 08:34:06" itemprop="dateCreated datePublished" datetime="2021-08-09T08:34:06+08:00">2021-08-09</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-15 17:04:53" itemprop="dateModified" datetime="2021-03-15T17:04:53+08:00">2021-03-15</time>
+        <time title="Modified: 2021-08-11 08:57:45" itemprop="dateModified" datetime="2021-08-11T08:57:45+08:00">2021-08-11</time>
       </span>
 
   
@@ -875,11 +239,833 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="问题现象"><a href="#问题现象" class="headerlink" title="问题现象"></a>问题现象</h3><p>MongoDB掉电后，启动失败，手动启动报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: child process failed, exited with error number 51</span><br></pre></td></tr></table></figure>
-<p>打开MongoDB后台日志，发现打印了Error信息，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2021-03-05T16:32:24.460+0800 E STORAGE  [initandlisten] WiredTiger error (0) [1614933144:460719][32304:0x7f12c5e01d40], file:WiredTiger.wt, connection: read checksum error for 4096B block at offset 94208: block header checksum of 3716119611 doesn&#39;t match expected checksum of 1168247350</span><br><span class="line">2021-03-05T16:32:24.460+0800 E STORAGE  [initandlisten] WiredTiger error (0) [1614933144:460768][32304:0x7f12c5e01d40], file:WiredTiger.wt, connection: WiredTiger.wt: encountered an illegal file format or internal value</span><br><span class="line">2021-03-05T16:32:24.460+0800 E STORAGE  [initandlisten] WiredTiger error (-31804) [1614933144:460778][32304:0x7f12c5e01d40], file:WiredTiger.wt, connection: the process must exit and restart: WT_PANIC: WiredTiger library panic</span><br></pre></td></tr></table></figure>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>暂时未找到解决方案</p>
+          <p>前言：该方案实际失败了，VM的网卡速度只有1Mbps，没有修好</p>
+<h2 id="自定义ISO，注入网卡驱动"><a href="#自定义ISO，注入网卡驱动" class="headerlink" title="自定义ISO，注入网卡驱动"></a>自定义ISO，注入网卡驱动</h2><h3 id="下载VMWare的Offline-Buldle"><a href="#下载VMWare的Offline-Buldle" class="headerlink" title="下载VMWare的Offline Buldle"></a>下载VMWare的Offline Buldle</h3><p>官网需要繁琐的注册流程，百度上找了个然后校验哈希</p>
+<h3 id="下载第三方插件"><a href="#下载第三方插件" class="headerlink" title="下载第三方插件"></a>下载第三方插件</h3><ol>
+<li>下载地址<code>https://www.v-front.de/p/esxi-customizer-ps.html</code></li>
+<li>下载后放在<code>E:\ESXi\</code></li>
+</ol>
+<h3 id="下载驱动"><a href="#下载驱动" class="headerlink" title="下载驱动"></a>下载驱动</h3><ol>
+<li><code>https://vibsdepot.v-front.de/wiki/index.php/List_of_currently_available_ESXi_packages</code></li>
+<li>在待安装ESXi的机器上，打开设备管理器，找到对应的网卡，找到硬件ID，我这里找到的是<code>10EC:8168</code>，根据硬件ID，在步骤1中的网站查找网卡驱动<code>Net55-r8168</code>，下载VIB文件</li>
+<li>下载后放在<code>E:\ESXi\pkg</code></li>
+</ol>
+<h3 id="离线安装VMware-PowerCLI"><a href="#离线安装VMware-PowerCLI" class="headerlink" title="离线安装VMware.PowerCLI"></a>离线安装VMware.PowerCLI</h3><ol>
+<li>打开<code>https://code.vmware.com/web/tool/12.3.0/vmware-powercli</code>，下载VMware-PowerCLI-12.3.0-17860403.zip</li>
+<li>下载后解压放在<code>C:\Windows\System32\WindowsPowerShell\v1.0\Modules</code></li>
+<li>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned</li>
+<li>Import-Module VMware.PowerCLI</li>
+</ol>
+<h3 id="生成自定义ISO"><a href="#生成自定义ISO" class="headerlink" title="生成自定义ISO"></a>生成自定义ISO</h3><ol>
+<li><code>Set-ExecutionPolicy Unrestricted</code></li>
+<li><code> .\ESXi-Customizer-PS-v2.6.0.ps1  -izip .\ESXi670-201912001.zip -pkgDir E:\ESXi\pkg</code></li>
+</ol>
+<h2 id="安装ISO"><a href="#安装ISO" class="headerlink" title="安装ISO"></a>安装ISO</h2><ol>
+<li>使用Rufus烧录ISO，如果使用UltraISO会提示<code>not a COM32R image</code></li>
+<li>安装前记得在BIOS中开启Intel VT</li>
+<li>按照提示安装即可</li>
+</ol>
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><ol>
+<li>安装后发现上传镜像/VM奇慢无比，经查看，物理网卡的网速自动协商成了10M</li>
+</ol>
+<p>解决方案：</p>
+<ul>
+<li>将物理网卡vmnic0（驱动程序r8168）修改为100MBps全双工，虽然当时断网了，但是重启后正常，但是实测VM的速度只有1MBps（甚至10M都达不到），Esxi中的各种配置都配过了，不知道原因在哪儿，只能暂时放弃此方案</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://mhsj.net/90.html">https://mhsj.net/90.html</a> </p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/07/slurm-2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/07/slurm-2nd/" class="post-title-link" itemprop="url">CentOS7安装Slurm</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-07 08:41:50 / Modified: 10:50:52" itemprop="dateCreated datePublished" datetime="2021-08-07T08:41:50+08:00">2021-08-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>踩了N个坑之后，重写Slurm这一篇。主要的姿势：</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>基础环境准备了两个：</p>
+<ul>
+<li>192.168.60.177 master CentOS7.9.2009</li>
+<li>192.168.60.178 slave1 CentOS7.9.2009</li>
+</ul>
+<p>实际需要的环境有几个：</p>
+<ol>
+<li>打包RPM：复用master</li>
+<li>配置数据库MariaDB服务：复用master</li>
+<li>控制节点：即master</li>
+<li>计算节点：即slave</li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h4 id="编译Slurm的RPM"><a href="#编译Slurm的RPM" class="headerlink" title="编译Slurm的RPM"></a>编译Slurm的RPM</h4><p>注意这一步很独立，可以在另一台机器上编译，避免混乱</p>
+<ol>
+<li>安装Slurm依赖<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install openssl openssl-devel pam-devel numactl numactl-devel hwloc hwloc-devel lua lua-devel readline-devel rrdtool-devel ncurses-devel man2html libibmad libibumad -y</span><br><span class="line">yum install mariadb-server mariadb-devel -y</span><br></pre></td></tr></table></figure></li>
+<li>下载Slurm<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 带Latest的好像不太行</span><br><span class="line">wget https:&#x2F;&#x2F;download.schedmd.com&#x2F;slurm&#x2F;slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li>依赖RPMBuild<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rpm-build -y</span><br></pre></td></tr></table></figure></li>
+<li>编译RPM<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpmbuild -ta slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li>编译出的安装包在<code>/root/rpmbuild/RPMS/x86_64</code>，拷贝出来备用即可</li>
+</ol>
+<h4 id="系统配置（Master-Slave）"><a href="#系统配置（Master-Slave）" class="headerlink" title="系统配置（Master/Slave）"></a>系统配置（Master/Slave）</h4><ol>
+<li>关闭防火墙</li>
+<li>关闭Selinux</li>
+<li>修改/etc/hostname，/etc/hosts</li>
+</ol>
+<h4 id="统一用户密码"><a href="#统一用户密码" class="headerlink" title="统一用户密码"></a>统一用户密码</h4><p>Master/Slave：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export MUNGEUSER=1991</span><br><span class="line">groupadd -g $MUNGEUSER munge</span><br><span class="line">useradd  -m -c &quot;MUNGE Uid &#x27;N&#x27; Gid Emporium&quot; -d /var/lib/munge -u $MUNGEUSER -g munge  -s /sbin/nologin munge</span><br><span class="line">export SLURMUSER=1992</span><br><span class="line">groupadd -g $SLURMUSER slurm</span><br><span class="line">useradd  -m -c &quot;SLURM workload manager&quot; -d /var/lib/slurm -u $SLURMUSER -g slurm  -s /bin/bash slurm</span><br></pre></td></tr></table></figure>
+<h4 id="安装数据库MairaDB"><a href="#安装数据库MairaDB" class="headerlink" title="安装数据库MairaDB"></a>安装数据库MairaDB</h4><p>Master节点安装MairaDB Server</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mariadb-server mariadb-devel</span><br><span class="line">mysql_secure_installation</span><br><span class="line">systemctl start mariadb</span><br><span class="line">ystemctl enable mariadb</span><br><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<h4 id="安装Munge"><a href="#安装Munge" class="headerlink" title="安装Munge"></a>安装Munge</h4><p>Master/Slave安装:</p>
+<ol>
+<li><code>yum install -y epel-release axel yum-axelget</code></li>
+<li><code>yum install munge munge-libs munge-devel rng-tools -y</code></li>
+</ol>
+<p>Master:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rngd -r /dev/urandom</span><br><span class="line">/usr/sbin/create-munge-key -r</span><br><span class="line">dd if=/dev/urandom bs=1 count=1024 &gt; /etc/munge/munge.key</span><br><span class="line">chown munge: /etc/munge/munge.key</span><br><span class="line">chmod 400 /etc/munge/munge.key</span><br><span class="line">scp -p /etc/munge/munge.key root@slave1:/etc/munge</span><br></pre></td></tr></table></figure>
+<p>Master/Slave:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: /etc/munge/ /var/log/munge/</span><br><span class="line">chmod 0700 /etc/munge/ /var/log/munge/</span><br><span class="line">chmod 0711 /var/lib/munge/</span><br><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure>
+<p>进行测试Master/Slave:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">munge -n</span><br><span class="line">munge -n | ssh master unmunge</span><br></pre></td></tr></table></figure>
+<h4 id="安装Slurm"><a href="#安装Slurm" class="headerlink" title="安装Slurm"></a>安装Slurm</h4><ol>
+<li>Master/Slave使用RPM安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum localinstall slurm-*.rpm</span><br></pre></td></tr></table></figure></li>
+<li>Master编辑配置文件<br>Master编辑<code>/etc/slurm/slurm.conf</code>和<code>/etc/slurm/slurmdbd.conf</code>，参考后面的示例文件</li>
+<li>Master将<code>slurm.conf</code>文件共享到slave<code>scp slurm.conf root@slave1:/etc/slurm</code></li>
+<li>Master:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br></pre></td></tr></table></figure>
+Slave<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmd.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmd.log</span><br></pre></td></tr></table></figure></li>
+<li>Master使用<code>slurmdbd -vvvvDDDD</code>手动启动，进行测试，看看报错不报错，如果不报错，搞成服务即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">enable slurmdbd.service </span><br><span class="line">systemctl start slurmdbd</span><br><span class="line">systemctl enable slurmdbd</span><br></pre></td></tr></table></figure></li>
+<li>Slave节点编辑<code>/etc/slurm/cgroup.conf</code></li>
+<li>Master/Slave:使用<code>slurmd -C</code>检查配置，使用<code>slurmd -vvvvDDDD</code>手动启动，进行测试，看看报错不报错。如果不报错，搞成服务：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start slurmctld.service</span><br><span class="line">systemctl enable slurmctld.service </span><br><span class="line">systemctl status slurmctld.service </span><br></pre></td></tr></table></figure>
+期间在Master节点遇到一个错误，<code>Incorrect permissions on state save loc: /var/spool</code>，简单粗暴的解决方案：<code>chmod 777 spool</code></li>
+</ol>
+<h2 id="简单测试"><a href="#简单测试" class="headerlink" title="简单测试"></a>简单测试</h2><p>sinfo</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/37d19a0fe473">https://www.jianshu.com/p/37d19a0fe473</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34149581/article/details/101902935">https://blog.csdn.net/qq_34149581/article/details/101902935</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/05/slurm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/05/slurm/" class="post-title-link" itemprop="url">slurm</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-05 10:40:20" itemprop="dateCreated datePublished" datetime="2021-08-05T10:40:20+08:00">2021-08-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-07 11:01:29" itemprop="dateModified" datetime="2021-08-07T11:01:29+08:00">2021-08-07</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Master节点"><a href="#Master节点" class="headerlink" title="Master节点"></a>Master节点</h2><ol>
+<li><p>关闭SELinux和firewalld</p>
+</li>
+<li><p>安装如下组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release axel yum-axelget</span><br></pre></td></tr></table></figure></li>
+<li><p>安装MariaDB<code>yum install -y mariadb-server mariadb-devel</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable mariadb</span><br><span class="line">systemctl start mariadb</span><br><span class="line">mysql_secure_installation   #密码设置123456</span><br></pre></td></tr></table></figure></li>
+<li><p>创建全局用户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export MUNGEUSER=1190</span><br><span class="line">groupadd -g $MUNGEUSER munge</span><br><span class="line">useradd  -m -c &quot;MUNGE Uid &#x27;N&#x27; Gid Emporium&quot; -d /var/lib/munge -u $MUNGEUSER -g munge -s /sbin/nologin munge</span><br><span class="line">export SlurmUSER=1191</span><br><span class="line">groupadd -g $SlurmUSER slurm</span><br><span class="line">useradd -m -c &quot;Slurm workload manager&quot; -d /var/lib/slurm -u $SlurmUSER -g slurm -s /bin/bash slurm</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#cd /var/yp</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#make</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>安装Munge</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install munge munge-libs munge-devel rng-tools -y</span><br><span class="line">rngd -r &#x2F;dev&#x2F;urandom</span><br></pre></td></tr></table></figure></li>
+<li><p>创建全局密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;sbin&#x2F;create-munge-key -r</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;urandom bs&#x3D;1 count&#x3D;1024 &gt; &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br><span class="line">chown munge: &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br><span class="line">chmod 400 &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br></pre></td></tr></table></figure></li>
+<li><p>密钥同步到其他节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -p &#x2F;etc&#x2F;munge&#x2F;munge.key root@192.168.60.175:&#x2F;etc&#x2F;munge</span><br></pre></td></tr></table></figure></li>
+<li><p>设置权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: &#x2F;etc&#x2F;munge&#x2F; &#x2F;var&#x2F;log&#x2F;munge&#x2F;</span><br><span class="line">chmod 0700 &#x2F;etc&#x2F;munge&#x2F; &#x2F;var&#x2F;log&#x2F;munge&#x2F;</span><br><span class="line">chmod 0711 &#x2F;var&#x2F;lib&#x2F;munge&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li><p>启动Munge服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure></li>
+<li><p>测试</p>
+</li>
+<li><p>安装Slurm依赖</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install openssl openssl-devel pam-devel numactl numactl-devel hwloc hwloc-devel lua lua-devel readline-devel rrdtool-devel ncurses-devel man2html libibmad libibumad -y</span><br><span class="line">yum install mariadb-server mariadb-devel -y</span><br></pre></td></tr></table></figure></li>
+<li><p>下载Slurm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 带Latest的好像不太行</span></span><br><span class="line">wget https://download.schedmd.com/slurm/slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>下载编译工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rpm-build -y</span><br></pre></td></tr></table></figure>
+<p>硬核编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpmbuild -ta slurm-20.11-latest.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li><p>安装Slurm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;rpmbuild&#x2F;RPMS&#x2F;x86_64</span><br><span class="line">yum --nogpgcheck localinstall slurm-*</span><br></pre></td></tr></table></figure></li>
+<li><p>复制到其他节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -p &#x2F;etc&#x2F;slurm&#x2F;slurm.conf root@192.168.60.175:&#x2F;etc&#x2F;slurm&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br></pre></td></tr></table></figure>
+<h2 id="Slave节点"><a href="#Slave节点" class="headerlink" title="Slave节点"></a>Slave节点</h2></li>
+<li><p>关闭SELinux和firewalld</p>
+</li>
+<li><p>安装如下组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release axel yum-axelget</span><br></pre></td></tr></table></figure></li>
+<li><p>安装Munge</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install munge munge-libs munge-devel -y</span><br><span class="line">yum install rng-tools -y</span><br><span class="line">rngd -r /dev/urandom</span><br></pre></td></tr></table></figure></li>
+<li><p>设置权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: /etc/munge/ /var/<span class="built_in">log</span>/munge/</span><br><span class="line">chmod 0700 /etc/munge/ /var/<span class="built_in">log</span>/munge/</span><br><span class="line">chmod 0711 /var/lib/munge/</span><br></pre></td></tr></table></figure></li>
+<li><p>启动Munge服务<br>注意这一步之前，master的<strong>密钥同步到其他节点</strong>步骤已经完成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/37d19a0fe473">https://www.jianshu.com/p/37d19a0fe473</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34149581/article/details/101902935">https://blog.csdn.net/qq_34149581/article/details/101902935</a></p>
+</blockquote>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="slurm-conf"><a href="#slurm-conf" class="headerlink" title="slurm.conf"></a>slurm.conf</h3><p>在Master/Slave的/etc/slurm中，而且需要同步</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"># slurm.conf file generated by configurator easy.html.</span><br><span class="line"># Put this file on all nodes of your cluster.</span><br><span class="line"># See the slurm.conf man page for more information.</span><br><span class="line">#</span><br><span class="line">SlurmctldHost&#x3D;master</span><br><span class="line">#</span><br><span class="line">#MailProg&#x3D;&#x2F;bin&#x2F;mail</span><br><span class="line">MpiDefault&#x3D;none</span><br><span class="line">#MpiParams&#x3D;ports&#x3D;#-#</span><br><span class="line">ProctrackType&#x3D;proctrack&#x2F;cgroup</span><br><span class="line">ReturnToService&#x3D;1</span><br><span class="line">SlurmctldPidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmctld.pid</span><br><span class="line">#SlurmctldPort&#x3D;6817</span><br><span class="line">SlurmdPidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmd.pid</span><br><span class="line">#SlurmdPort&#x3D;6818</span><br><span class="line">SlurmdSpoolDir&#x3D;&#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">SlurmUser&#x3D;slurm</span><br><span class="line">#SlurmdUser&#x3D;root</span><br><span class="line">StateSaveLocation&#x3D;&#x2F;var&#x2F;spool</span><br><span class="line">SwitchType&#x3D;switch&#x2F;none</span><br><span class="line">TaskPlugin&#x3D;task&#x2F;affinity</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># TIMERS</span><br><span class="line">#KillWait&#x3D;30</span><br><span class="line">#MinJobAge&#x3D;300</span><br><span class="line">#SlurmctldTimeout&#x3D;120</span><br><span class="line">#SlurmdTimeout&#x3D;300</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># SCHEDULING</span><br><span class="line">SchedulerType&#x3D;sched&#x2F;backfill</span><br><span class="line">SelectType&#x3D;select&#x2F;cons_tres</span><br><span class="line">SelectTypeParameters&#x3D;CR_Core</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># LOGGING AND ACCOUNTING</span><br><span class="line">AccountingStorageType&#x3D;accounting_storage&#x2F;slurmdbd</span><br><span class="line">ClusterName&#x3D;hpc</span><br><span class="line">#JobAcctGatherFrequency&#x3D;30</span><br><span class="line">JobAcctGatherType&#x3D;jobacct_gather&#x2F;linux</span><br><span class="line">#SlurmctldDebug&#x3D;info</span><br><span class="line">#SlurmctldLogFile&#x3D;</span><br><span class="line">#SlurmdDebug&#x3D;info</span><br><span class="line">#SlurmdLogFile&#x3D;</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># COMPUTE NODES</span><br><span class="line">NodeName&#x3D;slave1 NodeAddr&#x3D;192.168.60.178 CPUs&#x3D;1 RealMemory&#x3D;800 Sockets&#x3D;2 State&#x3D;UNKNOWN</span><br><span class="line">PartitionName&#x3D;debug Nodes&#x3D;slave1 Default&#x3D;YES MaxTime&#x3D;INFINITE State&#x3D;UP</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="slurmdbd-conf"><a href="#slurmdbd-conf" class="headerlink" title="slurmdbd.conf"></a>slurmdbd.conf</h3><p>在Master的/etc/slurm中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># Example slurmdbd.conf file.</span><br><span class="line">#</span><br><span class="line"># See the slurmdbd.conf man page for more information.</span><br><span class="line">#</span><br><span class="line"># Archive info</span><br><span class="line">#ArchiveJobs&#x3D;yes</span><br><span class="line">#ArchiveDir&#x3D;&quot;&#x2F;tmp&quot;</span><br><span class="line">#ArchiveSteps&#x3D;yes</span><br><span class="line">#ArchiveScript&#x3D;</span><br><span class="line">#JobPurge&#x3D;12</span><br><span class="line">#StepPurge&#x3D;1</span><br><span class="line">#</span><br><span class="line"># Authentication info</span><br><span class="line">AuthType&#x3D;auth&#x2F;munge</span><br><span class="line">#AuthInfo&#x3D;&#x2F;var&#x2F;run&#x2F;munge&#x2F;munge.socket.2</span><br><span class="line">#</span><br><span class="line"># slurmDBD info</span><br><span class="line">DbdAddr&#x3D;127.0.0.1</span><br><span class="line">DbdHost&#x3D;master</span><br><span class="line">#DbdPort&#x3D;7031</span><br><span class="line">SlurmUser&#x3D;slurm</span><br><span class="line">#MessageTimeout&#x3D;300</span><br><span class="line">DebugLevel&#x3D;verbose</span><br><span class="line">#DefaultQOS&#x3D;normal,standby</span><br><span class="line">LogFile&#x3D;&#x2F;var&#x2F;log&#x2F;slurm&#x2F;slurmdbd.log</span><br><span class="line">PidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmdbd.pid</span><br><span class="line">#PluginDir&#x3D;&#x2F;usr&#x2F;lib&#x2F;slurm</span><br><span class="line">#PrivateData&#x3D;accounts,users,usage,jobs</span><br><span class="line">#TrackWCKey&#x3D;yes</span><br><span class="line">#</span><br><span class="line"># Database info</span><br><span class="line">StorageType&#x3D;accounting_storage&#x2F;mysql</span><br><span class="line">StorageHost&#x3D;master</span><br><span class="line">StoragePort&#x3D;3306</span><br><span class="line">StoragePass&#x3D;123456</span><br><span class="line">StorageUser&#x3D;root</span><br><span class="line">StorageLoc&#x3D;slurm_acct_db</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="cgroup-conf"><a href="#cgroup-conf" class="headerlink" title="cgroup.conf"></a>cgroup.conf</h3><p>在Slave的/etc/slurm中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">###</span><br><span class="line">#</span><br><span class="line"># Slurm cgroup support configuration file</span><br><span class="line">#</span><br><span class="line"># See man slurm.conf and man cgroup.conf for further</span><br><span class="line"># information on cgroup configuration parameters</span><br><span class="line">#--</span><br><span class="line">CgroupAutomount&#x3D;yes</span><br><span class="line"></span><br><span class="line">ConstrainCores&#x3D;no</span><br><span class="line">ConstrainRAMSpace&#x3D;no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/04/keycloak/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/04/keycloak/" class="post-title-link" itemprop="url">KeyCloak学习（一）搭建</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-04 09:03:43" itemprop="dateCreated datePublished" datetime="2021-08-04T09:03:43+08:00">2021-08-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-09 19:35:16" itemprop="dateModified" datetime="2021-08-09T19:35:16+08:00">2021-08-09</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>测试环境下单机启动，增加参数-b，<code>sh standalone.sh -b 0.0.0.0</code>，允许除了localhost之外的IP地址访问。</p>
+<p>第一个管理员账户还是需要本地添加，添加后就可以在任意IP地址登录了。访问<code>http://192.168.60.171:8080/</code></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/03/filebeat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/03/filebeat/" class="post-title-link" itemprop="url">FileBeat学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-03 17:22:44 / Modified: 17:32:42" itemprop="dateCreated datePublished" datetime="2021-08-03T17:22:44+08:00">2021-08-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>相当于采集应用程序的日志文件，并且进行简单的处理转发。支持采集文件等多种类型的输入，支持正则等，输出支持ES等。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>官网下载RPM安装包进行安装</p>
+<h3 id="案例准备"><a href="#案例准备" class="headerlink" title="案例准备"></a>案例准备</h3><p>创建文件夹/var/log/app，里面创建error.log和output.log，模拟我们的应用日志</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>编辑<code>/etc/filebeat/filebeat.yml</code>，编辑input和output部分，其他部分保持默认配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">filebeat.inputs:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">type:</span> <span class="string">log</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">paths:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/var/log/app/*.log</span></span><br><span class="line"></span><br><span class="line"><span class="attr">output.console:</span></span><br><span class="line">  <span class="attr">pretty:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>终端运行<code>filebeat  &gt;&gt; /dev/ttyS1</code>，然后测试<code>cd /var/log/app/ &amp;&amp; echo &quot;output at `date`&quot;&gt;&gt;error.log</code></p>
+<p>备注：如果想输出到串口，不能使用output.file的方式，这样实际无法输出到串口，而且会导致串口异常（重启恢复），而是应当采用标准输出重定向的方式，如上</p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>上述配置将采集信息输出到了串口中，串口中打印的信息如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;@timestamp&quot;</span>:<span class="string">&quot;2021-08-03T09:22:01.678Z&quot;</span>,<span class="attr">&quot;@metadata&quot;</span>:&#123;<span class="attr">&quot;beat&quot;</span>:<span class="string">&quot;filebeat&quot;</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;_doc&quot;</span>,<span class="attr">&quot;version&quot;</span>:<span class="string">&quot;7.13.4&quot;</span>&#125;,<span class="attr">&quot;log&quot;</span>:&#123;<span class="attr">&quot;offset&quot;</span>:<span class="number">301</span>,<span class="attr">&quot;file&quot;</span>:&#123;<span class="attr">&quot;path&quot;</span>:<span class="string">&quot;/var/log/app/error.log&quot;</span>&#125;&#125;,<span class="attr">&quot;message&quot;</span>:<span class="string">&quot;output at Tue Aug  3 17:21:55 CST 2021&quot;</span>,<span class="attr">&quot;input&quot;</span>:&#123;<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;log&quot;</span>&#125;,<span class="attr">&quot;ecs&quot;</span>:&#123;<span class="attr">&quot;version&quot;</span>:<span class="string">&quot;1.8.0&quot;</span>&#125;,<span class="attr">&quot;host&quot;</span>:&#123;<span class="attr">&quot;mac&quot;</span>:[<span class="string">&quot;00:50:56:30:92:29&quot;</span>,<span class="string">&quot;52:54:00:e9:92:ee&quot;</span>,<span class="string">&quot;52:54:00:e9:92:ee&quot;</span>],<span class="attr">&quot;hostname&quot;</span>:<span class="string">&quot;master&quot;</span>,<span class="attr">&quot;name&quot;</span>:<span class="string">&quot;master&quot;</span>,<span class="attr">&quot;architecture&quot;</span>:<span class="string">&quot;x86_64&quot;</span>,<span class="attr">&quot;os&quot;</span>:&#123;<span class="attr">&quot;family&quot;</span>:<span class="string">&quot;redhat&quot;</span>,<span class="attr">&quot;name&quot;</span>:<span class="string">&quot;CentOS Linux&quot;</span>,<span class="attr">&quot;kernel&quot;</span>:<span class="string">&quot;3.10.0-1160.el7.x86_64&quot;</span>,<span class="attr">&quot;codename&quot;</span>:<span class="string">&quot;Core&quot;</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;linux&quot;</span>,<span class="attr">&quot;platform&quot;</span>:<span class="string">&quot;centos&quot;</span>,<span class="attr">&quot;version&quot;</span>:<span class="string">&quot;7 (Core)&quot;</span>&#125;,<span class="attr">&quot;id&quot;</span>:<span class="string">&quot;1020ecbf5d2f47dc83e0b481811acbb2&quot;</span>,<span class="attr">&quot;containerized&quot;</span>:<span class="literal">false</span>,<span class="attr">&quot;ip&quot;</span>:[<span class="string">&quot;192.168.60.171&quot;</span>,<span class="string">&quot;fe80::f95b:a929:5751:917c&quot;</span>,<span class="string">&quot;192.168.122.1&quot;</span>]&#125;,<span class="attr">&quot;agent&quot;</span>:&#123;<span class="attr">&quot;ephemeral_id&quot;</span>:<span class="string">&quot;812176a9-9fcf-4c25-b142-d89af4baee5e&quot;</span>,<span class="attr">&quot;id&quot;</span>:<span class="string">&quot;573a64a2-2d63-421f-b461-79b7799335ea&quot;</span>,<span class="attr">&quot;name&quot;</span>:<span class="string">&quot;master&quot;</span>,<span class="attr">&quot;type&quot;</span>:<span class="string">&quot;filebeat&quot;</span>,<span class="attr">&quot;version&quot;</span>:<span class="string">&quot;7.13.4&quot;</span>,<span class="attr">&quot;hostname&quot;</span>:<span class="string">&quot;master&quot;</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/03/using-serial-port-to-debug-remote-vmware/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/03/using-serial-port-to-debug-remote-vmware/" class="post-title-link" itemprop="url">VMWare串口调试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-03 16:16:45 / Modified: 16:23:52" itemprop="dateCreated datePublished" datetime="2021-08-03T16:16:45+08:00">2021-08-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="宿主机（Windows）和虚拟机（Linux）之间通信"><a href="#宿主机（Windows）和虚拟机（Linux）之间通信" class="headerlink" title="宿主机（Windows）和虚拟机（Linux）之间通信"></a>宿主机（Windows）和虚拟机（Linux）之间通信</h2><p>配置方法</p>
+<ol>
+<li>VMWare虚拟机关机，添加一个串口设备，选择使用命名的管道<code>\\.\pipe\com_1</code>，该端是服务器，另一端是虚拟机，开启轮询时主动放弃，配置完成后开机</li>
+<li>本地打开Putty，选择Serial，Line<code>\\.\pipe\com_1</code>，Speed<code>9600</code></li>
+<li>宿主机-&gt;虚拟机：虚拟机内<code>cat /dev/ttyS1</code>，宿主机使用Putty发送命令</li>
+<li>虚拟机-&gt;宿主机：虚拟机内<code>echo &quot;1&quot; &gt;&gt; dev/ttyS1</code></li>
+</ol>
+<p>如发现Putty本地无法输入，配置方法：</p>
+<ul>
+<li>Terminal标签页勾选<code>Implicit CR in every LF</code>，<code>Implici LF in every CR</code>，<code>Local ech</code>o修改为<code>Force on</code>，<code>Local line editing</code> 修改为<code>Force on</code></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/03/storage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/03/storage/" class="post-title-link" itemprop="url">存储</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-03 12:29:35 / Modified: 12:35:17" itemprop="dateCreated datePublished" datetime="2021-08-03T12:29:35+08:00">2021-08-03</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="块存储"><a href="#块存储" class="headerlink" title="块存储"></a>块存储</h1><h1 id="对象存储"><a href="#对象存储" class="headerlink" title="对象存储"></a>对象存储</h1><p>优缺点:</p>
+<ul>
+<li>优点：利于共享，读写也快</li>
+</ul>
+<h1 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h1><p>优缺点：</p>
+<ul>
+<li><p>优点：利于共享</p>
+</li>
+<li><p>缺点：读写慢</p>
+</li>
+<li><p>NFS服务器，类似Windows的SAMBA，搭建方法百度即可</p>
+</li>
+<li><p>FTP服务器</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/07/30/nginx-abc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/30/nginx-abc/" class="post-title-link" itemprop="url">Nginx学习和基本配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-30 21:34:17 / Modified: 21:37:26" itemprop="dateCreated datePublished" datetime="2021-07-30T21:34:17+08:00">2021-07-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="让Nginx当Apache用"><a href="#让Nginx当Apache用" class="headerlink" title="让Nginx当Apache用"></a>让Nginx当Apache用</h2><ol>
+<li>创建<code>/var/www/html/index.html</code></li>
+<li>修改Nginx配置文件，默认在/etc/nginx，在默认的nginx.conf的server段下，添加<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name _;</span><br><span class="line">    root &#x2F;var&#x2F;www&#x2F;html;</span><br><span class="line">    index index.html;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><code>nginx -s reload</code></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/07/27/abc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/27/abc/" class="post-title-link" itemprop="url">不成体系知识</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-27 14:56:10 / Modified: 15:01:45" itemprop="dateCreated datePublished" datetime="2021-07-27T14:56:10+08:00">2021-07-27</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li><code>java -cp</code>，cp的意思是classpath，参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/214093661">https://zhuanlan.zhihu.com/p/214093661</a></li>
+<li>docker的基础镜像，busybox和alpine <a target="_blank" rel="noopener" href="https://www.alpinelinux.org/">https://www.alpinelinux.org/</a> </li>
+<li>启动Java脚本 <a target="_blank" rel="noopener" href="https://github.com/fabric8io-images/run-java-sh/">https://github.com/fabric8io-images/run-java-sh/</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/07/26/k8s-learn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/26/k8s-learn/" class="post-title-link" itemprop="url">K8S入坑指南</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-26 19:55:43" itemprop="dateCreated datePublished" datetime="2021-07-26T19:55:43+08:00">2021-07-26</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-30 21:14:26" itemprop="dateModified" datetime="2021-07-30T21:14:26+08:00">2021-07-30</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ul>
+<li>获取节点列表<code>kubectl get node</code></li>
+</ul>
+<h1 id="安装之坑"><a href="#安装之坑" class="headerlink" title="安装之坑"></a>安装之坑</h1><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p><code>swapoff -a</code>，<code>vim /etc/fstab</code>把swap一行注释掉<br><code>vim /etc/selinux/config</code>关闭SELinux</p>
+<h2 id="kubeadm-init的时候，CoreDNS下载不下来"><a href="#kubeadm-init的时候，CoreDNS下载不下来" class="headerlink" title="kubeadm init的时候，CoreDNS下载不下来"></a>kubeadm init的时候，CoreDNS下载不下来</h2><p>解决方案，参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/a749227859/article/details/118732605">https://blog.csdn.net/a749227859/article/details/118732605</a></p>
+<h2 id="把cgroups替换为systemd"><a href="#把cgroups替换为systemd" class="headerlink" title="把cgroups替换为systemd"></a>把cgroups替换为systemd</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; &#x2F;etc&#x2F;docker&#x2F;daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  &quot;exec-opts&quot;: [&quot;native.cgroupdriver&#x3D;systemd&quot;],</span><br><span class="line">  &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">  &quot;log-opts&quot;: &#123;</span><br><span class="line">    &quot;max-size&quot;: &quot;100m&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;storage-driver&quot;: &quot;overlay2&quot;,</span><br><span class="line">  &quot;storage-opts&quot;: [</span><br><span class="line">    &quot;overlay2.override_kernel_check&#x3D;true&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>然后<code>systemctl restart docker</code></p>
+<h2 id="错误-ERROR-FileContent–proc-sys-net-bridge-bridge-nf-call-iptables-proc-sys-net-bridge-bridge-nf-call-iptables-contents-are-not-set-to-1"><a href="#错误-ERROR-FileContent–proc-sys-net-bridge-bridge-nf-call-iptables-proc-sys-net-bridge-bridge-nf-call-iptables-contents-are-not-set-to-1" class="headerlink" title="错误 [ERROR FileContent–proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1"></a>错误 [ERROR FileContent–proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1</h2><p>解决方案：<br><code>echo &quot;1&quot; &gt;/proc/sys/net/bridge/bridge-nf-call-iptables</code></p>
+<h2 id="kubeadm加入节点的命令忘了，重新查询"><a href="#kubeadm加入节点的命令忘了，重新查询" class="headerlink" title="kubeadm加入节点的命令忘了，重新查询"></a>kubeadm加入节点的命令忘了，重新查询</h2><p><code>kubeadm token create --print-join-command</code></p>
+<h1 id="重启之坑"><a href="#重启之坑" class="headerlink" title="重启之坑"></a>重启之坑</h1><h2 id="重启后master的Status为NotReady"><a href="#重启后master的Status为NotReady" class="headerlink" title="重启后master的Status为NotReady"></a>重启后master的Status为NotReady</h2><p>使用<code>kubectl get pod -n kube-system</code>命令查看，发现coredns开头的一直处于Pending状态，解决方案</p>
+<ol>
+<li><code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</code></li>
+<li><code>systemctl restart kubelet</code>，重启后等待，重新拉一下pod，显示kube-flannel-ds-mgh4s这个POD的状态为<code>Init:ErrImagePull</code></li>
+</ol>
+<p>意思是拉取镜像失败了，应该是墙的问题，解决方案：</p>
+<ol start="3">
+<li>查看<code>https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</code></li>
+<li>搜索quay.io/coreos/flannel版本为V0.14.0，然后去<code>https://github.com/flannel-io/flannel/releases</code>下载对应版本的镜像（docker格式，不是tar.gz格式）。</li>
+<li><code>docker load &lt; flanneld-v0.14.0-amd64.docker</code></li>
+<li><code>systemctl restart kubelet</code></li>
+</ol>
+<h1 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="POD相关"><a href="#POD相关" class="headerlink" title="POD相关"></a>POD相关</h2><ul>
+<li><p>查看POD详情 <code>kubectl describe pod [pod name] -n [namespace]</code></p>
+</li>
+<li><p>进入POD中某个容器内部<code>kubectl exec -it [pod name] -c [container name] -n [namespace] bash</code>，其中[container name]在describe命令输出中可以查看</p>
+</li>
+<li><p>查看容器日志 <code>kubectl logs -f [pod name] -c [container name] -n [namespace]</code></p>
+<h2 id="ConfigMap相关"><a href="#ConfigMap相关" class="headerlink" title="ConfigMap相关"></a>ConfigMap相关</h2></li>
+<li><p>列出ConfigMap <code>kubectl get configmap -n [namespace]</code></p>
+</li>
+<li><p>编辑某个ConfigMap <code>kubectl edit configmap -n [namespace] [configmap name]</code></p>
+</li>
+</ul>
+<h1 id="制作Pod"><a href="#制作Pod" class="headerlink" title="制作Pod"></a>制作Pod</h1><h2 id="基础镜像"><a href="#基础镜像" class="headerlink" title="基础镜像"></a>基础镜像</h2><p>一般使用Alpine和Busybox </p>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><h1 id="其他坑"><a href="#其他坑" class="headerlink" title="其他坑"></a>其他坑</h1><h2 id="无法curl访问ClusterIP"><a href="#无法curl访问ClusterIP" class="headerlink" title="无法curl访问ClusterIP"></a>无法curl访问ClusterIP</h2><p>参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/265997618%E6%90%AD%E5%BB%BA%E4%BA%86K8S%EF%BC%8C%E4%BD%BF%E7%94%A8%60curl">https://zhuanlan.zhihu.com/p/265997618搭建了K8S，使用`curl</a> http://[clusterip]:80<code>访问，提示</code>curl: (7) Failed connect to 10.111.91.192:80; Connection refused`，先不要着急怀疑是网络问题，可能是Service的namespace和POD的不一样</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/caoxb/p/11243472.html">https://www.cnblogs.com/caoxb/p/11243472.html</a> CentOS7 部署K8S集群</li>
+<li></li>
+</ul>
 
       
     </div>
@@ -899,7 +1085,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 

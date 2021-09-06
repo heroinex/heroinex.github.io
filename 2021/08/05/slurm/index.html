@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="Master节点 关闭SELinux和firewalld  安装如下组件 1yum install -y epel-release axel yum-axelget 安装MariaDByum install -y mariadb-server mariadb-devel 123systemctl enable mariadbsystemctl start mariadbmysql_secure_i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="slurm">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/08/05/slurm/index.html">
+<meta property="og:site_name" content="Blog of Mysterious">
+<meta property="og:description" content="Master节点 关闭SELinux和firewalld  安装如下组件 1yum install -y epel-release axel yum-axelget 安装MariaDByum install -y mariadb-server mariadb-devel 123systemctl enable mariadbsystemctl start mariadbmysql_secure_i">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-05T02:40:20.000Z">
+<meta property="article:modified_time" content="2021-08-07T03:01:29.387Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.heroine-x.com/2021/08/05/slurm/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>slurm | Blog of Mysterious</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Mysterious</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of mysterious(x) 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Master%E8%8A%82%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">Master节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slave%E8%8A%82%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">Slave节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">4.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#slurm-conf"><span class="nav-number">4.1.</span> <span class="nav-text">slurm.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slurmdbd-conf"><span class="nav-number">4.2.</span> <span class="nav-text">slurmdbd.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cgroup-conf"><span class="nav-number">4.3.</span> <span class="nav-text">cgroup.conf</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/05/slurm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          slurm
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-05 10:40:20" itemprop="dateCreated datePublished" datetime="2021-08-05T10:40:20+08:00">2021-08-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-07 11:01:29" itemprop="dateModified" datetime="2021-08-07T11:01:29+08:00">2021-08-07</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Master节点"><a href="#Master节点" class="headerlink" title="Master节点"></a>Master节点</h2><ol>
+<li><p>关闭SELinux和firewalld</p>
+</li>
+<li><p>安装如下组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release axel yum-axelget</span><br></pre></td></tr></table></figure></li>
+<li><p>安装MariaDB<code>yum install -y mariadb-server mariadb-devel</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable mariadb</span><br><span class="line">systemctl start mariadb</span><br><span class="line">mysql_secure_installation   #密码设置123456</span><br></pre></td></tr></table></figure></li>
+<li><p>创建全局用户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">export MUNGEUSER=1190</span><br><span class="line">groupadd -g $MUNGEUSER munge</span><br><span class="line">useradd  -m -c &quot;MUNGE Uid &#x27;N&#x27; Gid Emporium&quot; -d /var/lib/munge -u $MUNGEUSER -g munge -s /sbin/nologin munge</span><br><span class="line">export SlurmUSER=1191</span><br><span class="line">groupadd -g $SlurmUSER slurm</span><br><span class="line">useradd -m -c &quot;Slurm workload manager&quot; -d /var/lib/slurm -u $SlurmUSER -g slurm -s /bin/bash slurm</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#cd /var/yp</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#make</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>安装Munge</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install munge munge-libs munge-devel rng-tools -y</span><br><span class="line">rngd -r &#x2F;dev&#x2F;urandom</span><br></pre></td></tr></table></figure></li>
+<li><p>创建全局密钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;sbin&#x2F;create-munge-key -r</span><br><span class="line">dd if&#x3D;&#x2F;dev&#x2F;urandom bs&#x3D;1 count&#x3D;1024 &gt; &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br><span class="line">chown munge: &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br><span class="line">chmod 400 &#x2F;etc&#x2F;munge&#x2F;munge.key</span><br></pre></td></tr></table></figure></li>
+<li><p>密钥同步到其他节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -p &#x2F;etc&#x2F;munge&#x2F;munge.key root@192.168.60.175:&#x2F;etc&#x2F;munge</span><br></pre></td></tr></table></figure></li>
+<li><p>设置权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: &#x2F;etc&#x2F;munge&#x2F; &#x2F;var&#x2F;log&#x2F;munge&#x2F;</span><br><span class="line">chmod 0700 &#x2F;etc&#x2F;munge&#x2F; &#x2F;var&#x2F;log&#x2F;munge&#x2F;</span><br><span class="line">chmod 0711 &#x2F;var&#x2F;lib&#x2F;munge&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li><p>启动Munge服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure></li>
+<li><p>测试</p>
+</li>
+<li><p>安装Slurm依赖</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install openssl openssl-devel pam-devel numactl numactl-devel hwloc hwloc-devel lua lua-devel readline-devel rrdtool-devel ncurses-devel man2html libibmad libibumad -y</span><br><span class="line">yum install mariadb-server mariadb-devel -y</span><br></pre></td></tr></table></figure></li>
+<li><p>下载Slurm</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 带Latest的好像不太行</span></span><br><span class="line">wget https://download.schedmd.com/slurm/slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>下载编译工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rpm-build -y</span><br></pre></td></tr></table></figure>
+<p>硬核编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpmbuild -ta slurm-20.11-latest.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li><p>安装Slurm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;rpmbuild&#x2F;RPMS&#x2F;x86_64</span><br><span class="line">yum --nogpgcheck localinstall slurm-*</span><br></pre></td></tr></table></figure></li>
+<li><p>复制到其他节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -p &#x2F;etc&#x2F;slurm&#x2F;slurm.conf root@192.168.60.175:&#x2F;etc&#x2F;slurm&#x2F;</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br></pre></td></tr></table></figure>
+<h2 id="Slave节点"><a href="#Slave节点" class="headerlink" title="Slave节点"></a>Slave节点</h2></li>
+<li><p>关闭SELinux和firewalld</p>
+</li>
+<li><p>安装如下组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release axel yum-axelget</span><br></pre></td></tr></table></figure></li>
+<li><p>安装Munge</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install munge munge-libs munge-devel -y</span><br><span class="line">yum install rng-tools -y</span><br><span class="line">rngd -r /dev/urandom</span><br></pre></td></tr></table></figure></li>
+<li><p>设置权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: /etc/munge/ /var/<span class="built_in">log</span>/munge/</span><br><span class="line">chmod 0700 /etc/munge/ /var/<span class="built_in">log</span>/munge/</span><br><span class="line">chmod 0711 /var/lib/munge/</span><br></pre></td></tr></table></figure></li>
+<li><p>启动Munge服务<br>注意这一步之前，master的<strong>密钥同步到其他节点</strong>步骤已经完成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/37d19a0fe473">https://www.jianshu.com/p/37d19a0fe473</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34149581/article/details/101902935">https://blog.csdn.net/qq_34149581/article/details/101902935</a></p>
+</blockquote>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="slurm-conf"><a href="#slurm-conf" class="headerlink" title="slurm.conf"></a>slurm.conf</h3><p>在Master/Slave的/etc/slurm中，而且需要同步</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"># slurm.conf file generated by configurator easy.html.</span><br><span class="line"># Put this file on all nodes of your cluster.</span><br><span class="line"># See the slurm.conf man page for more information.</span><br><span class="line">#</span><br><span class="line">SlurmctldHost&#x3D;master</span><br><span class="line">#</span><br><span class="line">#MailProg&#x3D;&#x2F;bin&#x2F;mail</span><br><span class="line">MpiDefault&#x3D;none</span><br><span class="line">#MpiParams&#x3D;ports&#x3D;#-#</span><br><span class="line">ProctrackType&#x3D;proctrack&#x2F;cgroup</span><br><span class="line">ReturnToService&#x3D;1</span><br><span class="line">SlurmctldPidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmctld.pid</span><br><span class="line">#SlurmctldPort&#x3D;6817</span><br><span class="line">SlurmdPidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmd.pid</span><br><span class="line">#SlurmdPort&#x3D;6818</span><br><span class="line">SlurmdSpoolDir&#x3D;&#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">SlurmUser&#x3D;slurm</span><br><span class="line">#SlurmdUser&#x3D;root</span><br><span class="line">StateSaveLocation&#x3D;&#x2F;var&#x2F;spool</span><br><span class="line">SwitchType&#x3D;switch&#x2F;none</span><br><span class="line">TaskPlugin&#x3D;task&#x2F;affinity</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># TIMERS</span><br><span class="line">#KillWait&#x3D;30</span><br><span class="line">#MinJobAge&#x3D;300</span><br><span class="line">#SlurmctldTimeout&#x3D;120</span><br><span class="line">#SlurmdTimeout&#x3D;300</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># SCHEDULING</span><br><span class="line">SchedulerType&#x3D;sched&#x2F;backfill</span><br><span class="line">SelectType&#x3D;select&#x2F;cons_tres</span><br><span class="line">SelectTypeParameters&#x3D;CR_Core</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># LOGGING AND ACCOUNTING</span><br><span class="line">AccountingStorageType&#x3D;accounting_storage&#x2F;slurmdbd</span><br><span class="line">ClusterName&#x3D;hpc</span><br><span class="line">#JobAcctGatherFrequency&#x3D;30</span><br><span class="line">JobAcctGatherType&#x3D;jobacct_gather&#x2F;linux</span><br><span class="line">#SlurmctldDebug&#x3D;info</span><br><span class="line">#SlurmctldLogFile&#x3D;</span><br><span class="line">#SlurmdDebug&#x3D;info</span><br><span class="line">#SlurmdLogFile&#x3D;</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"># COMPUTE NODES</span><br><span class="line">NodeName&#x3D;slave1 NodeAddr&#x3D;192.168.60.178 CPUs&#x3D;1 RealMemory&#x3D;800 Sockets&#x3D;2 State&#x3D;UNKNOWN</span><br><span class="line">PartitionName&#x3D;debug Nodes&#x3D;slave1 Default&#x3D;YES MaxTime&#x3D;INFINITE State&#x3D;UP</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="slurmdbd-conf"><a href="#slurmdbd-conf" class="headerlink" title="slurmdbd.conf"></a>slurmdbd.conf</h3><p>在Master的/etc/slurm中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># Example slurmdbd.conf file.</span><br><span class="line">#</span><br><span class="line"># See the slurmdbd.conf man page for more information.</span><br><span class="line">#</span><br><span class="line"># Archive info</span><br><span class="line">#ArchiveJobs&#x3D;yes</span><br><span class="line">#ArchiveDir&#x3D;&quot;&#x2F;tmp&quot;</span><br><span class="line">#ArchiveSteps&#x3D;yes</span><br><span class="line">#ArchiveScript&#x3D;</span><br><span class="line">#JobPurge&#x3D;12</span><br><span class="line">#StepPurge&#x3D;1</span><br><span class="line">#</span><br><span class="line"># Authentication info</span><br><span class="line">AuthType&#x3D;auth&#x2F;munge</span><br><span class="line">#AuthInfo&#x3D;&#x2F;var&#x2F;run&#x2F;munge&#x2F;munge.socket.2</span><br><span class="line">#</span><br><span class="line"># slurmDBD info</span><br><span class="line">DbdAddr&#x3D;127.0.0.1</span><br><span class="line">DbdHost&#x3D;master</span><br><span class="line">#DbdPort&#x3D;7031</span><br><span class="line">SlurmUser&#x3D;slurm</span><br><span class="line">#MessageTimeout&#x3D;300</span><br><span class="line">DebugLevel&#x3D;verbose</span><br><span class="line">#DefaultQOS&#x3D;normal,standby</span><br><span class="line">LogFile&#x3D;&#x2F;var&#x2F;log&#x2F;slurm&#x2F;slurmdbd.log</span><br><span class="line">PidFile&#x3D;&#x2F;var&#x2F;run&#x2F;slurmdbd.pid</span><br><span class="line">#PluginDir&#x3D;&#x2F;usr&#x2F;lib&#x2F;slurm</span><br><span class="line">#PrivateData&#x3D;accounts,users,usage,jobs</span><br><span class="line">#TrackWCKey&#x3D;yes</span><br><span class="line">#</span><br><span class="line"># Database info</span><br><span class="line">StorageType&#x3D;accounting_storage&#x2F;mysql</span><br><span class="line">StorageHost&#x3D;master</span><br><span class="line">StoragePort&#x3D;3306</span><br><span class="line">StoragePass&#x3D;123456</span><br><span class="line">StorageUser&#x3D;root</span><br><span class="line">StorageLoc&#x3D;slurm_acct_db</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="cgroup-conf"><a href="#cgroup-conf" class="headerlink" title="cgroup.conf"></a>cgroup.conf</h3><p>在Slave的/etc/slurm中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">###</span><br><span class="line">#</span><br><span class="line"># Slurm cgroup support configuration file</span><br><span class="line">#</span><br><span class="line"># See man slurm.conf and man cgroup.conf for further</span><br><span class="line"># information on cgroup configuration parameters</span><br><span class="line">#--</span><br><span class="line">CgroupAutomount&#x3D;yes</span><br><span class="line"></span><br><span class="line">ConstrainCores&#x3D;no</span><br><span class="line">ConstrainRAMSpace&#x3D;no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/04/keycloak/" rel="prev" title="KeyCloak学习（一）搭建">
+                  <i class="fa fa-chevron-left"></i> KeyCloak学习（一）搭建
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/07/slurm-2nd/" rel="next" title="CentOS7安装Slurm">
+                  CentOS7安装Slurm <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

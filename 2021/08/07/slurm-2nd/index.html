@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.heroine-x.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="踩了N个坑之后，重写Slurm这一篇。主要的姿势： 环境基础环境准备了两个：  192.168.60.177 master CentOS7.9.2009 192.168.60.178 slave1 CentOS7.9.2009  实际需要的环境有几个：  打包RPM：复用master 配置数据库MariaDB服务：复用master 控制节点：即master 计算节点：即slave  安装准备工作编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7安装Slurm">
+<meta property="og:url" content="http://blog.heroine-x.com/2021/08/07/slurm-2nd/index.html">
+<meta property="og:site_name" content="Blog of Mysterious">
+<meta property="og:description" content="踩了N个坑之后，重写Slurm这一篇。主要的姿势： 环境基础环境准备了两个：  192.168.60.177 master CentOS7.9.2009 192.168.60.178 slave1 CentOS7.9.2009  实际需要的环境有几个：  打包RPM：复用master 配置数据库MariaDB服务：复用master 控制节点：即master 计算节点：即slave  安装准备工作编">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-07T00:41:50.000Z">
+<meta property="article:modified_time" content="2021-08-07T02:50:52.998Z">
+<meta property="article:author" content="heroine-x">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.heroine-x.com/2021/08/07/slurm-2nd/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>CentOS7安装Slurm | Blog of Mysterious</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Blog of Mysterious</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">blog of mysterious(x) 2018-2021</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%AF%91Slurm%E7%9A%84RPM"><span class="nav-number">2.1.1.</span> <span class="nav-text">编译Slurm的RPM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE%EF%BC%88Master-Slave%EF%BC%89"><span class="nav-number">2.1.2.</span> <span class="nav-text">系统配置（Master&#x2F;Slave）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81"><span class="nav-number">2.1.3.</span> <span class="nav-text">统一用户密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%95%B0%E6%8D%AE%E5%BA%93MairaDB"><span class="nav-number">2.1.4.</span> <span class="nav-text">安装数据库MairaDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Munge"><span class="nav-number">2.1.5.</span> <span class="nav-text">安装Munge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Slurm"><span class="nav-number">2.1.6.</span> <span class="nav-text">安装Slurm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">简单测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">heroine-x</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/07/slurm-2nd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CentOS7安装Slurm
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-07 08:41:50 / Modified: 10:50:52" itemprop="dateCreated datePublished" datetime="2021-08-07T08:41:50+08:00">2021-08-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>踩了N个坑之后，重写Slurm这一篇。主要的姿势：</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>基础环境准备了两个：</p>
+<ul>
+<li>192.168.60.177 master CentOS7.9.2009</li>
+<li>192.168.60.178 slave1 CentOS7.9.2009</li>
+</ul>
+<p>实际需要的环境有几个：</p>
+<ol>
+<li>打包RPM：复用master</li>
+<li>配置数据库MariaDB服务：复用master</li>
+<li>控制节点：即master</li>
+<li>计算节点：即slave</li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h4 id="编译Slurm的RPM"><a href="#编译Slurm的RPM" class="headerlink" title="编译Slurm的RPM"></a>编译Slurm的RPM</h4><p>注意这一步很独立，可以在另一台机器上编译，避免混乱</p>
+<ol>
+<li>安装Slurm依赖<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install openssl openssl-devel pam-devel numactl numactl-devel hwloc hwloc-devel lua lua-devel readline-devel rrdtool-devel ncurses-devel man2html libibmad libibumad -y</span><br><span class="line">yum install mariadb-server mariadb-devel -y</span><br></pre></td></tr></table></figure></li>
+<li>下载Slurm<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 带Latest的好像不太行</span><br><span class="line">wget https:&#x2F;&#x2F;download.schedmd.com&#x2F;slurm&#x2F;slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li>依赖RPMBuild<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rpm-build -y</span><br></pre></td></tr></table></figure></li>
+<li>编译RPM<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpmbuild -ta slurm-20.02.7.tar.bz2</span><br></pre></td></tr></table></figure></li>
+<li>编译出的安装包在<code>/root/rpmbuild/RPMS/x86_64</code>，拷贝出来备用即可</li>
+</ol>
+<h4 id="系统配置（Master-Slave）"><a href="#系统配置（Master-Slave）" class="headerlink" title="系统配置（Master/Slave）"></a>系统配置（Master/Slave）</h4><ol>
+<li>关闭防火墙</li>
+<li>关闭Selinux</li>
+<li>修改/etc/hostname，/etc/hosts</li>
+</ol>
+<h4 id="统一用户密码"><a href="#统一用户密码" class="headerlink" title="统一用户密码"></a>统一用户密码</h4><p>Master/Slave：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export MUNGEUSER=1991</span><br><span class="line">groupadd -g $MUNGEUSER munge</span><br><span class="line">useradd  -m -c &quot;MUNGE Uid &#x27;N&#x27; Gid Emporium&quot; -d /var/lib/munge -u $MUNGEUSER -g munge  -s /sbin/nologin munge</span><br><span class="line">export SLURMUSER=1992</span><br><span class="line">groupadd -g $SLURMUSER slurm</span><br><span class="line">useradd  -m -c &quot;SLURM workload manager&quot; -d /var/lib/slurm -u $SLURMUSER -g slurm  -s /bin/bash slurm</span><br></pre></td></tr></table></figure>
+<h4 id="安装数据库MairaDB"><a href="#安装数据库MairaDB" class="headerlink" title="安装数据库MairaDB"></a>安装数据库MairaDB</h4><p>Master节点安装MairaDB Server</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mariadb-server mariadb-devel</span><br><span class="line">mysql_secure_installation</span><br><span class="line">systemctl start mariadb</span><br><span class="line">ystemctl enable mariadb</span><br><span class="line">mysql_secure_installation</span><br></pre></td></tr></table></figure>
+<h4 id="安装Munge"><a href="#安装Munge" class="headerlink" title="安装Munge"></a>安装Munge</h4><p>Master/Slave安装:</p>
+<ol>
+<li><code>yum install -y epel-release axel yum-axelget</code></li>
+<li><code>yum install munge munge-libs munge-devel rng-tools -y</code></li>
+</ol>
+<p>Master:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rngd -r /dev/urandom</span><br><span class="line">/usr/sbin/create-munge-key -r</span><br><span class="line">dd if=/dev/urandom bs=1 count=1024 &gt; /etc/munge/munge.key</span><br><span class="line">chown munge: /etc/munge/munge.key</span><br><span class="line">chmod 400 /etc/munge/munge.key</span><br><span class="line">scp -p /etc/munge/munge.key root@slave1:/etc/munge</span><br></pre></td></tr></table></figure>
+<p>Master/Slave:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chown -R munge: /etc/munge/ /var/log/munge/</span><br><span class="line">chmod 0700 /etc/munge/ /var/log/munge/</span><br><span class="line">chmod 0711 /var/lib/munge/</span><br><span class="line">systemctl start munge</span><br><span class="line">systemctl status munge</span><br><span class="line">systemctl enable munge</span><br></pre></td></tr></table></figure>
+<p>进行测试Master/Slave:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">munge -n</span><br><span class="line">munge -n | ssh master unmunge</span><br></pre></td></tr></table></figure>
+<h4 id="安装Slurm"><a href="#安装Slurm" class="headerlink" title="安装Slurm"></a>安装Slurm</h4><ol>
+<li>Master/Slave使用RPM安装<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum localinstall slurm-*.rpm</span><br></pre></td></tr></table></figure></li>
+<li>Master编辑配置文件<br>Master编辑<code>/etc/slurm/slurm.conf</code>和<code>/etc/slurm/slurmdbd.conf</code>，参考后面的示例文件</li>
+<li>Master将<code>slurm.conf</code>文件共享到slave<code>scp slurm.conf root@slave1:/etc/slurm</code></li>
+<li>Master:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmctld</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmctld.log</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurm_jobacct.log &#x2F;var&#x2F;log&#x2F;slurm_jobcomp.log</span><br></pre></td></tr></table></figure>
+Slave<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">chown slurm: &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">chmod 755 &#x2F;var&#x2F;spool&#x2F;slurmd</span><br><span class="line">touch &#x2F;var&#x2F;log&#x2F;slurmd.log</span><br><span class="line">chown slurm: &#x2F;var&#x2F;log&#x2F;slurmd.log</span><br></pre></td></tr></table></figure></li>
+<li>Master使用<code>slurmdbd -vvvvDDDD</code>手动启动，进行测试，看看报错不报错，如果不报错，搞成服务即可<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">enable slurmdbd.service </span><br><span class="line">systemctl start slurmdbd</span><br><span class="line">systemctl enable slurmdbd</span><br></pre></td></tr></table></figure></li>
+<li>Slave节点编辑<code>/etc/slurm/cgroup.conf</code></li>
+<li>Master/Slave:使用<code>slurmd -C</code>检查配置，使用<code>slurmd -vvvvDDDD</code>手动启动，进行测试，看看报错不报错。如果不报错，搞成服务：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start slurmctld.service</span><br><span class="line">systemctl enable slurmctld.service </span><br><span class="line">systemctl status slurmctld.service </span><br></pre></td></tr></table></figure>
+期间在Master节点遇到一个错误，<code>Incorrect permissions on state save loc: /var/spool</code>，简单粗暴的解决方案：<code>chmod 777 spool</code></li>
+</ol>
+<h2 id="简单测试"><a href="#简单测试" class="headerlink" title="简单测试"></a>简单测试</h2><p>sinfo</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/37d19a0fe473">https://www.jianshu.com/p/37d19a0fe473</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34149581/article/details/101902935">https://blog.csdn.net/qq_34149581/article/details/101902935</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/05/slurm/" rel="prev" title="slurm">
+                  <i class="fa fa-chevron-left"></i> slurm
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/09/install-esxi-on-notebook/" rel="next" title="在备胎笔记本电脑上安装ESXi">
+                  在备胎笔记本电脑上安装ESXi <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">heroine-x</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

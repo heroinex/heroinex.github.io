@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/23/linux-server-safety/">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/09/03/rabbitmq-cluster/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -208,7 +208,209 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/23/linux-server-safety/" class="post-title-link" itemprop="url">Linux服务器安全</a>
+          <a href="/2021/09/03/rabbitmq-cluster/" class="post-title-link" itemprop="url">RabbitMQ集群——联邦模式和铲子模式</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-09-03 13:42:43" itemprop="dateCreated datePublished" datetime="2021-09-03T13:42:43+08:00">2021-09-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-06 19:38:28" itemprop="dateModified" datetime="2021-09-06T19:38:28+08:00">2021-09-06</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="单机RabbitMQ搭建方法"><a href="#单机RabbitMQ搭建方法" class="headerlink" title="单机RabbitMQ搭建方法"></a>单机RabbitMQ搭建方法</h2><ol>
+<li><p>安装erlang依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install unixODBC</span><br><span class="line">yum install unixODBC-devel</span><br></pre></td></tr></table></figure></li>
+<li><p>下载erlang并安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;packages.erlang-solutions.com&#x2F;erlang&#x2F;rpm&#x2F;centos&#x2F;7&#x2F;x86_64&#x2F;esl-erlang_24.0.5-1~centos~7_amd64.rpm</span><br><span class="line">rpm -ivh esl-erlang_24.0.5-1~centos~7_amd64.rpm</span><br></pre></td></tr></table></figure></li>
+<li><p>安装MQ依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install socat</span><br></pre></td></tr></table></figure></li>
+<li><p>从官网下载RPM包，并且安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh rabbitmq-server-3.8.22-1.el7.noarch.rpm</span><br><span class="line">systemctl start rabbitmq-server</span><br></pre></td></tr></table></figure></li>
+<li><p>修改/etc/hosts文件，将自身hostname写入，才能开启WEB控制台，添加用户等操作</p>
+</li>
+<li><p>初始化MQ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl add_user mq 123456</span><br><span class="line">rabbitmqctl set_permissions -p &#x2F; mq1 &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span><br><span class="line">rabbitmqctl set_user_tags mq1 administrator</span><br></pre></td></tr></table></figure>
+<h2 id="联邦模式（交换机）"><a href="#联邦模式（交换机）" class="headerlink" title="联邦模式（交换机）"></a>联邦模式（交换机）</h2></li>
+</ol>
+<p>RabbitMQ的Federation模式，就是联邦模式。</p>
+<h3 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h3><ol>
+<li>消息只能从上游发送到下游</li>
+<li>消息发送的是副本，也就是会复制一份</li>
+<li>队列的消费是独立的，也就是消息复制出来之后，就各自消费各自的了</li>
+</ol>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>依照前文，分别搭建两套MQ，分别是mqf1和mqf2，都是单节点，IP地址分别是192.168.102.135和136。测试队列为user。把mqf1作为upstream。</p>
+<p>在mqf1上，新建一个交换机test.ex1，暂不绑定队列。</p>
+<p>在mqf2上，新建一个交换机test.ex1，按照<code>Routing key=msg.key.user</code>绑定消息到user队列</p>
+<ol>
+<li><p>在mqf1和mqf2上，都开启联邦插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rabbitmq-plugins enable rabbitmq_federation</span><br><span class="line">rabbitmq-plugins enable rabbitmq_federation_management</span><br></pre></td></tr></table></figure></li>
+<li><p>在mqf2的控制台上，进入Admin-&gt;Federation Upstreams，新建一个Upstream，参数设置如下</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Name:</span> <span class="string">upstream2</span></span><br><span class="line"><span class="attr">URI:</span> <span class="string">amqp://mqf1:123456@192.168.102.135</span></span><br></pre></td></tr></table></figure>
+<p>其他参数保持默认即可</p>
+</li>
+<li><p>在mqf2上，点击Admin-&gt;Policies，添加一条Policy，参数设置如下：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Name:</span> <span class="string">federation_policy</span></span><br><span class="line"><span class="attr">Pattern:</span> <span class="string">^test.ex1</span></span><br><span class="line"><span class="attr">Apply to:</span> <span class="string">all</span></span><br><span class="line"><span class="attr">Definition:</span> <span class="string">federaion-upstream:upstream2</span></span><br></pre></td></tr></table></figure>
+<p>其他参数保持默认即可</p>
+</li>
+<li><p>查看mqf2的控制台，点击Admin-&gt;Federation Status，显示当前的联邦状态，如下：</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Upstream</th>
+<th>URI</th>
+<th>Exchange/Queue</th>
+<th>State</th>
+<th>Inbound message rate</th>
+<th>Last Changed</th>
+<th>ID</th>
+<th>Consumer tag</th>
+<th>Operations</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>upstream2</td>
+<td>amqp://192.168.102.135</td>
+<td>test.ex1(exchange)</td>
+<td>running</td>
+<td>0.00/s</td>
+<td>2021-09-06 12:25:24</td>
+<td>d99bfb9e</td>
+<td></td>
+<td>Restert</td>
+</tr>
+</tbody></table>
+<p>State列是Running说明状态正常，此时上游的test.ex1和下游的test.ex1形成联邦</p>
+<h3 id="观察状态"><a href="#观察状态" class="headerlink" title="观察状态"></a>观察状态</h3><p>在mqf1（上游）中：</p>
+<ul>
+<li>Connections中，有一个Federation link，Name为192.168.102.136:37342 (Federation link,upstream:upstream2,policy:federation_policy)，状态为Running</li>
+<li>Exchanges中，除了我们手动创建的test.ex1之外，还有一条灰色的<code>federation:test.ex1 -&gt; rabbit@mqf2 B</code>，type为x-federation-upstream</li>
+<li>Queue中，有一条Name为federation:test.ex1-&gt; rabbit@mqf2的队列，type=classic</li>
+</ul>
+<p>在mqf2（下游）中：</p>
+<ul>
+<li>Connections中，有一条Federaion link，Name为<a href="mailto:&#114;&#x61;&#x62;&#x62;&#105;&#116;&#64;&#x6d;&#113;&#102;&#x32;&#46;&#x31;&#x36;&#51;&#48;&#56;&#x39;&#54;&#48;&#x32;&#x39;&#x2e;&#x36;&#49;&#x37;&#57;&#46;&#48;">&#114;&#x61;&#x62;&#x62;&#105;&#116;&#64;&#x6d;&#113;&#102;&#x32;&#46;&#x31;&#x36;&#51;&#48;&#56;&#x39;&#54;&#48;&#x32;&#x39;&#x2e;&#x36;&#49;&#x37;&#57;&#46;&#48;</a>（Federation link (upstream: upstream2, policy: federation_policy)），Protocol为Direct 0-9-1</li>
+<li>Exchanges中，有一个名为test.ex1的交换机，type为direct，属性包含federation_policy（这是我们配的）</li>
+<li>Queues中有一个user队列，这个是我们配置的</li>
+</ul>
+<h3 id="测试过程"><a href="#测试过程" class="headerlink" title="测试过程"></a>测试过程</h3><ol>
+<li><strong>上游投递消息，上游无路由队列，下游接收</strong>。因为mqf1是上游，因此在上游的test.ex1交换机发布一条消息，Routing key=msg.key.user，Payload随便输入，发布之后，在mqf2的user队列中会看到新增一条Ready的消息。注意，此时mqf1中是没有user队列的</li>
+<li><strong>上游投递消息，上下游的队列都收到</strong>。在上游mqf1中，对test.ex1交换机新增一个绑定，路由key还是msg.key.user，路由到新建的一个队列叫user_135，然后在上游的test.ex1交换机中发布一条消息，过几秒后发现上游的user_135和下游的user都收到了消息</li>
+<li><strong>消费互相独立</strong>。上游投递消息，下游消费，下游的user队列中的消息被消费后，上游的user_135队列中的消息仍然存在，二者是独立的</li>
+</ol>
+<h3 id="附：下游消费代码"><a href="#附：下游消费代码" class="headerlink" title="附：下游消费代码"></a>附：下游消费代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pika</span><br><span class="line">credentials=pika.PlainCredentials(<span class="string">&quot;mqf2&quot;</span>,<span class="string">&quot;123456&quot;</span>)</span><br><span class="line">connection=pika.BlockingConnection(pika.ConnectionParameters(host=<span class="string">&#x27;192.168.102.136&#x27;</span>,virtual_host=<span class="string">&#x27;/&#x27;</span>,credentials=credentials))</span><br><span class="line">channel=connection.channel()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span>(<span class="params">ch,method,properties,body</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;received&#x27;</span>,body)</span><br><span class="line"></span><br><span class="line">channel.basic_consume(<span class="string">&#x27;user&#x27;</span>,callback,<span class="literal">True</span>)</span><br><span class="line">channel.start_consuming()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="联邦模式（队列）"><a href="#联邦模式（队列）" class="headerlink" title="联邦模式（队列）"></a>联邦模式（队列）</h2><h3 id="先说结论-1"><a href="#先说结论-1" class="headerlink" title="先说结论"></a>先说结论</h3><ol>
+<li>消息的流转方向是从上游到下游</li>
+<li>下游的消费者会先消费下级的消息，空了之后再拉取上游的消息，存储到本地，然后再被消费者消费，同时上游的消息被消费，没了</li>
+</ol>
+<h3 id="环境搭建-1"><a href="#环境搭建-1" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>这次我们将mqf2的名为bill的queue作为上游，mqf1作为下游，配置方法如下：</p>
+<ol>
+<li>在mqf1和mqf2中各自新建名为bill的队列，并且绑定到test.ex1交换机上，交换机的Routing Key=msg.key.bill</li>
+<li>在mqf1（注意这里成下游了）的控制台中，进入Admin-&gt;Federation Upstreams，添加一个Upstream，Name为<code>qupstream3</code>，URI为<code>amqp://mqf2:123456@192.168.102.136</code></li>
+<li>在mqf1（下游）的控制台中，进入Admin-&gt;Policies，添加一条策略，Name为<code>federation_policy_queue</code>，Patter为<code>^bill</code>，Definition为<code>federation-upstream=qupstream3</code></li>
+<li>添加好之后，在Admin-&gt;Federation Status中，查看状态为Running即可</li>
+</ol>
+<h3 id="测试过程-1"><a href="#测试过程-1" class="headerlink" title="测试过程"></a>测试过程</h3><ol>
+<li>上游和下游都没有消费者，队列都是空的，往上游队列投递一个消息，不会同步到下游队列</li>
+<li>给下游增加一个消费者，则会消费上游的消息</li>
+<li>把消费者停止，手动向上级的队列投递一个消息155，往下游队列投递一个消息156，这时上下游的队列的Ready数都是1</li>
+<li>给下游增加一个消费者，打印出来的消息是156、155，说明先消费的下级的，再消费上级的</li>
+<li>给上下游各自增加一个消费者，上游投递消息，此时下游收不到消息</li>
+</ol>
+<h2 id="Shovel模式"><a href="#Shovel模式" class="headerlink" title="Shovel模式"></a>Shovel模式</h2><p>RabbitMQ的Shovel模式就是铲子模式。</p>
+<h3 id="先说结论-2"><a href="#先说结论-2" class="headerlink" title="先说结论"></a>先说结论</h3><ul>
+<li>Shovel的意思是铲子，铲子模式的意思就是把一个队列的消息铲到另一个队列上，这两个队列的消息可以不在一个Broker上</li>
+<li>只需要在一个MQ上开启铲子插件即可</li>
+</ul>
+<h3 id="环境搭建和测试过程"><a href="#环境搭建和测试过程" class="headerlink" title="环境搭建和测试过程"></a>环境搭建和测试过程</h3><p>依照前文，分别搭建两套MQ，分别是mq1和mq2，都是单节点，IP地址分别是192.168.102.133和134。测试队列为user。</p>
+<ol>
+<li>在mq1上，开启Shovel<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmq-plugins enable rabbitmq_shovel_management</span><br></pre></td></tr></table></figure></li>
+<li>在mq1的控制台上，打开<code>Shovel Management</code>标签页，进行如下配置</li>
+</ol>
+<ul>
+<li>Source选择AMQP0.9.1</li>
+<li>URL输入<code>amqp://mq1:123456@192.168.102.133</code>，如果是vhost是/，不需要加/</li>
+<li>Queue输入user</li>
+<li>Destination选择AMQP0.9.1</li>
+<li>Destination输入<code>amqp://mq2:123456@192.168.102.134</code></li>
+<li>Queue输入user</li>
+</ul>
+<ol start="3">
+<li>切到<code>Shovel Status</code>标签页，查看状态，应该是Running，如果不是，进入/var/log/rabbitmq看日志</li>
+<li>进行测试，在mq1上的user队列里发布一条消息，切换到mq2的管理控制台，发现消息已经发布到了mq2的user队列中，同时mq1中的user队列被清空</li>
+</ol>
+<h3 id="记录点"><a href="#记录点" class="headerlink" title="记录点"></a>记录点</h3><ol>
+<li>添加Shovel之前的消息也会同步</li>
+<li>mq2上没有的队列，例如如果没有user队列，会自动创建</li>
+<li>铲子铲走的消息，在mq1里就没有了</li>
+<li>实测铲子的速度大概是秒级的</li>
+</ol>
+<h2 id="未尽之处"><a href="#未尽之处" class="headerlink" title="未尽之处"></a>未尽之处</h2><ol>
+<li>如果两个Broker互为上下游，会不会造成消息死循环</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/09/02/raft-and-paxos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/09/02/raft-and-paxos/" class="post-title-link" itemprop="url">Raft和Paxos</a>
         </h2>
 
         <div class="post-meta-container">
@@ -220,7 +422,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-04-23 09:18:27 / Modified: 09:52:48" itemprop="dateCreated datePublished" datetime="2021-04-23T09:18:27+08:00">2021-04-23</time>
+      <time title="Created: 2021-09-02 08:51:10 / Modified: 08:54:54" itemprop="dateCreated datePublished" datetime="2021-09-02T08:51:10+08:00">2021-09-02</time>
     </span>
 
   
@@ -233,18 +435,646 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>服务器平安，Linux平安，SSH平安</p>
-<h1 id="SSH安全"><a href="#SSH安全" class="headerlink" title="SSH安全"></a>SSH安全</h1><ul>
-<li>更强的密码，或使用密钥登录</li>
-<li>更改SSH端口</li>
-<li>限制源IP地址</li>
-<li>fail2ban</li>
-<li>denyhost</li>
-<li>endlessh ssh蜜罐</li>
+          <p>基于Raft构建的产品有Etcd、TiDB、PolarFS、Dragonboat、CockrouchDB。<br>但是很少直接基于Paxos构建的产品，可理解为Paxos只是一种指导思想，并不适合直接指导实践。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/21/virtual-architecture-stage1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/21/virtual-architecture-stage1/" class="post-title-link" itemprop="url">虚拟架构阶段1</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-21 10:56:10" itemprop="dateCreated datePublished" datetime="2021-08-21T10:56:10+08:00">2021-08-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-28 10:23:47" itemprop="dateModified" datetime="2021-08-28T10:23:47+08:00">2021-08-28</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>设想一个类似于电商的系统，其整个架构如下：</p>
+<ul>
+<li>前端：使用NodeJS提供服务</li>
+<li>后端：使用微服务架构</li>
+<li>整体：整体跑在K8S上</li>
+<li>数据库： 数据库使用MariaDB</li>
 </ul>
-<p>参考材料：</p>
-<blockquote>
-<p>如何防止被暴力破解 ssh <a target="_blank" rel="noopener" href="https://www.v2ex.com/t/772486#reply29">https://www.v2ex.com/t/772486#reply29</a></p>
+<p>在这个基础上进行增长：</p>
+<ol>
+<li>基础</li>
+</ol>
+<ul>
+<li>1.1 搭建K8S环境</li>
+<li>1.2 </li>
+</ul>
+<ol start="2">
+<li>程序</li>
+</ol>
+<ul>
+<li>2.1 Spring Cloud 框架搭建</li>
+<li>2.2 使用Redis缓存 </li>
+<li>2.3 基于布隆过滤器防止缓存穿透</li>
+<li>2.4 程序架构，Java+Spring，前后端分离</li>
+</ul>
+<ol start="3">
+<li>数据库</li>
+</ol>
+<ul>
+<li>3.1 MySQL数据库MHA</li>
+</ul>
+<ol start="4">
+<li>消息队列MQ</li>
+</ol>
+<ul>
+<li>4.1 </li>
+</ul>
+<ol start="5">
+<li>DevOps</li>
+</ol>
+<ul>
+<li>5.1 基于开源堡垒机进行运维</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/21/disaster-recovery/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/21/disaster-recovery/" class="post-title-link" itemprop="url">容灾基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-21 10:28:42 / Modified: 10:30:39" itemprop="dateCreated datePublished" datetime="2021-08-21T10:28:42+08:00">2021-08-21</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>RTO Recovery Time Object，IT系统崩溃开始到业务恢复时的时间间隔</li>
+<li>RPO Recorty Point Object，数据可以恢复到的时间点</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/19/nfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/19/nfs/" class="post-title-link" itemprop="url">nfs</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-19 15:44:30" itemprop="dateCreated datePublished" datetime="2021-08-19T15:44:30+08:00">2021-08-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/17/using-proguard-to-protect-code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/17/using-proguard-to-protect-code/" class="post-title-link" itemprop="url">使用Proguard保护SpringBoot程序代码</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-17 21:04:06 / Modified: 21:17:01" itemprop="dateCreated datePublished" datetime="2021-08-17T21:04:06+08:00">2021-08-17</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Proguard是用来保护Java代码的工具，测试使用如下：</p>
+<ol>
+<li>新建Spring Boot工程</li>
+<li>POM文件添加依赖，整体如下<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span> <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring_cloud_demo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>spring_cloud_demo<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>Demo project for Spring Boot<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.wvengen<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>proguard-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span><span class="tag">&lt;<span class="name">goal</span>&gt;</span>proguard<span class="tag">&lt;/<span class="name">goal</span>&gt;</span><span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">proguardVersion</span>&gt;</span>6.2.2<span class="tag">&lt;/<span class="name">proguardVersion</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">injar</span>&gt;</span>$&#123;project.build.finalName&#125;.jar<span class="tag">&lt;/<span class="name">injar</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">outjar</span>&gt;</span>$&#123;project.build.finalName&#125;.jar<span class="tag">&lt;/<span class="name">outjar</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!--&lt;proguardInclude&gt;$&#123;project.basedir&#125;/proguard.cfg&lt;/proguardInclude&gt;--&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">obfuscate</span>&gt;</span>true<span class="tag">&lt;/<span class="name">obfuscate</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">options</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 不做收缩（删除注释、未被引用代码）--&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span>-dontshrink<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 不做优化（变更代码实现逻辑）--&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span>-dontoptimize<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!--保持目录结构，否则spring的自动注入无法使用--&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!--&lt;option&gt;-keepdirectories&lt;/option&gt;--&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,</span><br><span class="line">                            SourceFile,LineNumberTable, *Annotation*,EnclosingMethod</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span>-adaptclassstrings<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span></span><br><span class="line">                            <span class="comment">&lt;!-- 保护程序入口 --&gt;</span></span><br><span class="line">                            -keep class com.cloud.sbhl.App &#123; *; &#125;</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span>-keepnames interface ** &#123; *; &#125;<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 固定几个类不能混淆--&gt;</span></span><br><span class="line"></span><br><span class="line">                        <span class="comment">&lt;!--&lt;option&gt;-keep interface * extends * &#123; *; &#125;&lt;/option&gt;--&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- 此选项将在所有包的所有类中保存所有原始定义的注释.--&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">option</span>&gt;</span></span><br><span class="line">                            -keep class * &#123;</span><br><span class="line">                            @org.springframework.beans.factory.annotation.Autowired *;</span><br><span class="line">                            @org.springframework.beans.factory.annotation.Value *;</span><br><span class="line">                            @org.springframework.stereotype.Service *;</span><br><span class="line">                            @org.springframework.stereotype.Component *;</span><br><span class="line">                            @org.springframework.scheduling.annotation.Scheduled *;</span><br><span class="line"></span><br><span class="line">                            &#125;</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">options</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">libs</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- Include main JAVA library required.--&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">lib</span>&gt;</span>$&#123;java.home&#125;/lib/rt.jar<span class="tag">&lt;/<span class="name">lib</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">lib</span>&gt;</span>$&#123;java.home&#125;/lib/jce.jar<span class="tag">&lt;/<span class="name">lib</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">libs</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.sf.proguard<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>proguard-base<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">executable</span>&gt;</span>true<span class="tag">&lt;/<span class="name">executable</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><code>mvn clean package</code>打包后，使用JD-GUI反编译查看<br>备注：我这里的JD-GUI好像有问题，打开啥都是//internal error//</li>
+<li>使用java -jar启动，启动成功，证明对业务无影响</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/16/alibaba-canal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/16/alibaba-canal/" class="post-title-link" itemprop="url">阿里巴巴Canal学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-16 19:01:56 / Modified: 21:38:55" itemprop="dateCreated datePublished" datetime="2021-08-16T19:01:56+08:00">2021-08-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>我理解的这是个订阅MySQL Server binlog的工具。</p>
+<h2 id="测试过程"><a href="#测试过程" class="headerlink" title="测试过程"></a>测试过程</h2><h3 id="配置Mariadb-server"><a href="#配置Mariadb-server" class="headerlink" title="配置Mariadb-server"></a>配置Mariadb-server</h3><ol>
+<li>安装MariaDB-Server，启动</li>
+<li>添加用户<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;cloud&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;cloud&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li>
+<li>配置<code>/etc/my.cnf</code>，增加如下配置，然后重启MariaDB-Server<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">log-bin</span>=mysql-bin</span><br><span class="line"><span class="attr">binlog-format</span>=ROW</span><br><span class="line"><span class="attr">server_id</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure></li>
+<li>重启后运行<code>show variables like &#39;log_bin&#39;</code>，如果显示ON则说明已打开</li>
+<li>创建test数据库，agent表格，内容不重要</li>
+<li>运行<code>show binary logs</code>，记录最新的Log_name（例如mysql-bin.000003），File_Size，例如423</li>
+</ol>
+<h3 id="安装Canal"><a href="#安装Canal" class="headerlink" title="安装Canal"></a>安装Canal</h3><ol>
+<li>下载<code>https://github.com/alibaba/canal</code></li>
+<li>编辑<code>conf/canal.properties</code>，修改绑定的IP地址，如果不修改，可能导致奇怪的连不上的问题<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canal.ip &#x3D; 192.168.60.179</span><br></pre></td></tr></table></figure></li>
+<li><code>conf/canal.properties</code>配置文件中<code>canal.destinations = example</code>，因此编辑example目录下的<code>instance.properties</code>，修改如下几行：<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">canal.instance.master.address</span>=<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">3306</span></span><br><span class="line"><span class="attr">canal.instance.master.journal.name</span>=mysql-bin.<span class="number">000003</span></span><br><span class="line"><span class="attr">canal.instance.master.position</span>=<span class="number">423</span></span><br><span class="line"></span><br><span class="line"><span class="attr">canal.instance.tsdb.enable</span>=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">canal.instance.dbUsername</span>=dev</span><br><span class="line"><span class="attr">canal.instance.dbPassword</span>=<span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
+<li>sh bin/startup.sh</li>
+<li>可以tail一下logs目录下的日志，检查有无报错</li>
+</ol>
+<h3 id="Java客户端测试"><a href="#Java客户端测试" class="headerlink" title="Java客户端测试"></a>Java客户端测试</h3><ol>
+<li>新建Spring Boot工程，引入依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.otter<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>canal.client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.otter<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>canal.protocol<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>示例代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.cloud.canal;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.otter.canal.client.CanalConnector;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.otter.canal.client.CanalConnectors;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.otter.canal.protocol.CanalEntry;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.otter.canal.protocol.Message;</span><br><span class="line"><span class="keyword">import</span> com.google.protobuf.InvalidProtocolBufferException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CanalServiceImpl</span> <span class="keyword">implements</span> <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CanalConnector connector = CanalConnectors.newSingleConnector(<span class="keyword">new</span> InetSocketAddress(<span class="string">&quot;192.168.60.179&quot;</span>, <span class="number">11111</span>), <span class="string">&quot;example&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        connector.connect();</span><br><span class="line">        connector.subscribe();</span><br><span class="line">        connector.rollback();</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            Message message = connector.getWithoutAck(<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">long</span> batchId = message.getId();</span><br><span class="line">            <span class="keyword">int</span> size=message.getEntries().size();</span><br><span class="line">            <span class="keyword">if</span> (batchId==-<span class="number">1</span> ||size==<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;getEntries&quot;</span>);</span><br><span class="line">                printEntry(message.getEntries());</span><br><span class="line">            &#125;</span><br><span class="line">            connector.ack(batchId);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printEntry</span><span class="params">(List&lt;CanalEntry.Entry&gt; entryList)</span> <span class="keyword">throws</span> InvalidProtocolBufferException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (CanalEntry.Entry entry:entryList)</span><br><span class="line">        &#123;</span><br><span class="line">            CanalEntry.EntryType entryType = entry.getEntryType();</span><br><span class="line">            System.out.println(<span class="string">&quot;entryType&quot;</span>+entryType);</span><br><span class="line">            <span class="keyword">if</span> (entryType== CanalEntry.EntryType.TRANSACTIONBEGIN ||entryType== CanalEntry.EntryType.TRANSACTIONEND)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            CanalEntry.RowChange rowChange= CanalEntry.RowChange.parseFrom(entry.getStoreValue());</span><br><span class="line">            CanalEntry.EventType eventType=rowChange.getEventType();</span><br><span class="line">            System.out.println(<span class="string">&quot;getLogfileName&quot;</span>+entry.getHeader().getLogfileName());</span><br><span class="line">            System.out.println(<span class="string">&quot;getLogfileOffset&quot;</span>+entry.getHeader().getLogfileOffset());</span><br><span class="line">            System.out.println(<span class="string">&quot;getSchemaName&quot;</span>+entry.getHeader().getSchemaName());</span><br><span class="line">            System.out.println(<span class="string">&quot;getTableName&quot;</span>+entry.getHeader().getTableName());</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rowChange.getIsDdl())</span><br><span class="line">            &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;ddl&quot;</span>+rowChange.getSql());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (CanalEntry.RowData rowData:rowChange.getRowDatasList())</span><br><span class="line">            &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;eventType&quot;</span>+eventType);</span><br><span class="line">                System.out.println(<span class="string">&quot;getBeforeColumnsList&quot;</span>);</span><br><span class="line">                printColumn(rowData.getBeforeColumnsList());</span><br><span class="line">                System.out.println(<span class="string">&quot;getAfterColumnsList&quot;</span>);</span><br><span class="line">                printColumn(rowData.getAfterColumnsList());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printColumn</span><span class="params">(List&lt;CanalEntry.Column&gt; columns)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (CanalEntry.Column column:columns)</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;getName&quot;</span>+column.getName());</span><br><span class="line">            System.out.println(<span class="string">&quot;getValue&quot;</span>+column.getValue());</span><br><span class="line">            System.out.println(<span class="string">&quot;getUpdated&quot;</span>+column.getUpdated());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>修改一条记录，原纪录id=3,name=name3，修改为id=3,name=test3，打印如下日志：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">getEntries</span><br><span class="line">entryTypeTRANSACTIONBEGIN</span><br><span class="line">entryTypeROWDATA</span><br><span class="line">getLogfileNamemysql-bin.000003</span><br><span class="line">getLogfileOffset902</span><br><span class="line">getSchemaNametest</span><br><span class="line">getTableNameagent</span><br><span class="line">eventTypeUPDATE</span><br><span class="line">getBeforeColumnsList</span><br><span class="line">getNameid</span><br><span class="line">getValue3</span><br><span class="line">getUpdatedfalse</span><br><span class="line">getNamename</span><br><span class="line">getValuename3</span><br><span class="line">getUpdatedfalse</span><br><span class="line">getAfterColumnsList</span><br><span class="line">getNameid</span><br><span class="line">getValue3</span><br><span class="line">getUpdatedfalse</span><br><span class="line">getNamename</span><br><span class="line">getValuetest3</span><br><span class="line">getUpdatedtrue</span><br><span class="line">entryTypeTRANSACTIONEND</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yehongzhi1994/article/details/107880162">https://blog.csdn.net/yehongzhi1994/article/details/107880162</a><br><a target="_blank" rel="noopener" href="https://github.com/alibaba/canal/wiki/QuickStart">https://github.com/alibaba/canal/wiki/QuickStart</a></p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/12/commands/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/12/commands/" class="post-title-link" itemprop="url">命令速查</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-12 08:27:31 / Modified: 08:29:30" itemprop="dateCreated datePublished" datetime="2021-08-12T08:27:31+08:00">2021-08-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h4 id="开放防火墙端口"><a href="#开放防火墙端口" class="headerlink" title="开放防火墙端口"></a>开放防火墙端口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;public --add-port&#x3D;80&#x2F;tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --query-port&#x3D;80&#x2F;tcp</span><br><span class="line">firewall-cmd --list-port</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/11/openladp-server-in-linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/11/openladp-server-in-linux/" class="post-title-link" itemprop="url">CentOS7搭建和使用LDAP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-11 12:27:08" itemprop="dateCreated datePublished" datetime="2021-08-11T12:27:08+08:00">2021-08-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-16 21:30:02" itemprop="dateModified" datetime="2021-08-16T21:30:02+08:00">2021-08-16</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ol>
+<li>测试环境下，selinux/firewall一条龙</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install openldap openldap-* -y</span><br><span class="line">systemctl start slapd.service</span><br></pre></td></tr></table></figure></li>
+<li>设置管理员密码<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slappasswd -s 123456</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/08/09/spring-boot-keycloak/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="heroine-x">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog of Mysterious">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/09/spring-boot-keycloak/" class="post-title-link" itemprop="url">KeyCloak学习（二）Spring Boot Demo</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-09 19:33:42 / Modified: 20:10:06" itemprop="dateCreated datePublished" datetime="2021-08-09T19:33:42+08:00">2021-08-09</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Demo搭建"><a href="#Demo搭建" class="headerlink" title="Demo搭建"></a>Demo搭建</h2><h3 id="KeyCloak环境配置"><a href="#KeyCloak环境配置" class="headerlink" title="KeyCloak环境配置"></a>KeyCloak环境配置</h3><ul>
+<li>新增realm 名称cloud</li>
+<li>新增用户cloud000，密码123456，角色user</li>
+<li>新增client 名称cloud-app-000<h3 id="pom-xml配置"><a href="#pom-xml配置" class="headerlink" title="pom.xml配置"></a>pom.xml配置</h3></li>
+</ul>
+<ol>
+<li><code>pom.xml</code>增加依赖<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-freemarker<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.keycloak.bom<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>keycloak-adapter-bom<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>/resources/static/index.html</code>作为首页<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Index Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/cloud/app&quot;</span>&gt;</span>cloud app<span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>/resources/templates/cloud.ftl</code>作为登录后才能查看的网页<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;#import &quot;/spring.ftl&quot; as spring&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Protect page $&#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;/logout&quot;</span>&gt;</span>Logout<span class="tag">&lt;/<span class="name">a</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>application.properties进行配置<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">keycloak.auth-server-url</span>=<span class="string">http://192.168.60.171:8080/auth</span></span><br><span class="line"><span class="meta">keycloak.realm</span>=<span class="string">cloud</span></span><br><span class="line"><span class="meta">keycloak.public-client</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">keycloak.resource</span>=<span class="string">cloud-app-000</span></span><br><span class="line"></span><br><span class="line"><span class="meta">spring.freemarker.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">spring.freemarker.suffix</span>=<span class="string">.ftl</span></span><br><span class="line"></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].authRoles[0]</span>=<span class="string">user</span></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].securityCollections[0].name</span>= <span class="string">common user</span></span><br><span class="line"><span class="meta">keycloak.securityConstraints[0].securityCollections[0].patterns[0]</span>=<span class="string">/cloud/*</span></span><br></pre></td></tr></table></figure></li>
+<li>新建<code>CloudController.java</code>，主要内容如下<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(path = &quot;/cloud/app&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getCloud</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">    model.addAttribute(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;username000&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;cloud&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(path = &quot;/logout&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">logout</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    request.logout();</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;/&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li><p>场景1：访问<code>http://127.0.0.1:8086</code>，得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Index Page</span><br><span class="line">cloud app</span><br></pre></td></tr></table></figure></li>
+<li><p>点击cloud app上的链接，跳转到KeyCloak登录界面，URL为<code>http://192.168.60.171:8080/auth/realms/cloud/protocol/openid-connect/auth?response_type=code&amp;client_id=cloud-app-000&amp;redirect_uri=http%3A%2F%2F127.0.0.1%3A8086%2Fcloud%2Fapp&amp;state=4d91e21f-3716-47d2-bf2f-c6e6b85acf3d&amp;login=true&amp;scope=openid</code>，输入正确的用户名密码user000/123456，跳转到<code>http://127.0.0.1:8086/cloud/app</code></p>
+</li>
+<li><p>点击Logout，跳转到首页</p>
+</li>
+<li><p>直接在控制台中curl，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl 127.0.0.1:8086/cloud/app -I</span><br></pre></td></tr></table></figure>
+<p>返回如下</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="string">302</span></span><br><span class="line"><span class="meta">Cache-Control</span>: <span class="string">private</span></span><br><span class="line"><span class="attr">Expires</span>: <span class="string">Thu, 01 Jan 1970 00:00:00 GMT</span></span><br><span class="line"><span class="meta">Set-Cookie</span>: <span class="string">JSESSIONID=98C14318DDFF46051F757D620CA624FA; Path=/; HttpOnly</span></span><br><span class="line"><span class="meta">Set-Cookie</span>: <span class="string">OAuth_Token_Request_State=a10a0741-1674-4010-8230-b2a41f1e6e98; Version=1; Path=/; HttpOnly</span></span><br><span class="line"><span class="attr">Location</span>: <span class="string">http://192.168.60.171:8080/auth/realms/cloud/protocol/openid-connect/auth?response_type=code&amp;client_id=cloud-app-000&amp;redirect_uri=http%3A%2F%2F127.0.0.1%3A8086%2Fcloud%2Fapp&amp;state=a10a0741-1674-4010-8230-b2a41f1e6e98&amp;login=true&amp;scope=openid</span></span><br><span class="line"><span class="meta">Transfer-Encoding</span>: <span class="string">chunked</span></span><br><span class="line"><span class="attr">Date</span>: <span class="string">Mon, 09 Aug 2021 11:58:40 GMT</span></span><br></pre></td></tr></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2></li>
+</ol>
+<h3 id="登录-登出后，如果手动回到-cloud-app，则需要ctrl-F5刷新生效"><a href="#登录-登出后，如果手动回到-cloud-app，则需要ctrl-F5刷新生效" class="headerlink" title="登录/登出后，如果手动回到/cloud/app，则需要ctrl+F5刷新生效"></a>登录/登出后，如果手动回到/cloud/app，则需要ctrl+F5刷新生效</h3><p>暂时没有找到原因</p>
+<h3 id="如何在Controller中获取当前登录的用户名"><a href="#如何在Controller中获取当前登录的用户名" class="headerlink" title="如何在Controller中获取当前登录的用户名"></a>如何在Controller中获取当前登录的用户名</h3><p>暂时没有找到方案</p>
+<h3 id="跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid-parameter-redirect-uri"><a href="#跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid-parameter-redirect-uri" class="headerlink" title="跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid parameter: redirect_uri"></a>跳转到KeyCloak后，不等输入用户名密码直接显示：Invalid parameter: redirect_uri</h3><p>解决方案：在KeyCloak管理界面配置相应Client的Valid Redriect URIs为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8086</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1:8086&#x2F;*</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ifme/p/12591457.html#gallery-5">https://www.cnblogs.com/ifme/p/12591457.html#gallery-5</a></p>
 </blockquote>
 
       
@@ -264,650 +1094,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/22/jenkins-install-faq/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/22/jenkins-install-faq/" class="post-title-link" itemprop="url">Jenkins安装问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-22 10:50:50 / Modified: 10:53:27" itemprop="dateCreated datePublished" datetime="2021-04-22T10:50:50+08:00">2021-04-22</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="Windows安装Slave服务的权限问题"><a href="#Windows安装Slave服务的权限问题" class="headerlink" title="Windows安装Slave服务的权限问题"></a>Windows安装Slave服务的权限问题</h3><p>Windows构建环境下安装Jenkins Slave，在Install Service时报Access Denied错误，解决方法：</p>
-<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>任务管理器中查看当时运行的jp2launcher，右键属性兼容性，以管理员身份运行此程序即可</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/20/how-to-acquire-the-ip-of-a-host/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/20/how-to-acquire-the-ip-of-a-host/" class="post-title-link" itemprop="url">如何通过网线得到服务器的IP地址</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-20 11:50:58 / Modified: 11:51:34" itemprop="dateCreated datePublished" datetime="2021-04-20T11:50:58+08:00">2021-04-20</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/12/using-elasticsearch-in-wiki-js/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/12/using-elasticsearch-in-wiki-js/" class="post-title-link" itemprop="url">在Wiki.js中使用ElasticSearch搜索</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-12 15:32:47 / Modified: 15:40:16" itemprop="dateCreated datePublished" datetime="2021-04-12T15:32:47+08:00">2021-04-12</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>首先还是搭建完成Wiki.js，然后搭建ElasticSearch，方法如下：</p>
-<h2 id="搭建ES"><a href="#搭建ES" class="headerlink" title="搭建ES"></a>搭建ES</h2><ul>
-<li>使用<code>docker pull elasticsearch:7.12.0</code>命令拉取ES，注意要加上版本号，否则可能报错</li>
-<li>使用<br><code>docker save -o elasticsearch:7.12.0.tar elasticsearch:7.12.0</code>导出为tar镜像，并导出到离线的机器上，如果没有此需求可以不进行这个操作</li>
-<li>在离线机器上使用<code>docker load -i elasticsearch:7.12.0.tar</code>命令导入镜像</li>
-<li>启动ES<code>docker run -p 9200:9200 -p 9300:9300 -e &quot;discovery.type=single-node&quot;  --name es --restart unless-stopped elasticsearch:7.12.0 </code></li>
-<li>添加防火墙规则<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone=public --add-port=9200/tcp --permanent</span><br><span class="line">firewall-cmd --zone=public --add-port=9300/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
-<h2 id="连接ES"><a href="#连接ES" class="headerlink" title="连接ES"></a>连接ES</h2></li>
-<li>登录Wiki.js，进入设置-&gt;搜索引擎，选择ElasticSearch</li>
-<li>Version选择7.x，Host输入<code>http://172.17.0.1:9200</code>，其他的不需要进行修改</li>
-<li>点击右上角的应用，再点击右上角的重建索引</li>
-</ul>
-<p>这样支持了中文分词搜索，但是亲测搜索效果不佳，很多词汇搜不出来，不知道有无优化余地。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/08/search-binary-sequence-in-binary-files/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/08/search-binary-sequence-in-binary-files/" class="post-title-link" itemprop="url">文件夹中的二进制序列搜索</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-08 14:44:29 / Modified: 14:51:19" itemprop="dateCreated datePublished" datetime="2021-04-08T14:44:29+08:00">2021-04-08</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>需求：需要在一个文件夹中查找特定的二进制串，例如0x11,0x12,0x13,0x14，经测试可使用grepWin工具</p>
-<ul>
-<li>Search in 文件夹路径</li>
-<li>Search for 填写查找文件的正则，例如\x11\x12\x13\x14</li>
-<li>勾选Treat files as binary</li>
-<li>点击Search即可</li>
-</ul>
-<p>缺点是仅查找出来了文件，未写明第几行，还需要UltraEdit之类的工具二次查找。</p>
-<p>grepWin工具网站：<a target="_blank" rel="noopener" href="https://tools.stefankueng.com/">https://tools.stefankueng.com/</a> </p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/01/install-wiki-js-in-offline-env-using-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/01/install-wiki-js-in-offline-env-using-docker/" class="post-title-link" itemprop="url">通过Docker的方式在离线环境中安装wiki.js</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-01 19:45:29 / Modified: 20:28:03" itemprop="dateCreated datePublished" datetime="2021-04-01T19:45:29+08:00">2021-04-01</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h1><h2 id="Docker镜像导入离线环境"><a href="#Docker镜像导入离线环境" class="headerlink" title="Docker镜像导入离线环境"></a>Docker镜像导入离线环境</h2><p>首先在联网机上安装Docker，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-<p>然后拉取Wiki.js和MySQL的镜像，并保存</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull requarks&#x2F;wiki:2.5</span><br><span class="line">docker save -o wiki:2.5.tar requarks&#x2F;wiki:2.5</span><br><span class="line">docker pull mysql</span><br><span class="line">docker save -o mysql.tar mysql</span><br></pre></td></tr></table></figure>
-<p>把wiki:2.5.tar和mysql.tar拷贝到离线环境中（此时离线环境应当已经安装了Docker），然后执行命令将镜像导入：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker load -i wiki:2.5.tar</span><br><span class="line">docker load -i mysql.tar</span><br></pre></td></tr></table></figure>
-<h2 id="初始化MySQL"><a href="#初始化MySQL" class="headerlink" title="初始化MySQL"></a>初始化MySQL</h2><p>在离线环境主机上，进行如下操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p &#x2F;data&#x2F;mysql&#x2F;data</span><br><span class="line">mkdir -p &#x2F;data&#x2F;mysql&#x2F;conf.d</span><br><span class="line">touch &#x2F;data&#x2F;mysql&#x2F;conf.d&#x2F;my.conf</span><br></pre></td></tr></table></figure>
-<p>编辑/data/mysql/conf.d/my.conf，内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">user&#x3D;mysql</span><br><span class="line">character-set-server&#x3D;utf8</span><br><span class="line">default_authentication_plugin&#x3D;mysql_native_password</span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">default-character-set&#x3D;utf8</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set&#x3D;utf8</span><br></pre></td></tr></table></figure>
-<h2 id="启动MySQL"><a href="#启动MySQL" class="headerlink" title="启动MySQL"></a>启动MySQL</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v /data/mysql/data:/var/lib/mysql -v /data/mysql/conf:/etc/mysql/conf.d --name mysql --restart unless-stopped -e TZ=Asia/Shanghai  -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 mysql:latest</span><br></pre></td></tr></table></figure>
-<p>使用docker exec -it mysql bash进入mysql容器，执行如下命令：<code>mysql -u root -p -h127.0.0.1</code>，输入密码123456之后，能进入MySQL命令行，输入如下内容</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;wiki&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;wiki&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="keyword">create</span> database `wiki`;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> privileges <span class="keyword">on</span> wiki.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;wiki&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> privileges <span class="keyword">on</span> wiki.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;wiki&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">flush privileges;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> <span class="string">&#x27;wiki&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">with</span> mysql_native_password <span class="keyword">by</span> <span class="string">&#x27;123456&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>退出MySQL命令行，打开主机3306防火墙，此时可以用navicat等工具连接数据库了。</p>
-<h2 id="启动Wiki-js"><a href="#启动Wiki-js" class="headerlink" title="启动Wiki.js"></a>启动Wiki.js</h2><p>执行命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 80:3000 --name wiki --restart unless-stopped -e &quot;DB_TYPE=mysql&quot; -e &quot;DB_HOST=172.17.0.1&quot; -e &quot;DB_PORT=3306&quot; -e &quot;DB_USER=wiki&quot; -e &quot;DB_PASS=123456&quot; -e &quot;DB_NAME=wiki&quot; requarks/wiki:2.5</span><br></pre></td></tr></table></figure>
-<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>开放主机80端口后，则可以访问<a target="_blank" rel="noopener" href="http://127.0.0.1来初始化我们的wiki了./">http://127.0.0.1来初始化我们的Wiki了。</a></p>
-<h2 id="汉化"><a href="#汉化" class="headerlink" title="汉化"></a>汉化</h2><p>Wiki.js没有默认语言，默认的显示都是标签，需要汉化时需要先在联网环境中搭建一套Wiki.js，下载中文语言包，然后导出数据库中<code>locales</code>表中<code>code</code>=<code>zh</code>的记录到离线环境中。</p>
-<h1 id="注意事项和坑"><a href="#注意事项和坑" class="headerlink" title="注意事项和坑"></a>注意事项和坑</h1><ul>
-<li>在主机上执行<code>ifconfig</code>命令，docker0网卡对应的IP地址就是主机对于Docker的IP地址</li>
-<li>由于MySQL和Wiki是运行在不同的容器中，因此需要主机开3306端口，否则无法访问，此处存疑，不知道有无优化余地，添加防火墙规则命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --zone&#x3D;public --add-port&#x3D;3306&#x2F;tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure></li>
-<li>关闭SELinux一劳永逸，临时关闭<code>setenforce 0</code>，永久关闭：编辑<code>/etc/selinux/config</code>文件，将<code>SELINUX=enforcing</code>更改为<code>SELINUX=disabled</code></li>
-<li>不支持中文搜索，后续尝试PostgreSQL</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/04/01/docker-basic-usage/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/01/docker-basic-usage/" class="post-title-link" itemprop="url">Docker基本用法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-01 17:44:11 / Modified: 20:20:39" itemprop="dateCreated datePublished" datetime="2021-04-01T17:44:11+08:00">2021-04-01</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/31/shred-dir/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/31/shred-dir/" class="post-title-link" itemprop="url">Linux下文件夹shred命令</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-31 09:30:00" itemprop="dateCreated datePublished" datetime="2021-03-31T09:30:00+08:00">2021-03-31</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-01 20:22:03" itemprop="dateModified" datetime="2021-04-01T20:22:03+08:00">2021-04-01</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Linux下的shred命令可以完全删除文件，但是不支持文件夹，如果想遍历删除文件夹，代码如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">rshreddir=$1</span><br><span class="line">echo &quot;dir is $rshreddir&quot;</span><br><span class="line">function rshredcir()</span><br><span class="line">&#123;</span><br><span class="line">	echo &quot;----------shred dir $1------------&quot;</span><br><span class="line">	for file in `ls $1`</span><br><span class="line">	do</span><br><span class="line">		if [ -d $1/$file ]</span><br><span class="line">			then</span><br><span class="line">			rshredcir $1/$file</span><br><span class="line">		else</span><br><span class="line">			echo &quot;shred file $1/$file&quot;</span><br><span class="line">			shred -u -z $1/$file</span><br><span class="line">		fi</span><br><span class="line">	done</span><br><span class="line">&#125;</span><br><span class="line">rshredcir $rshreddir</span><br></pre></td></tr></table></figure>
-<p>使用方法<code>./batch_shred.sh /not/usr/dir/to/shred</code></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/26/403-error-of-iis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/26/403-error-of-iis/" class="post-title-link" itemprop="url">IIS中访问目录服务器报403错误</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-03-26 09:59:16 / Modified: 10:01:16" itemprop="dateCreated datePublished" datetime="2021-03-26T09:59:16+08:00">2021-03-26</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>想把一个目录分享出来，放一些工具供下载，访问后提示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">403-禁止访问：访问被拒绝。</span><br><span class="line">您无权使用所提供的凭据查看此目录或页面。</span><br></pre></td></tr></table></figure>
-<p>解决方案也很简单：选择应用程序，点击目录浏览，右侧启用即可。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.heroine-x.com/2021/03/23/project-tooz-web-recorder/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="heroine-x">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Blog of Mysterious">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/project-tooz-web-recorder/" class="post-title-link" itemprop="url">Tools工具箱Web请求录制器</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-23 14:43:07" itemprop="dateCreated datePublished" datetime="2021-03-23T14:43:07+08:00">2021-03-23</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-31 09:31:55" itemprop="dateModified" datetime="2021-03-31T09:31:55+08:00">2021-03-31</time>
-      </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
